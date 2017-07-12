@@ -26,17 +26,24 @@ namespace TCPClient
             int count = clientSocket.Receive(buffer);
             Console.WriteLine("receive msg:\n" + Encoding.UTF8.GetString(buffer, 0, count));
 
-            while (true)
+            //while (true)
+            //{
+            //    Console.WriteLine("enter a msg to send to server:");
+            //    string msg = Console.ReadLine();
+            //    if (msg == "q")
+            //    {
+            //        clientSocket.Close();
+            //        return;
+            //    }
+            //    clientSocket.Send(Encoding.UTF8.GetBytes(msg));
+            //}
+            
+            for (int i = 0; i < 100; i++)
             {
-                Console.WriteLine("enter a msg to send to server:");
-                string msg = Console.ReadLine();
-                if (msg == "q")
-                {
-                    clientSocket.Close();
-                    return;
-                }
-                clientSocket.Send(Encoding.UTF8.GetBytes(msg));
+                clientSocket.Send(Message.GetBytes(i.ToString() + "汉字"));
             }
+
+            Console.ReadKey();
         }
     }
 }
