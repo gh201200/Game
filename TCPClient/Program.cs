@@ -18,6 +18,7 @@ namespace TCPClient
             if (!clientSocket.Connected)
             {
                 Console.WriteLine("connect failed");
+                Console.ReadKey();
                 return;
             }
 
@@ -25,12 +26,17 @@ namespace TCPClient
             int count = clientSocket.Receive(buffer);
             Console.WriteLine("receive msg:\n" + Encoding.UTF8.GetString(buffer, 0, count));
 
-            Console.WriteLine("enter a msg to send to server:");
-            string msg = Console.ReadLine();
-            clientSocket.Send(Encoding.UTF8.GetBytes(msg));
-
-            Console.ReadKey();
-            clientSocket.Close();
+            while (true)
+            {
+                Console.WriteLine("enter a msg to send to server:");
+                string msg = Console.ReadLine();
+                if (msg == "q")
+                {
+                    clientSocket.Close();
+                    return;
+                }
+                clientSocket.Send(Encoding.UTF8.GetBytes(msg));
+            }
         }
     }
 }
