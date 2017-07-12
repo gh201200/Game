@@ -1,6 +1,0 @@
-D:\SocketPrograming\SocketPrograming\TCPServer\bin\Debug\TCPServer.exe.config
-D:\SocketPrograming\SocketPrograming\TCPServer\bin\Debug\TCPServer.exe
-D:\SocketPrograming\SocketPrograming\TCPServer\bin\Debug\TCPServer.pdb
-D:\SocketPrograming\SocketPrograming\TCPServer\obj\Debug\TCPServer.csprojResolveAssemblyReference.cache
-D:\SocketPrograming\SocketPrograming\TCPServer\obj\Debug\TCPServer.exe
-D:\SocketPrograming\SocketPrograming\TCPServer\obj\Debug\TCPServer.pdb
