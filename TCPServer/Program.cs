@@ -18,6 +18,9 @@ namespace TCPServer
             IPEndPoint ipEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 88);
             serverSocket.Bind(ipEndPoint);
             serverSocket.Listen(maxClient);
+
+            Console.WriteLine("server start listen, port is {0}", 88);
+
             clientSocket = serverSocket.Accept();
 
             string msg = "hello client ! 你好......";
@@ -27,7 +30,7 @@ namespace TCPServer
             byte[] receiveBuffer = new byte[1024];
             int count = clientSocket.Receive(receiveBuffer);
             string receiveMsg = Encoding.UTF8.GetString(receiveBuffer, 0, count);
-            Console.WriteLine(receiveMsg);
+            Console.WriteLine("receive msg:\n" + receiveMsg);
 
             clientSocket.Close();
             serverSocket.Close();

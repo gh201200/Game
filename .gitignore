@@ -1,4 +1,4 @@
-# 忽略编译生成的bin和obj文件
-/TCPServer/bin
-/TCPServer/obj
+﻿# 忽略编译生成的bin和obj文件
+bin/
+obj/
 /.vs
