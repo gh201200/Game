@@ -29,8 +29,8 @@ namespace TCPClient
             string msg = Console.ReadLine();
             clientSocket.Send(Encoding.UTF8.GetBytes(msg));
 
-            //clientSocket.Close();
             Console.ReadKey();
+            clientSocket.Close();
         }
     }
 }

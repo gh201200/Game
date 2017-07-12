@@ -32,9 +32,9 @@ namespace TCPServer
             string receiveMsg = Encoding.UTF8.GetString(receiveBuffer, 0, count);
             Console.WriteLine("receive msg:\n" + receiveMsg);
 
+            Console.ReadKey();
             clientSocket.Close();
             serverSocket.Close();
-            Console.ReadKey();
         }
     }
 }
