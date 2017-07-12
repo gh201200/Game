@@ -1,0 +1,3 @@
+# 忽略编译生成的bin和obj文件
+./TCPServer/bin
+./TCPServer/obj
