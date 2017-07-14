@@ -1,0 +1,5 @@
+\N	Fluffy	1995-05-15	litter	4 kittens, 3 female, 1 male
+\N	Buffy	1993-06-23	litter	5 puppies, 2 female, 3 male
+\N	Buffy	1994-06-19	litter	3 puppies, 3 female
+\N	Chirpy	1999-03-21	vet	needed beak straightened
+\N	Slim	1997-08-03	vet	broken rib
