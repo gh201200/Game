@@ -11,6 +11,7 @@ namespace Server.Tool
         private byte[] buffer;
         private int startIndex;
         private int endIndex;
+        private int msgLength;
 
         public Message()
         {
@@ -23,6 +24,7 @@ namespace Server.Tool
         {
             this.startIndex = msg.StartIndex;
             this.endIndex = msg.EndIndex;
+            this.buffer = new byte[2048];
             byte[] data = new byte[msg.Length];
             Array.Copy(msg.Buffer, msg.StartIndex, this.buffer, 0, msg.Length);
         }
@@ -70,9 +72,18 @@ namespace Server.Tool
         public bool Check()
         {
             if (Length <= 4) return false;
-            int msgLength = BitConverter.ToInt32(buffer, startIndex);
-            if (Length >= msgLength) startIndex += 4;
-            Console.WriteLine("check res -> startIndex:{0} msgLength:{1} Length:{2}", startIndex, msgLength, Length);
+            msgLength = BitConverter.ToInt32(buffer, startIndex);
+            if (Length >= msgLength)
+            {
+                //覆盖已经读取过的字节位置
+                Array.Copy(buffer, startIndex, buffer, 0, Length);
+                int len = Length;
+                startIndex = 0;
+                endIndex = len;
+                //开始4个字节为消息长度
+                startIndex += 4;
+            }
+            //Console.WriteLine("check res -> startIndex:{0} msgLength:{1} Length:{2}", startIndex, msgLength, Length);
             return Length >= msgLength;
         }
 
@@ -85,12 +96,6 @@ namespace Server.Tool
             Array.Copy(buffer, 0, buffer, 4, Length);
             Array.Copy(data, 0, buffer, 0, 4);
             endIndex += 4;
-        }
-
-        private void Reset()
-        {
-            startIndex = 0;
-            endIndex = 0;
         }
 
         #region Read
