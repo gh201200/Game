@@ -11,9 +11,12 @@ namespace TCPClient
 {
     class Program
     {
+        static Message msg;
+        static Socket clientSocket;
+
         static void Main(string[] args)
         {
-            Socket clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             clientSocket.Connect(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 88));
 
             if (!clientSocket.Connected)
@@ -22,13 +25,8 @@ namespace TCPClient
                 Console.ReadKey();
                 return;
             }
-
-            Message msg = new Message();
-            int count = clientSocket.Receive(msg.Buffer, msg.Remain, 0);
-            msg.UpdateEndIndex(count);
-            Console.WriteLine("receive {0} bytes", count);
-            msg.Check();
-            Console.WriteLine(msg.ReadString());
+            msg = new Message();
+            clientSocket.BeginReceive(msg.Buffer, msg.EndIndex, msg.Remain, SocketFlags.None, ReceiveCallback, null);
 
             //while (true)
             //{
@@ -94,6 +92,19 @@ namespace TCPClient
             //clientSocket.Send(m.Buffer, m.EndIndex, 0);
 
             Console.ReadKey();
+        }
+
+        static void ReceiveCallback(IAsyncResult ar)
+        {
+            int amount = clientSocket.EndReceive(ar);
+            msg.UpdateEndIndex(amount);
+            while (msg.Check())
+            {
+                Console.WriteLine(msg.ReadInt());
+                Console.WriteLine(msg.ReadBool());
+                Console.WriteLine(msg.ReadString());
+            }
+            clientSocket.BeginReceive(msg.Buffer, msg.EndIndex, msg.Remain, SocketFlags.None, ReceiveCallback, null);
         }
     }
 }

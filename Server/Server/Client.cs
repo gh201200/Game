@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Common;
 using Server.Controller;
+using Server.Tool;
+using MySql.Data.MySqlClient;
 
 namespace Server.Server
 {
@@ -18,6 +20,12 @@ namespace Server.Server
         private string ip;
         private int port;
         private Message msg;
+        private MySqlConnection mySqlCon;
+
+        public MySqlConnection MySqlCon
+        {
+            get { return mySqlCon; }
+        }
 
         public Client(Socket clientSocket, Server server)
         {
@@ -26,10 +34,7 @@ namespace Server.Server
             this.ip = ((IPEndPoint)clientSocket.RemoteEndPoint).Address.ToString();
             this.port = ((IPEndPoint)clientSocket.RemoteEndPoint).Port;
             this.msg = new Message();
-            Message m = new Message();
-            m.WriteString("connect success!");
-            m.EndWrite();
-            clientSocket.Send(m.Buffer, m.EndIndex, SocketFlags.None);
+            mySqlCon = ConnHelper.Connect();
         }
 
         public void Start()
@@ -52,13 +57,13 @@ namespace Server.Server
                     //Console.WriteLine("{0}, {1}, {2}", msg.ReadString(), msg.ReadInt(), msg.ReadBool());
                     RequestCode requestCode = (RequestCode)msg.ReadInt();
                     ActionCode actionCode = (ActionCode)msg.ReadInt();
-                    string data = msg.ReadString();
+                    //string data = msg.ReadString();
                     BaseController bc = ControllerManager.Instance.GetController(requestCode);
                     if (bc == null)
                     {
                         throw (new Exception("controller not found RequestCode is " + requestCode));
                     }
-                    bc.HandleMessage(actionCode, new Message(msg), clientSocket, server);
+                    bc.HandleMessage(actionCode, msg, this, server);
                 }
                 if (clientSocket != null) Start();
             }
@@ -71,9 +76,15 @@ namespace Server.Server
 
         private void Close()
         {
+            ConnHelper.Close(mySqlCon);
             if (clientSocket != null) clientSocket.Close();
             string key = Util.GetClientKey(ip, port);
             server.RemoveClient(key);
+        }
+
+        public void Send(Message msg)
+        {
+            clientSocket.Send(msg.Buffer, msg.Length, SocketFlags.None);
         }
     }
 }

@@ -20,13 +20,19 @@ namespace Server.Tool
             endIndex = 0;
         }
 
-        public Message(Message msg)
+        public Message(int startIndex, int endIndex, byte[] buffer)
         {
-            this.startIndex = msg.StartIndex;
-            this.endIndex = msg.EndIndex;
-            this.buffer = new byte[2048];
-            byte[] data = new byte[msg.Length];
-            Array.Copy(msg.Buffer, msg.StartIndex, this.buffer, 0, msg.Length);
+            this.startIndex = startIndex;
+            this.endIndex = endIndex;
+            this.buffer = buffer;
+        }
+
+        public Message New()
+        {
+            byte[] data = new byte[Length];
+            Array.Copy(buffer, startIndex, data, 0, Length);
+            Message m = new Message(0, Length, data);
+            return m;
         }
 
         public int StartIndex
@@ -53,7 +59,7 @@ namespace Server.Tool
         }
 
         /// <summary>
-        /// 数据长度, 不含包头的4个字节
+        /// 数据长度
         /// </summary>
         public int Length
         {

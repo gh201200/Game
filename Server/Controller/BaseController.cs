@@ -17,6 +17,6 @@ namespace Server.Controller
             get;
         }
 
-        public abstract void HandleMessage(ActionCode actionCode, Message msg, Socket clientSocket, Server.Server server);
+        public abstract void HandleMessage(ActionCode actionCode, Message msg, Client client, Server.Server server);
     }
 }
