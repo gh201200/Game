@@ -5,3 +5,9 @@ obj/
 Library/
 *.csproj
 *.sln
+/ShareFolder
+/LuaFramework/Assets/Slua/jit
+/LuaFramework/Assets/Slua/jit.meta
+/LuaFramework/Assets/Slua/LuaObject
+/LuaFramework/Assets/Slua/LuaObject.meta
+/LuaFramework/Temp/
