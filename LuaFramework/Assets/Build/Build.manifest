@@ -1,0 +1,91 @@
+ManifestFileVersion: 0
+CRC: 1958342907
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: materials/mat.bytes
+      Dependencies:
+        Dependency_0: textures/icon.bytes
+    Info_1:
+      Name: prefabs/cube.bytes
+      Dependencies:
+        Dependency_0: materials/mat.bytes
+    Info_2:
+      Name: prefabs/sphere.bytes
+      Dependencies:
+        Dependency_0: materials/mat.bytes
+    Info_3:
+      Name: textures/icon.bytes
+      Dependencies: {}
+    Info_4:
+      Name: textures/ui/1.bytes
+      Dependencies: {}
+    Info_5:
+      Name: textures/ui/10.bytes
+      Dependencies: {}
+    Info_6:
+      Name: textures/ui/11.bytes
+      Dependencies: {}
+    Info_7:
+      Name: textures/ui/2.bytes
+      Dependencies: {}
+    Info_8:
+      Name: textures/ui/3.bytes
+      Dependencies: {}
+    Info_9:
+      Name: textures/ui/4.bytes
+      Dependencies: {}
+    Info_10:
+      Name: textures/ui/5.bytes
+      Dependencies: {}
+    Info_11:
+      Name: textures/ui/6.bytes
+      Dependencies: {}
+    Info_12:
+      Name: textures/ui/7.bytes
+      Dependencies: {}
+    Info_13:
+      Name: textures/ui/8.bytes
+      Dependencies: {}
+    Info_14:
+      Name: textures/ui/9.bytes
+      Dependencies: {}
+    Info_15:
+      Name: textures/ui/loginpanel/12.bytes
+      Dependencies: {}
+    Info_16:
+      Name: textures/ui/loginpanel/13.bytes
+      Dependencies: {}
+    Info_17:
+      Name: textures/ui/loginpanel/14.bytes
+      Dependencies: {}
+    Info_18:
+      Name: textures/ui/loginpanel/15.bytes
+      Dependencies: {}
+    Info_19:
+      Name: textures/ui/loginpanel/16.bytes
+      Dependencies: {}
+    Info_20:
+      Name: textures/ui/loginpanel/17.bytes
+      Dependencies: {}
+    Info_21:
+      Name: textures/ui/loginpanel/18.bytes
+      Dependencies: {}
+    Info_22:
+      Name: textures/ui/loginpanel/19.bytes
+      Dependencies: {}
+    Info_23:
+      Name: textures/ui/loginpanel/20.bytes
+      Dependencies: {}
+    Info_24:
+      Name: textures/ui/loginpanel/21.bytes
+      Dependencies: {}
+    Info_25:
+      Name: textures/ui/loginpanel/22.bytes
+      Dependencies: {}
+    Info_26:
+      Name: textures/ui/loginpanel/30.bytes
+      Dependencies: {}
+    Info_27:
+      Name: textures/ui/loginpanel/qwdb.bytes
+      Dependencies: {}

@@ -10,17 +10,17 @@ using UnityEditorInternal;
 [CustomEditor(typeof(BuildSetting))]
 public class BuildSettingExpand : Editor
 {
-    private static bool debugMode = true;
+    private static bool debugMode = PreDebugMode;
 
     private static bool preDebugMode = true;
 
-    private bool firstInit = false;
+    private bool firstInit = true;
 
     private const string debugStr = "DEBUG_MODE";
 
-    private string[] packType = { "PerFolder", "PerFile" };
+    private const string perFileStr = "PerFile";
 
-    private int curPackType = -1;
+    private bool perFile = prePerFile;
 
     private static bool PreDebugMode
     {
@@ -38,6 +38,22 @@ public class BuildSettingExpand : Editor
         }
     }
 
+    private static bool prePerFile
+    {
+        get { return GameEditor.ExistsSymbols(perFileStr); }
+        set
+        {
+            if (value)
+            {
+                GameEditor.AddSymbols(perFileStr);
+            }
+            else
+            {
+                GameEditor.RemoveSymbols(perFileStr);
+            }
+        }
+    }
+
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
@@ -46,15 +62,7 @@ public class BuildSettingExpand : Editor
         EditorGUILayout.Separator();
         debugMode = GUILayout.Toggle(debugMode, "    Debug Mode");
         EditorGUILayout.Separator();
-        curPackType = EditorGUILayout.Popup(curPackType, packType);
-        if (curPackType == 1)
-        {
-            GameEditor.AddSymbols("PerFile");
-        }
-        else
-        {
-            GameEditor.RemoveSymbols("PerFile");
-        }
+        perFile = GUILayout.Toggle(perFile, "    Pack AssetBundle PerFile");
         EditorGUILayout.Separator();
         GUILayout.BeginHorizontal();
         if (GUILayout.Button("Apply"))
@@ -74,7 +82,7 @@ public class BuildSettingExpand : Editor
         if (EditorApplication.isCompiling) return false;
         if (Selection.activeObject == null)
         {
-            if (debugMode != PreDebugMode)
+            if (debugMode != PreDebugMode || perFile != prePerFile)
             {
                 bool ok = EditorUtility.DisplayDialog("提示", "use settings?", "Apply", "Revert");
                 if (ok)
@@ -86,12 +94,13 @@ public class BuildSettingExpand : Editor
                     OnRevert();
                 }
             }
-            firstInit = false;
-        }
-        if (!firstInit)
-        {
             firstInit = true;
+        }
+        if (firstInit)
+        {
+            firstInit = false;
             debugMode = PreDebugMode;
+            perFile = prePerFile;
         }
         return base.RequiresConstantRepaint();
     }
@@ -99,10 +108,12 @@ public class BuildSettingExpand : Editor
     private void OnApply()
     {
         PreDebugMode = debugMode;
+        prePerFile = perFile;
     }
 
     private void OnRevert()
     {
         debugMode = PreDebugMode;
+        perFile = prePerFile;
     }
 }

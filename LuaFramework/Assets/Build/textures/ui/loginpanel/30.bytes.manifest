@@ -1,0 +1,18 @@
+ManifestFileVersion: 0
+CRC: 2728003160
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 05f30d4191c8e451c73c928e73343ff9
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 9dea23ffc7e96552740e12d1ee5309d8
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/Res/Textures/UI/LoginPanel/30.png
+Dependencies: []
