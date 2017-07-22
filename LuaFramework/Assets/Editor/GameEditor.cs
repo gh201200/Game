@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using SLua;
 using UnityEditor;
 using Object = UnityEngine.Object;
 
@@ -25,7 +26,7 @@ public class GameEditor
         Selection.activeObject = obj;
     }
 
-    [MenuItem("Tool/AssetBundle/Build Single", false, 10)]
+    [MenuItem("Tool/AssetBundle/Build Single", false, 100)]
     static void BuildSingle()
     {
         AddResVersion();
@@ -36,16 +37,15 @@ public class GameEditor
 #endif
     }
 
-    [MenuItem("Tool/AssetBundle/Build All", false, 20)]
+    [MenuItem("Tool/AssetBundle/Build All", false, 0)]
     static void BuildAll()
     {
         BuildSetting bs = GetBuildSettingAsset();
         HashSet<string> files = GetAllAssets();
+        string subFolder = "";
         AddResVersion();
 #if PerFile
-        //每个文件都是一个AssetBundle
-#else
-        //每个文件夹都是一个AssetBundle
+        //每个文件是一个AssetBundle
         foreach (string str in files)
         {
             string fileName = Path.GetFileName(str);
@@ -54,21 +54,35 @@ public class GameEditor
             ai.assetBundleName = bundleTag;
             ai.assetBundleVariant = null;
         }
-        string buildPath = Application.dataPath.Replace("/Assets", "/") + bs.buildPath;
+        subFolder = "PerFile/";
+#else
+        //每个文件夹下的文件是一个AssetBundle
+        foreach (string str in files)
+        {
+            string fileName = Path.GetFileName(str);
+            string bundleTag = str.Replace(GetBuildSettingAsset().resPath, "").Replace("/" + fileName, "") + ".bytes";
+            AssetImporter ai = AssetImporter.GetAtPath(str);
+            ai.assetBundleName = bundleTag;
+            ai.assetBundleVariant = null;
+        }
+        subFolder = "PerFolder/";
+#endif
+        string buildPath = Application.dataPath.Replace("/Assets", "/") + bs.buildPath + subFolder;
         DirectoryInfo di = new DirectoryInfo(buildPath);
         if (!di.Exists) di.Create();
-        BuildPipeline.BuildAssetBundles(bs.buildPath, BuildAssetBundleOptions.ChunkBasedCompression, bs.buildTarget);
-#endif
+        BuildPipeline.BuildAssetBundles(bs.buildPath + subFolder, BuildAssetBundleOptions.ChunkBasedCompression | BuildAssetBundleOptions.DeterministicAssetBundle, bs.buildTarget);
+        AssetDatabase.RemoveUnusedAssetBundleNames();
+        AssetDatabase.Refresh();
     }
 
-    [MenuItem("Tool/AssetBundle/Remove Unused AssetBundle Name", false, 30)]
+    [MenuItem("Tool/AssetBundle/Remove Unused AssetBundle Name", false, 0)]
     static void RemoveUnusedAssetBundleName()
     {
         AssetDatabase.RemoveUnusedAssetBundleNames();
         Debug.Log("clear success!");
     }
 
-    [MenuItem("Tool/AssetBundle/Remove All AssetBundle Name", false, 30)]
+    [MenuItem("Tool/AssetBundle/Remove All AssetBundle Name", false, 0)]
     static void RemoveAllAssetBundleName()
     {
         foreach (string file in GetAllAssets())
@@ -80,12 +94,18 @@ public class GameEditor
         RemoveUnusedAssetBundleName();
     }
 
-    [MenuItem("Tool/AssetBundle/Clear ResVersion Record", false, 30)]
+    [MenuItem("Tool/AssetBundle/Clear ResVersion Record", false, 0)]
     static void ClearResVersionRecord()
     {
         EditorPrefs.DeleteKey("BuildVersion");
         GetBuildSettingAsset().resVersion = EditorPrefs.GetInt("BuildVersion");
         Debug.Log("clear success!");
+    }
+
+    [MenuItem("Tool/Compile LuaScripts", false, 100)]
+    static void CompileLuaScripts()
+    {
+        LuajitGen.exportLuajit(Config.LuaPath.Replace(Application.dataPath.Replace("Assets", ""), ""), "*.lua", GetBuildSettingAsset().buildPath + "LuaScripts/", JITBUILDTYPE.X86);
     }
 
     static HashSet<string> GetAllAssets()

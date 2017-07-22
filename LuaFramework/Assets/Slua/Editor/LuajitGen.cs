@@ -93,7 +93,7 @@ namespace SLua
             { JITBUILDTYPE.X64, Application.dataPath + "/../jit/win/x64/luajit.exe" },
             { JITBUILDTYPE.GC64, Application.dataPath + "/../jit/win/gc64/luajit.exe" },
         };
-            string exePath = build[ buildType ];
+            string exePath = build[buildType];
             Process[] psList = new Process[src.Length];
 
 #else
@@ -122,6 +122,7 @@ namespace SLua
                 var ps = StartProcess(exePath, cmd, workDir );
                 ps.WaitForExit();
 #endif
+                EditorUtility.DisplayProgressBar("compile lua scripts", src[i], i / (float)src.Length);
             }
 
 
@@ -134,12 +135,13 @@ namespace SLua
                 }
             }
 #endif
+            EditorUtility.ClearProgressBar();
         }
 
-        static void exportLuajit( string res, string ext, string jitluadir, JITBUILDTYPE buildType )
+        public static void exportLuajit(string res, string ext, string jitluadir, JITBUILDTYPE buildType)
         {
             // delete
-            AssetDatabase.DeleteAsset( jitluadir );
+            AssetDatabase.DeleteAsset(jitluadir);
 
             var files = Directory.GetFiles(res, ext, SearchOption.AllDirectories);
             var dests = new string[files.Length];
@@ -166,7 +168,7 @@ namespace SLua
             }
 
 
-           	compileLuaJit(files, dests, buildType );
+            compileLuaJit(files, dests, buildType);
             AssetDatabase.Refresh();
         }
 
@@ -176,13 +178,13 @@ namespace SLua
             exportLuajit("Assets/Slua/Resources/", "*.txt", "Assets/Slua/jit/jitx86", JITBUILDTYPE.X86);
         }
 
-		[MenuItem("SLua/Compile Bytecode/luajitx64 for WIN64")]
+        [MenuItem("SLua/Compile Bytecode/luajitx64 for WIN64")]
         static void exportLuajitx64()
         {
             exportLuajit("Assets/Slua/Resources/", "*.txt", "Assets/Slua/jit/jitx64", JITBUILDTYPE.X64);
         }
 
-		[MenuItem("SLua/Compile Bytecode/luajitgc64 for MAC&ARM64")]
+        [MenuItem("SLua/Compile Bytecode/luajitgc64 for MAC&ARM64")]
         static void exportLuajitgc64()
         {
             exportLuajit("Assets/Slua/Resources/", "*.txt", "Assets/Slua/jit/jitgc64", JITBUILDTYPE.GC64);

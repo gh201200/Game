@@ -1,0 +1,29 @@
+ManifestFileVersion: 0
+CRC: 2253591761
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 18a3ca10fc2a297b8f99b7e06a5bf575
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: fef8b8cf8d9ad4df4d5f49024f8845f9
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 136
+  Script: {instanceID: 0}
+Assets:
+- Assets/Res/Prefabs/Capsule.prefab
+Dependencies:
+- Assets/Build/PerFile/materials/mat.bytes
