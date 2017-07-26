@@ -1,0 +1,249 @@
+fileFormatVersion: 2
+guid: 0b1176edb9c33cb4b8632c30e95ff893
+timeCreated: 1484533351
+licenseType: Pro
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: dingkuang
+    21300002: hongdi
+    21300004: jindu
+    21300006: jindudi
+    21300008: landi
+    21300010: liubianx
+    21300012: shengli
+    21300014: shibai
+    21300016: pingju
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 1
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 5
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: dingkuang
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 2
+        width: 948
+        height: 75
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 466, y: 34.5}
+        - {x: 465, y: 34.5}
+        - {x: 464, y: 36.5}
+        - {x: 461, y: 37.5}
+        - {x: -461, y: 37.5}
+        - {x: -464, y: 36.5}
+        - {x: -465, y: 34.5}
+        - {x: -466, y: 34.5}
+        - {x: -471, y: 29.5}
+        - {x: -471, y: 28.5}
+        - {x: -473, y: 27.5}
+        - {x: -474, y: 24.5}
+        - {x: -474, y: -37.5}
+        - {x: 474, y: -37.5}
+        - {x: 474, y: 24.5}
+        - {x: 473, y: 27.5}
+    - name: hongdi
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 79
+        width: 950
+        height: 523
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -475, y: 261.5}
+        - {x: -475, y: -261.5}
+        - {x: 475, y: -261.5}
+        - {x: 475, y: 261.5}
+    - name: jindu
+      rect:
+        serializedVersion: 2
+        x: 1472
+        y: 21
+        width: 25
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: jindudi
+      rect:
+        serializedVersion: 2
+        x: 1472
+        y: 49
+        width: 92
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 40, y: 0, z: 40, w: 0}
+      outline: []
+    - name: landi
+      rect:
+        serializedVersion: 2
+        x: 954
+        y: 79
+        width: 950
+        height: 523
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -475, y: 261.5}
+        - {x: -475, y: -261.5}
+        - {x: 475, y: -261.5}
+        - {x: 475, y: 261.5}
+    - name: liubianx
+      rect:
+        serializedVersion: 2
+        x: 952
+        y: 7
+        width: 80
+        height: 70
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -25, y: 35}
+        - {x: -40, y: 13}
+        - {x: -40, y: -8}
+        - {x: -27, y: -35}
+        - {x: 28, y: -35}
+        - {x: 40, y: -6}
+        - {x: 40, y: 13}
+        - {x: 23, y: 35}
+    - name: pingju
+      rect:
+        serializedVersion: 2
+        x: 1330
+        y: 12
+        width: 140
+        height: 65
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -65, y: 32.5}
+        - {x: -70, y: 15.5}
+        - {x: -70, y: -22.5}
+        - {x: -49, y: -32.5}
+        - {x: -22, y: -32.5}
+        - {x: 1, y: -11.5}
+        - {x: 3, y: 7.5}
+        - {x: 3, y: 32.5}
+      - - {x: 11, y: 32.5}
+        - {x: -3, y: -11.5}
+        - {x: -3, y: -26.5}
+        - {x: -1, y: -32.5}
+        - {x: 63, y: -32.5}
+        - {x: 67, y: -21.5}
+        - {x: 70, y: 0.5}
+        - {x: 70, y: 32.5}
+    - name: shengli
+      rect:
+        serializedVersion: 2
+        x: 1034
+        y: 10
+        width: 146
+        height: 67
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -64, y: 33.5}
+        - {x: -73, y: 16.5}
+        - {x: -73, y: -33.5}
+        - {x: 3, y: -33.5}
+        - {x: 3, y: 26.5}
+        - {x: -5, y: 33.5}
+      - - {x: 67, y: -23.5}
+        - {x: 73, y: 15.5}
+        - {x: 73, y: 33.5}
+        - {x: 5, y: 33.5}
+        - {x: -2, y: 10.5}
+        - {x: -2, y: -25.5}
+        - {x: 1, y: -33.5}
+        - {x: 25, y: -33.5}
+        - {x: 26, y: -31.5}
+        - {x: 31, y: -33.5}
+        - {x: 60, y: -33.5}
+    - name: shibai
+      rect:
+        serializedVersion: 2
+        x: 1182
+        y: 10
+        width: 146
+        height: 67
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 9, y: 33.5}
+        - {x: 5, y: 26.5}
+        - {x: 0, y: -8.5}
+        - {x: 0, y: -11.5}
+        - {x: -1, y: -6.5}
+        - {x: 0, y: 3.5}
+        - {x: 3, y: 23.5}
+        - {x: -20, y: 33.5}
+        - {x: -54, y: 33.5}
+        - {x: -72, y: 1.5}
+        - {x: -72, y: -6.5}
+        - {x: -68, y: -10.5}
+        - {x: -73, y: -16.5}
+        - {x: -73, y: -31.5}
+        - {x: -72, y: -33.5}
+        - {x: 72, y: -33.5}
+        - {x: 73, y: -29.5}
+        - {x: 73, y: 26.5}
+        - {x: 59, y: 33.5}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: res/ui/textures/battlerecord/battlerecord.bytes
+  assetBundleVariant: 

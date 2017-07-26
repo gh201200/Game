@@ -11,6 +11,7 @@ using Debug = UnityEngine.Debug;
 using ICSharpCode.SharpZipLib.Zip;
 using System.Diagnostics;
 using System.Timers;
+using System.Xml;
 
 public class GameEditor
 {
@@ -19,64 +20,37 @@ public class GameEditor
     [MenuItem("Tool/Test", false, 1000)]
     static void Test()
     {
-        Stopwatch sp = new Stopwatch();
-        sp.Start();
-        //Debug.Log("begin compress file");
-        //string path = @"C:\Users\Administrator\Desktop\PDF\Android开发入门教程.pdf";
-        //ZipUtil.PackFile(path, @"C:\Users\Administrator\Desktop\test.zip", (cur, total) =>
+        ////测试解压
+        //Stopwatch sp = new Stopwatch();
+        //sp.Start();
+        //string content = "";
+        //float progress = 0f;
+        //try
         //{
-        //    string content = (((double)cur / total) * 100).ToString("0.0") + "% " + (cur / 1024d / 1024d).ToString("0.0") + "M/" + (total / 1024d / 1024d).ToString("0.0") + "M";
-        //    Debug.Log(content);
-        //}, () =>
+        //    ZipUtil.UnpackFile(@"C:\Users\Administrator\Desktop\test", Config.StreamingAssetsPath + "/data.zip",
+        //        (cur, total) =>
+        //        {
+        //            progress = (float)cur / total;
+        //            content = (progress * 100).ToString("0.0") + "% " + (cur / 1024d / 1024d).ToString("0.0") + "M/" +
+        //                      (total / 1024d / 1024d).ToString("0.0") + "M";
+        //            EditorUtility.DisplayProgressBar("unpack zip", content, progress);
+        //        },
+        //        () =>
+        //        {
+        //            Debug.Log("unpack finish! 耗时:" + sp.Elapsed.TotalSeconds + "s");
+        //        });
+        //}
+        //catch (Exception e)
         //{
-        //    Debug.Log("compress finish! 耗时:" + sp.Elapsed.TotalSeconds + "s");
-        //    sp.Stop();
-        //}, 9, "123456");
+        //    throw new Exception(e.Message);
+        //}
+        //finally
+        //{
+        //    EditorUtility.ClearProgressBar();
+        //    AssetDatabase.Refresh();
+        //}
 
-        //Debug.Log("begin compress file");
-        //string path = @"D:\SocketPrograming\SocketPrograming\ScrollView";
-        //ZipUtil.PackDirectory(path, @"C:\Users\Administrator\Desktop\test.zip", (cur, total) =>
-        //{
-        //    string content = (((double)cur / total) * 100).ToString("0.0") + "%    " + (cur / 1024d / 1024d).ToString("0.0") + "M/" + (total / 1024d / 1024d).ToString("0.0") + "M";
-        //    Debug.Log(content);
-        //}, () =>
-        //{
-        //    Debug.Log("compress finish! 耗时:" + sp.Elapsed.TotalSeconds + "s");
-        //});
-
-        //string pach = @"E:\美术策划资源\美术资源.zip";
-        //ZipUtil.UnpackFileAsync(@"C:\Users\Administrator\Desktop\test", pach, (cur, total) =>
-        //{
-        //    string content = (((double)cur / total) * 100).ToString("0.0") + "%    " + (cur / 1024d / 1024d).ToString("0.0") + "M/" + (total / 1024d / 1024d).ToString("0.0") + "M";
-        //    Debug.Log(content);
-        //}, () => Debug.Log("unpack finish! 耗时:" + sp.Elapsed.TotalSeconds + "s"));
-
-        string content = "";
-        float progress = 0f;
-        try
-        {
-            ZipUtil.UnpackFile(@"C:\Users\Administrator\Desktop\test", Config.StreamingAssetsPath + "/data.zip",
-                (cur, total) =>
-                {
-                    progress = (float)cur / total;
-                    content = (progress * 100).ToString("0.0") + "% " + (cur / 1024d / 1024d).ToString("0.0") + "M/" +
-                              (total / 1024d / 1024d).ToString("0.0") + "M";
-                    EditorUtility.DisplayProgressBar("progress", content, progress);
-                },
-                () =>
-                {
-                    Debug.Log("unpack finish! 耗时:" + sp.Elapsed.TotalSeconds + "s");
-                });
-        }
-        catch (Exception e)
-        {
-            throw new Exception(e.Message);
-        }
-        finally
-        {
-            EditorUtility.ClearProgressBar();
-            AssetDatabase.Refresh();
-        }
+        GenerateAssetInfo();
     }
 
     [MenuItem("Tool/BuildSetting", false, 1)]
@@ -87,15 +61,35 @@ public class GameEditor
         Selection.activeObject = obj;
     }
 
-    [MenuItem("Tool/AssetBundle/Build Single", false, 10)]
+    //[MenuItem("Tool/AssetBundle/Build Single", false, 10)]
     static void BuildSingle()
     {
         AddResVersion();
-#if PerFile
-        //每个文件都是一个AssetBundle
-#else
-        //每个文件夹都是一个AssetBundle
-#endif
+        BuildSetting bs = GetBuildSettingAsset();
+        RemoveAllAssetBundleName();
+        UnityEngine.Object[] objs = Selection.objects;
+        HashSet<string> buildList = new HashSet<string>();
+        foreach (var obj in objs)
+        {
+            string path = AssetDatabase.GetAssetPath(obj);
+            string[] dependencies = AssetDatabase.GetDependencies(path);
+            foreach (string file in dependencies)
+            {
+                if (!file.StartsWith(bs.resPath))
+                {
+                    EditorUtility.DisplayDialog("error", "please make sure all dependencies assets in " + bs.resPath, "ok");
+                    return;
+                }
+                string tag = GetAssetBundleTag(file);
+                AssetImporter ai = AssetImporter.GetAtPath(file);
+                ai.assetBundleName = tag;
+                ai.assetBundleVariant = null;
+                if (!buildList.Contains(tag)) buildList.Add(tag);
+            }
+        }
+        Debug.Log("build list:");
+        foreach (var file in buildList) Debug.Log(file);
+        Build();
     }
 
     [MenuItem("Tool/AssetBundle/Build All", false, 20)]
@@ -109,8 +103,7 @@ public class GameEditor
         //每个文件是一个AssetBundle
         foreach (string str in files)
         {
-            string fileName = Path.GetFileName(str);
-            string bundleTag = str.Replace("Assets/", "").Replace(fileName, "") + Path.GetFileNameWithoutExtension(str) + ".bytes";
+            string bundleTag = GetAssetBundleTag(str);
             AssetImporter ai = AssetImporter.GetAtPath(str);
             ai.assetBundleName = bundleTag;
             ai.assetBundleVariant = null;
@@ -119,26 +112,20 @@ public class GameEditor
         //每个文件夹下的文件是一个AssetBundle
         foreach (string str in files)
         {
-            string fileName = Path.GetFileName(str);
-            string bundleTag = str.Replace("Assets/", "").Replace("/" + fileName, "") + ".bytes";
+            string bundleTag = GetAssetBundleTag(str);
             AssetImporter ai = AssetImporter.GetAtPath(str);
             ai.assetBundleName = bundleTag;
             ai.assetBundleVariant = null;
         }
 #endif
-        string buildPath = Application.dataPath.Replace("/Assets", "/") + bs.buildPath;
-        DirectoryInfo di = new DirectoryInfo(buildPath);
-        if (!di.Exists) di.Create();
-        BuildPipeline.BuildAssetBundles(bs.buildPath, BuildAssetBundleOptions.ChunkBasedCompression | BuildAssetBundleOptions.DeterministicAssetBundle, bs.buildTarget);
-        AssetDatabase.RemoveUnusedAssetBundleNames();
-        AssetDatabase.Refresh();
+        Build();
     }
 
     [MenuItem("Tool/AssetBundle/Remove Unused AssetBundle Name", false, 30)]
     static void RemoveUnusedAssetBundleName()
     {
         AssetDatabase.RemoveUnusedAssetBundleNames();
-        Debug.Log("clear success!");
+        //Debug.Log("clear success!");
     }
 
     [MenuItem("Tool/AssetBundle/Remove All AssetBundle Name", false, 40)]
@@ -147,8 +134,8 @@ public class GameEditor
         foreach (string file in GetAllAssets())
         {
             AssetImporter ai = AssetImporter.GetAtPath(file);
-            if (ai.assetBundleVariant != null) ai.assetBundleVariant = null;
-            if (ai.assetBundleName != null) ai.assetBundleName = null;
+            if (!string.IsNullOrEmpty(ai.assetBundleVariant)) ai.assetBundleVariant = null;
+            if (!string.IsNullOrEmpty(ai.assetBundleName)) ai.assetBundleName = null;
         }
         RemoveUnusedAssetBundleName();
     }
@@ -192,6 +179,17 @@ public class GameEditor
         LuajitGen.exportLuajit(Config.LuaPath.Replace(Application.dataPath.Replace("Assets", ""), ""), "*.lua", GetBuildSettingAsset().buildPath + "LuaScripts/", JITBUILDTYPE.X86);
     }
 
+    [MenuItem("Tool/Clear Lua Bytecode", false, 110)]
+    static void ClearLuaBytecode()
+    {
+        BuildSetting bs = GetBuildSettingAsset();
+        string path = Application.dataPath.Replace("Assets", "") + bs.buildPath;
+        path = path.Replace('/', '\\');
+        DirectoryInfo di = new DirectoryInfo(path + "LuaScripts");
+        if (di.Exists) di.Delete(true);
+        AssetDatabase.Refresh();
+    }
+
     [MenuItem("Tool/Pack Assets", false, 200)]
     static void PackAssets()
     {
@@ -211,7 +209,7 @@ public class GameEditor
                 progress = (float)cur / total;
                 content = (progress * 100).ToString("0.0") + "% " + (cur / 1024d / 1024d).ToString("0.0") + "M/" +
                           (total / 1024d / 1024d).ToString("0.0") + "M";
-                EditorUtility.DisplayProgressBar("progress", content, progress);
+                EditorUtility.DisplayProgressBar("pack assets to zip", content, progress);
             },
                 () =>
                 {
@@ -227,6 +225,118 @@ public class GameEditor
             EditorUtility.ClearProgressBar();
             AssetDatabase.Refresh();
         }
+    }
+
+    static void GenerateAssetInfo()
+    {
+        try
+        {
+            BuildSetting bs = GetBuildSettingAsset();
+            string path = Application.dataPath.Replace("Assets", "") + bs.buildPath;
+            path = path.Replace('/', '\\');
+            string[] files = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
+            XmlDocument doc = new XmlDocument();
+            XmlElement root = doc.CreateElement("root");
+            int fileCount = 0;
+            long totalSize = 0;
+            doc.AppendChild(root);
+            foreach (string file in files)
+            {
+                if (file.EndsWith(".meta") || file.EndsWith("AssetsInfo.xml")) continue;
+                string filePath = file.Replace('\\', '/');
+                filePath = filePath.Replace(Application.dataPath + "/Build/", "");
+
+                string md5 = GameUtil.MD5File(file);
+
+                string fileName = Path.GetFileName(file);
+
+                FileInfo info = new FileInfo(file);
+
+                string size = info.Length.ToString();
+
+                XmlElement node = doc.CreateElement("file");
+
+                XmlAttribute nameAtt = doc.CreateAttribute("name");
+                nameAtt.Value = fileName;
+                node.Attributes.Append(nameAtt);
+
+                XmlAttribute pathAtt = doc.CreateAttribute("path");
+                pathAtt.Value = filePath;
+                node.Attributes.Append(pathAtt);
+
+                XmlAttribute md5Att = doc.CreateAttribute("md5");
+                md5Att.Value = md5;
+                node.Attributes.Append(md5Att);
+
+                XmlAttribute sizeAtt = doc.CreateAttribute("size");
+                sizeAtt.Value = size;
+                node.Attributes.Append(sizeAtt);
+
+                root.AppendChild(node);
+
+                fileCount++;
+                totalSize += info.Length;
+
+                EditorUtility.DisplayProgressBar("generate AssetsInfo.xml", filePath, (float)fileCount / files.Length * 2);
+            }
+
+            XmlAttribute fileCountAtt = doc.CreateAttribute("fileCount");
+            fileCountAtt.Value = fileCount.ToString();
+            root.Attributes.Append(fileCountAtt);
+
+            XmlAttribute totalSizeAtt = doc.CreateAttribute("totalSize");
+            totalSizeAtt.Value = totalSize.ToString();
+            root.Attributes.Append(totalSizeAtt);
+
+            XmlAttribute resVersionAtt = doc.CreateAttribute("resVertion");
+            resVersionAtt.Value = bs.resVersion.ToString();
+            root.Attributes.Append(resVersionAtt);
+
+            XmlAttribute timeAtt = doc.CreateAttribute("generateTime");
+            timeAtt.Value = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            root.Attributes.Append(timeAtt);
+
+            doc.Save(path + "AssetsInfo.xml");
+        }
+        catch (System.Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+        finally
+        {
+            EditorUtility.ClearProgressBar();
+            AssetDatabase.Refresh();
+        }
+    }
+
+    static void Build()
+    {
+        BuildSetting bs = GetBuildSettingAsset();
+        string buildPath = Application.dataPath.Replace("/Assets", "/") + bs.buildPath;
+        DirectoryInfo di = new DirectoryInfo(buildPath);
+        if (!di.Exists) di.Create();
+        BuildPipeline.BuildAssetBundles(bs.buildPath, BuildAssetBundleOptions.ChunkBasedCompression | BuildAssetBundleOptions.DeterministicAssetBundle, bs.buildTarget);
+        AssetDatabase.RemoveUnusedAssetBundleNames();
+        AssetDatabase.Refresh();
+        GenerateAssetInfo();
+    }
+
+    /// <summary>
+    /// 生成AssetBundle的标签
+    /// 路径以Assets/开头
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    static string GetAssetBundleTag(string path)
+    {
+        string tag = "";
+        string fileName = Path.GetFileName(path);
+#if PerFile
+        tag = path.Replace("Assets/", "").Replace(fileName, "") + Path.GetFileNameWithoutExtension(path) + ".bytes";
+#else
+        tag = path.Replace("Assets/", "").Replace("/" + fileName, "") + ".bytes";
+#endif
+        return tag;
     }
 
     static HashSet<string> GetAllAssets()
@@ -268,6 +378,9 @@ public class GameEditor
         {
             obj = AssetDatabase.LoadAssetAtPath<BuildSetting>(buildSettingPath);
         }
+
+        ((BuildSetting)obj).resVersion = EditorPrefs.GetInt("BuildVersion");
+
         return obj as BuildSetting;
     }
 

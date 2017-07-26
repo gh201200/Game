@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: c055e6dde3445f24db8d1aa52e081204
+timeCreated: 1474608688
+licenseType: Pro
+ShaderImporter:
+  defaultTextures: []
+  userData: 
+  assetBundleName: res/shaders/discoloration/discoloration.bytes
+  assetBundleVariant: 

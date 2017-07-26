@@ -1,0 +1,1476 @@
+fileFormatVersion: 2
+guid: 0df8d2ff9eaaa174993085add904dbb8
+timeCreated: 1488421661
+licenseType: Pro
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Bg2
+    21300002: Bg3
+    21300004: Bg_Blue
+    21300006: Bg_Green
+    21300008: Button_Close
+    21300010: Button_Green
+    21300012: Button_Grey
+    21300014: Button_Red
+    21300016: DialogBg1
+    21300018: DialogBg2
+    21300020: Frame
+    21300022: LevelFrame
+    21300024: LightStrip
+    21300026: Rect2Bg
+    21300028: RectBg
+    21300030: UpgradeArrow_Blue
+    21300032: UpgradeArrow_Green
+    21300034: baoshi
+    21300036: bianjiao
+    21300038: dengji
+    21300040: di
+    21300042: dier
+    21300044: dikuang-anniu
+    21300046: dikuang
+    21300048: diwen
+    21300050: edge_blue
+    21300052: edge_green
+    21300054: edge_orange
+    21300056: edge_purple
+    21300058: edge_white
+    21300060: erxing
+    21300062: gonghuianniu
+    21300064: guanbi
+    21300066: huadongkuang
+    21300068: jie
+    21300070: jifeng
+    21300072: jinbi
+    21300074: jindukuang
+    21300076: jindurenwkuang
+    21300078: jingdutiao
+    21300080: kuang
+    21300082: lingqu
+    21300084: liubianxdiwen
+    21300086: loadingAsset
+    21300088: moduleShadow
+    21300090: qudinganniu
+    21300092: renwuwenzikuang
+    21300094: rouxiang
+    21300096: sanxing
+    21300098: tianjiaanniu
+    21300100: xing
+    21300102: xinxin
+    21300104: yiny
+    21300106: yixing
+    21300108: yuandi
+    21300110: H
+    21300112: R
+    21300114: anniul
+    21300116: jia
+    21300118: juxingkuangdi
+    21300120: l
+    21300122: fenggexian
+    21300124: juli
+    21300126: kapian
+    21300128: lengquan
+    21300130: liliang
+    21300132: mingjie
+    21300134: mofa
+    21300136: shengming
+    21300138: zhili
+    21300140: lianglikuang
+    21300142: Lvjintu
+    21300144: jiaobiao
+    21300146: jinengdik
+    21300148: pailieanniu
+    21300150: wenzi
+    21300152: Lvguang
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 1
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: 12
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 5
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: H
+      rect:
+        serializedVersion: 2
+        x: 862
+        y: 20
+        width: 86
+        height: 81
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -34, y: 40.5}
+        - {x: -43, y: 31.5}
+        - {x: -43, y: -12.5}
+        - {x: -33, y: -40.5}
+        - {x: 26, y: -40.5}
+        - {x: 43, y: -29.5}
+        - {x: 43, y: 32.5}
+        - {x: 27, y: 40.5}
+      - - {x: 22, y: -34.5}
+        - {x: 22, y: -36.5}
+        - {x: 24, y: -40.5}
+        - {x: 31, y: -40.5}
+        - {x: 31, y: -35.5}
+        - {x: 28, y: -32.5}
+        - {x: 24, y: -32.5}
+      - - {x: -33, y: -32.5}
+        - {x: -32, y: -35.5}
+        - {x: -29, y: -35.5}
+        - {x: -27, y: -33.5}
+        - {x: -28, y: -30.5}
+        - {x: -31, y: -30.5}
+    - name: LevelFrame
+      rect:
+        serializedVersion: 2
+        x: 1035
+        y: 8
+        width: 114
+        height: 114
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -41, y: 57}
+        - {x: -57, y: 54}
+        - {x: -57, y: -51}
+        - {x: -47, y: -57}
+        - {x: 57, y: -57}
+        - {x: 57, y: 47}
+        - {x: 46, y: 57}
+    - name: Lvguang
+      rect:
+        serializedVersion: 2
+        x: 532
+        y: 510
+        width: 143
+        height: 49
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 17, w: 0}
+      outline:
+      - - {x: -59.5, y: 24.5}
+        - {x: -61.5, y: 22.5}
+        - {x: -71.5, y: 0.5}
+        - {x: -71.5, y: -24.5}
+        - {x: 69.5, y: -24.5}
+        - {x: 71.5, y: -16.5}
+        - {x: 71.5, y: 24.5}
+    - name: Lvjintu
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 97
+        width: 273
+        height: 49
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 60, y: 0, z: 60, w: 0}
+      outline:
+      - - {x: -126.5, y: 24.5}
+        - {x: -136.5, y: 9.5}
+        - {x: -136.5, y: -24.5}
+        - {x: 124.5, y: -24.5}
+        - {x: 135.5, y: -11.5}
+        - {x: 136.5, y: -10.5}
+        - {x: 136.5, y: 24.5}
+    - name: R
+      rect:
+        serializedVersion: 2
+        x: 1253
+        y: 121
+        width: 86
+        height: 80
+      alignment: 9
+      pivot: {x: 0.5, y: 0.49375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -43, y: 40.5}
+        - {x: -43, y: -29.5}
+        - {x: -23, y: -39.5}
+        - {x: 29, y: -39.5}
+        - {x: 43, y: -27.5}
+        - {x: 43, y: 31.5}
+        - {x: 23, y: 40.5}
+      - - {x: 39, y: 38.5}
+        - {x: 39, y: 37.5}
+        - {x: 42, y: 34.5}
+        - {x: 43, y: 34.5}
+        - {x: 43, y: 40.5}
+        - {x: 41, y: 40.5}
+    - name: Rect2Bg
+      rect:
+        serializedVersion: 2
+        x: 1026
+        y: 331
+        width: 34
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: RectBg
+      rect:
+        serializedVersion: 2
+        x: 236
+        y: 443
+        width: 34
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: anniul
+      rect:
+        serializedVersion: 2
+        x: 1050
+        y: 203
+        width: 238
+        height: 107
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 118, y: 53.5}
+        - {x: -99, y: 53.5}
+        - {x: -113, y: 33.5}
+        - {x: -119, y: 22.5}
+        - {x: -119, y: -18.5}
+        - {x: -108, y: -53.5}
+        - {x: 114, y: -53.5}
+        - {x: 119, y: -48.5}
+        - {x: 119, y: 52.5}
+    - name: baoshi
+      rect:
+        serializedVersion: 2
+        x: 950
+        y: 5
+        width: 83
+        height: 101
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -37.5, y: 14.5}
+        - {x: -41.5, y: -1.5}
+        - {x: -41.5, y: -35.5}
+        - {x: -27.5, y: -50.5}
+        - {x: 6.5, y: -50.5}
+        - {x: 41.5, y: -37.5}
+        - {x: 41.5, y: 50.5}
+        - {x: -9.5, y: 50.5}
+        - {x: -12.5, y: 49.5}
+    - name: bianjiao
+      rect:
+        serializedVersion: 2
+        x: 1084
+        y: 443
+        width: 299
+        height: 571
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 142.5, y: -267.5}
+        - {x: 110.5, y: -204.5}
+        - {x: 76.5, y: -139.5}
+        - {x: 74.5, y: -132.5}
+        - {x: 70.5, y: -129.5}
+        - {x: 52.5, y: -93.5}
+        - {x: 41.5, y: -72.5}
+        - {x: 29.5, y: -49.5}
+        - {x: 6.5, y: -5.5}
+        - {x: -4.5, y: 15.5}
+        - {x: -17.5, y: 38.5}
+        - {x: -17.5, y: 43.5}
+        - {x: -28.5, y: 61.5}
+        - {x: -39.5, y: 80.5}
+        - {x: -37.5, y: 82.5}
+        - {x: -36.5, y: 84.5}
+        - {x: -41.5, y: 87.5}
+        - {x: -61.5, y: 124.5}
+        - {x: -83.5, y: 166.5}
+        - {x: -80.5, y: 169.5}
+        - {x: -87.5, y: 175.5}
+        - {x: -109.5, y: 216.5}
+        - {x: -121.5, y: 239.5}
+        - {x: -129.5, y: 258.5}
+        - {x: -128.5, y: 260.5}
+        - {x: -135.5, y: 264.5}
+        - {x: -146.5, y: 285.5}
+        - {x: -149.5, y: 285.5}
+        - {x: -149.5, y: -278.5}
+        - {x: -139.5, y: -285.5}
+        - {x: 149.5, y: -285.5}
+        - {x: 149.5, y: -279.5}
+        - {x: 147.5, y: -271.5}
+    - name: dengji
+      rect:
+        serializedVersion: 2
+        x: 1290
+        y: 203
+        width: 93
+        height: 107
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -18.5, y: 53.5}
+        - {x: -21.5, y: 52.5}
+        - {x: -46.5, y: 36.5}
+        - {x: -46.5, y: -34.5}
+        - {x: -41.5, y: -53.5}
+        - {x: 21.5, y: -53.5}
+        - {x: 46.5, y: -25.5}
+        - {x: 46.5, y: 27.5}
+        - {x: 16.5, y: 53.5}
+    - name: di
+      rect:
+        serializedVersion: 2
+        x: 790
+        y: 172
+        width: 142
+        height: 138
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 40, y: 40, z: 40, w: 40}
+      outline:
+      - - {x: -63, y: 69}
+        - {x: -71, y: 41}
+        - {x: -71, y: -39}
+        - {x: -41, y: -69}
+        - {x: 40, y: -69}
+        - {x: 71, y: -38}
+        - {x: 71, y: 62}
+        - {x: 48, y: 69}
+    - name: dier
+      rect:
+        serializedVersion: 2
+        x: 740
+        y: 579
+        width: 200
+        height: 200
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 50, y: 50, z: 50, w: 50}
+      outline:
+      - - {x: 100, y: 80}
+        - {x: 96, y: 89}
+        - {x: 89, y: 96}
+        - {x: 80, y: 100}
+        - {x: -83, y: 100}
+        - {x: -97, y: 90}
+        - {x: -100, y: 81}
+        - {x: -100, y: -80}
+        - {x: -96, y: -89}
+        - {x: -89, y: -96}
+        - {x: -80, y: -100}
+        - {x: 80, y: -100}
+        - {x: 89, y: -96}
+        - {x: 96, y: -89}
+        - {x: 100, y: -80}
+    - name: dikuang-anniu
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 569
+        width: 258
+        height: 210
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 80, y: 0, z: 80, w: 0}
+      outline:
+      - - {x: -96, y: 105}
+        - {x: -129, y: -43}
+        - {x: -129, y: -105}
+        - {x: -120, y: -105}
+        - {x: -86, y: 6}
+        - {x: -76, y: 78}
+        - {x: -76, y: 105}
+      - - {x: 115, y: 105}
+        - {x: 89, y: -32}
+        - {x: 79, y: -104}
+        - {x: 79, y: -105}
+        - {x: 89, y: -105}
+        - {x: 129, y: 55}
+        - {x: 129, y: 105}
+    - name: dikuang
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 781
+        width: 1080
+        height: 233
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 529, y: 110.5}
+        - {x: 438, y: 110.5}
+        - {x: 434, y: 114.5}
+        - {x: 382, y: 114.5}
+        - {x: 380, y: 112.5}
+        - {x: 378, y: 112.5}
+        - {x: 376, y: 110.5}
+        - {x: 291, y: 110.5}
+        - {x: 290, y: 111.5}
+        - {x: 287, y: 111.5}
+        - {x: 284, y: 114.5}
+        - {x: 232, y: 114.5}
+        - {x: 229, y: 110.5}
+        - {x: 138, y: 110.5}
+        - {x: 138, y: 111.5}
+        - {x: 134, y: 115.5}
+        - {x: 82, y: 115.5}
+        - {x: 79, y: 110.5}
+        - {x: -11, y: 110.5}
+        - {x: -12, y: 111.5}
+        - {x: -12, y: 114.5}
+        - {x: -14, y: 116.5}
+        - {x: -68, y: 116.5}
+        - {x: -70, y: 115.5}
+        - {x: -72, y: 111.5}
+        - {x: -74, y: 111.5}
+        - {x: -75, y: 110.5}
+        - {x: -160, y: 110.5}
+        - {x: -166, y: 116.5}
+        - {x: -219, y: 116.5}
+        - {x: -222, y: 110.5}
+        - {x: -308, y: 110.5}
+        - {x: -310, y: 112.5}
+        - {x: -312, y: 112.5}
+        - {x: -312, y: 113.5}
+        - {x: -315, y: 116.5}
+        - {x: -369, y: 116.5}
+        - {x: -371, y: 113.5}
+        - {x: -372, y: 111.5}
+        - {x: -374, y: 111.5}
+        - {x: -375, y: 110.5}
+        - {x: -457, y: 110.5}
+        - {x: -458, y: 111.5}
+        - {x: -461, y: 111.5}
+        - {x: -461, y: 112.5}
+        - {x: -462, y: 115.5}
+        - {x: -464, y: 116.5}
+        - {x: -520, y: 116.5}
+        - {x: -523, y: 110.5}
+        - {x: -540, y: 110.5}
+        - {x: -540, y: -116.5}
+        - {x: 540, y: -116.5}
+        - {x: 540, y: 113.5}
+        - {x: 532, y: 113.5}
+    - name: diwen
+      rect:
+        serializedVersion: 2
+        x: 274
+        y: 558
+        width: 204
+        height: 221
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 102, y: 110.5}
+        - {x: 62, y: 110.5}
+        - {x: -102, y: -76.5}
+        - {x: -102, y: -110.5}
+        - {x: 75, y: -110.5}
+        - {x: 100, y: -90.5}
+        - {x: 102, y: -85.5}
+    - name: edge_blue
+      rect:
+        serializedVersion: 2
+        x: 690
+        y: 334
+        width: 82
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 50, y: 50, z: 50, w: 50}
+      outline:
+      - - {x: -41, y: 41}
+        - {x: -41, y: -41}
+        - {x: 41, y: -41}
+        - {x: 41, y: 41}
+      - - {x: -26, y: 18}
+        - {x: 18, y: 26}
+        - {x: 26, y: -18}
+        - {x: -18, y: -26}
+    - name: edge_green
+      rect:
+        serializedVersion: 2
+        x: 774
+        y: 334
+        width: 82
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 50, y: 50, z: 50, w: 50}
+      outline:
+      - - {x: -41, y: 41}
+        - {x: -41, y: -38}
+        - {x: -35, y: -41}
+        - {x: 41, y: -41}
+        - {x: 41, y: 41}
+      - - {x: -26, y: 18}
+        - {x: 18, y: 26}
+        - {x: 26, y: -18}
+        - {x: -18, y: -26}
+    - name: edge_orange
+      rect:
+        serializedVersion: 2
+        x: 858
+        y: 334
+        width: 82
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 50, y: 50, z: 50, w: 50}
+      outline:
+      - - {x: -41, y: 41}
+        - {x: -41, y: -37}
+        - {x: -37, y: -41}
+        - {x: 33, y: -41}
+        - {x: 41, y: -34}
+        - {x: 41, y: 38}
+        - {x: 40, y: 41}
+      - - {x: -26, y: 19}
+        - {x: 18, y: 26}
+        - {x: 26, y: -18}
+        - {x: -18, y: -26}
+    - name: edge_purple
+      rect:
+        serializedVersion: 2
+        x: 942
+        y: 334
+        width: 82
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 50, y: 50, z: 50, w: 50}
+      outline:
+      - - {x: -41, y: 41}
+        - {x: -41, y: -41}
+        - {x: 41, y: -41}
+        - {x: 41, y: 41}
+      - - {x: -26, y: 20}
+        - {x: 18, y: 26}
+        - {x: 26, y: -20}
+        - {x: -18, y: -26}
+    - name: edge_white
+      rect:
+        serializedVersion: 2
+        x: 688
+        y: 19
+        width: 82
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 30, y: 30, z: 30, w: 30}
+      outline:
+      - - {x: 39, y: 38}
+        - {x: 35, y: 41}
+        - {x: -41, y: 41}
+        - {x: -41, y: -41}
+        - {x: 36, y: -41}
+        - {x: 40, y: -35}
+        - {x: 41, y: -32}
+        - {x: 41, y: 33}
+      - - {x: -20, y: 27}
+        - {x: 23, y: 20}
+        - {x: 26, y: -20}
+        - {x: -18, y: -26}
+    - name: erxing
+      rect:
+        serializedVersion: 2
+        x: 626
+        y: 341
+        width: 62
+        height: 62
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -21, y: 31}
+        - {x: -31, y: 20}
+        - {x: -31, y: -27}
+        - {x: -20, y: -31}
+        - {x: 8, y: -31}
+        - {x: 31, y: -3}
+        - {x: 31, y: 12}
+        - {x: 20, y: 31}
+    - name: fenggexian
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 561
+        width: 219
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: gonghuianniu
+      rect:
+        serializedVersion: 2
+        x: 472
+        y: 324
+        width: 70
+        height: 79
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -22, y: -39.5}
+        - {x: 35, y: -39.5}
+        - {x: 35, y: 39.5}
+        - {x: -15, y: 39.5}
+        - {x: -35, y: 32.5}
+        - {x: -35, y: -23.5}
+    - name: guanbi
+      rect:
+        serializedVersion: 2
+        x: 530
+        y: 9
+        width: 77
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -25.5, y: 43}
+        - {x: -38.5, y: 38}
+        - {x: -38.5, y: -39}
+        - {x: -28.5, y: -43}
+        - {x: 30.5, y: -43}
+        - {x: 38.5, y: -29}
+        - {x: 38.5, y: 35}
+        - {x: 30.5, y: 43}
+      - - {x: 27.5, y: -43}
+        - {x: 26.5, y: -40}
+        - {x: 20.5, y: -40}
+        - {x: 19.5, y: -43}
+    - name: huadongkuang
+      rect:
+        serializedVersion: 2
+        x: 655
+        y: 155
+        width: 133
+        height: 155
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 106, y: 0, z: 10, w: 0}
+      outline:
+      - - {x: -16.5, y: 77.5}
+        - {x: -66.5, y: -9.5}
+        - {x: -66.5, y: -77.5}
+        - {x: 66.5, y: -77.5}
+        - {x: 66.5, y: 77.5}
+    - name: jia
+      rect:
+        serializedVersion: 2
+        x: 1151
+        y: 23
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 50, y: 16}
+        - {x: 11, y: 50}
+        - {x: -19, y: 50}
+        - {x: -50, y: 10}
+        - {x: -50, y: -11}
+        - {x: -12, y: -50}
+        - {x: 14, y: -50}
+        - {x: 18, y: -31}
+        - {x: 50, y: -15}
+    - name: jiaobiao
+      rect:
+        serializedVersion: 2
+        x: 1150
+        y: 125
+        width: 65
+        height: 30
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: jie
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 330
+        width: 120
+        height: 117
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -57, y: 58.5}
+        - {x: -60, y: 57.5}
+        - {x: -60, y: -38.5}
+        - {x: -28, y: -58.5}
+        - {x: 27, y: -58.5}
+        - {x: 60, y: -40.5}
+        - {x: 60, y: 36.5}
+        - {x: 48, y: 58.5}
+    - name: jifeng
+      rect:
+        serializedVersion: 2
+        x: 363
+        y: 3
+        width: 79
+        height: 92
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -34.5, y: 46}
+        - {x: -39.5, y: 45}
+        - {x: -39.5, y: -44}
+        - {x: -38.5, y: -46}
+        - {x: 34.5, y: -46}
+        - {x: 39.5, y: -25}
+        - {x: 39.5, y: 46}
+    - name: jinbi
+      rect:
+        serializedVersion: 2
+        x: 444
+        y: 4
+        width: 84
+        height: 91
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -27, y: 45.5}
+        - {x: -38, y: 32.5}
+        - {x: -42, y: 15.5}
+        - {x: -42, y: -31.5}
+        - {x: -32, y: -45.5}
+        - {x: 17, y: -45.5}
+        - {x: 42, y: -29.5}
+        - {x: 42, y: 41.5}
+        - {x: 32, y: 45.5}
+    - name: jindukuang
+      rect:
+        serializedVersion: 2
+        x: 236
+        y: 449
+        width: 235
+        height: 53
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 30, y: 0, z: 30, w: 0}
+      outline:
+      - - {x: -117.5, y: 26.5}
+        - {x: -117.5, y: -26.5}
+        - {x: 114.5, y: -26.5}
+        - {x: 117.5, y: -9.5}
+        - {x: 117.5, y: 26.5}
+    - name: jindurenwkuang
+      rect:
+        serializedVersion: 2
+        x: 473
+        y: 455
+        width: 215
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 60, y: 0, z: 60, w: 0}
+      outline:
+      - - {x: -93.5, y: 24}
+        - {x: -95.5, y: 21}
+        - {x: -107.5, y: 1}
+        - {x: -107.5, y: -24}
+        - {x: 99.5, y: -24}
+        - {x: 104.5, y: -18}
+        - {x: 107.5, y: -2}
+        - {x: 107.5, y: 24}
+    - name: jinengdik
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 504
+        width: 270
+        height: 275
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5018182}
+      border: {x: 55, y: 55, z: 55, w: 55}
+      outline:
+      - - {x: -121, y: 137}
+        - {x: -135, y: 135}
+        - {x: -135, y: -138}
+        - {x: 133, y: -138}
+        - {x: 135, y: -132}
+        - {x: 135, y: 123}
+        - {x: 132, y: 137}
+      - - {x: -125, y: -104}
+        - {x: -107, y: 128}
+        - {x: 125, y: 110}
+        - {x: 107, y: -122}
+    - name: jingdutiao
+      rect:
+        serializedVersion: 2
+        x: 473
+        y: 405
+        width: 215
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 20, y: 0, z: 19, w: 0}
+      outline:
+      - - {x: -95.5, y: 24}
+        - {x: -107.5, y: 6}
+        - {x: -107.5, y: -24}
+        - {x: 96.5, y: -24}
+        - {x: 107.5, y: -4}
+        - {x: 107.5, y: 24}
+      - - {x: -104.5, y: 24}
+        - {x: -103.5, y: 21}
+        - {x: -98.5, y: 21}
+        - {x: -96.5, y: 23}
+        - {x: -96.5, y: 24}
+    - name: juli
+      rect:
+        serializedVersion: 2
+        x: 1005
+        y: 573
+        width: 66
+        height: 66
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 11, y: 33}
+        - {x: -8, y: 33}
+        - {x: -20, y: 29}
+        - {x: -33, y: 10}
+        - {x: -33, y: -9}
+        - {x: -12, y: -33}
+        - {x: 12, y: -33}
+        - {x: 33, y: -10}
+        - {x: 33, y: 11}
+        - {x: 32, y: 16}
+    - name: kapian
+      rect:
+        serializedVersion: 2
+        x: 182
+        y: 447
+        width: 52
+        height: 55
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -15, y: 27.5}
+        - {x: -24, y: 16.5}
+        - {x: -26, y: 4.5}
+        - {x: -26, y: -24.5}
+        - {x: -20, y: -27.5}
+        - {x: 25, y: -27.5}
+        - {x: 26, y: -25.5}
+        - {x: 26, y: 27.5}
+    - name: kuang
+      rect:
+        serializedVersion: 2
+        x: 544
+        y: 330
+        width: 80
+        height: 73
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 35, y: 30, z: 35, w: 30}
+      outline:
+      - - {x: -32, y: 36.5}
+        - {x: -40, y: 35.5}
+        - {x: -40, y: -36.5}
+        - {x: 39, y: -36.5}
+        - {x: 40, y: -34.5}
+        - {x: 40, y: 36.5}
+      - - {x: -24, y: 18.5}
+        - {x: -25, y: 19.5}
+        - {x: -24, y: 18.5}
+        - {x: -21, y: 21.5}
+    - name: l
+      rect:
+        serializedVersion: 2
+        x: 772
+        y: 20
+        width: 88
+        height: 81
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -43, y: 40.5}
+        - {x: -44, y: 39.5}
+        - {x: -44, y: -33.5}
+        - {x: -29, y: -40.5}
+        - {x: 38, y: -40.5}
+        - {x: 44, y: -35.5}
+        - {x: 44, y: 33.5}
+        - {x: 40, y: 40.5}
+      - - {x: 40, y: 38.5}
+        - {x: 40, y: 37.5}
+        - {x: 43, y: 34.5}
+        - {x: 44, y: 34.5}
+        - {x: 44, y: 40.5}
+        - {x: 42, y: 40.5}
+    - name: lengquan
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 444
+        width: 58
+        height: 58
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -29, y: 29}
+        - {x: -29, y: -29}
+        - {x: 27, y: -29}
+        - {x: 29, y: -25}
+        - {x: 29, y: 25}
+        - {x: 21, y: 29}
+    - name: lianglikuang
+      rect:
+        serializedVersion: 2
+        x: 869
+        y: 106
+        width: 59
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -27.5, y: 32}
+        - {x: -29.5, y: 31}
+        - {x: -29.5, y: -32}
+        - {x: 27.5, y: -32}
+        - {x: 29.5, y: -31}
+        - {x: 29.5, y: 28}
+        - {x: 25.5, y: 32}
+    - name: liliang
+      rect:
+        serializedVersion: 2
+        x: 930
+        y: 108
+        width: 56
+        height: 62
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -25, y: 31}
+        - {x: -28, y: 26}
+        - {x: -28, y: -7}
+        - {x: -9, y: -31}
+        - {x: 21, y: -31}
+        - {x: 28, y: -29}
+        - {x: 28, y: 26}
+        - {x: 18, y: 31}
+    - name: lingqu
+      rect:
+        serializedVersion: 2
+        x: 1082
+        y: 324
+        width: 304
+        height: 117
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 140, y: 0, z: 140, w: 0}
+      outline:
+      - - {x: 148, y: 56.5}
+        - {x: 143, y: 58.5}
+        - {x: -124, y: 58.5}
+        - {x: -124, y: 55.5}
+        - {x: -152, y: 28.5}
+        - {x: -152, y: -52.5}
+        - {x: -149, y: -56.5}
+        - {x: -145, y: -58.5}
+        - {x: 122, y: -58.5}
+        - {x: 132, y: -50.5}
+        - {x: 152, y: -30.5}
+        - {x: 152, y: 52.5}
+    - name: liubianxdiwen
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 148
+        width: 149
+        height: 174
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -74.5, y: 87}
+        - {x: -74.5, y: -87}
+        - {x: 74.5, y: -87}
+        - {x: 74.5, y: 87}
+    - name: loadingAsset
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 95
+        width: 346
+        height: 346
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -10, y: -97}
+        - {x: -17, y: -103}
+        - {x: -17, y: -167}
+        - {x: -16, y: -173}
+        - {x: 19, y: -173}
+        - {x: 19, y: -107}
+        - {x: 11, y: -97}
+      - - {x: -74, y: -83}
+        - {x: -96, y: -111}
+        - {x: -96, y: -157}
+        - {x: -50, y: -157}
+        - {x: -38, y: -114}
+        - {x: -38, y: -83}
+      - - {x: 43, y: -82}
+        - {x: 40, y: -91}
+        - {x: 40, y: -118}
+        - {x: 55, y: -143}
+        - {x: 73, y: -157}
+        - {x: 95, y: -157}
+        - {x: 99, y: -150}
+        - {x: 99, y: -117}
+        - {x: 74, y: -82}
+      - - {x: -119, y: -39}
+        - {x: -155, y: -64}
+        - {x: -155, y: -95}
+        - {x: -143, y: -100}
+        - {x: -119, y: -100}
+        - {x: -80, y: -69}
+        - {x: -80, y: -43}
+        - {x: -90, y: -39}
+      - - {x: 86, y: -40}
+        - {x: 82, y: -50}
+        - {x: 82, y: -70}
+        - {x: 110, y: -98}
+        - {x: 156, y: -98}
+        - {x: 156, y: -69}
+        - {x: 115, y: -40}
+      - - {x: -173, y: 17}
+        - {x: -173, y: -14}
+        - {x: -164, y: -19}
+        - {x: -155, y: -20}
+        - {x: -102, y: -20}
+        - {x: -96, y: -9}
+        - {x: -96, y: 17}
+      - - {x: 104, y: 17}
+        - {x: 97, y: 7}
+        - {x: 97, y: -10}
+        - {x: 101, y: -19}
+        - {x: 173, y: -19}
+        - {x: 173, y: 17}
+      - - {x: -92, y: 76}
+        - {x: -125, y: 96}
+        - {x: -148, y: 96}
+        - {x: -155, y: 86}
+        - {x: -155, y: 72}
+        - {x: -154, y: 66}
+        - {x: -109, y: 38}
+        - {x: -94, y: 38}
+        - {x: -90, y: 39}
+        - {x: -81, y: 49}
+        - {x: -81, y: 66}
+        - {x: -82, y: 69}
+      - - {x: 151, y: 97}
+        - {x: 123, y: 97}
+        - {x: 82, y: 69}
+        - {x: 82, y: 39}
+        - {x: 87, y: 38}
+        - {x: 127, y: 38}
+        - {x: 152, y: 50}
+        - {x: 157, y: 66}
+        - {x: 157, y: 96}
+      - - {x: 96, y: 154}
+        - {x: 62, y: 154}
+        - {x: 39, y: 118}
+        - {x: 39, y: 82}
+        - {x: 46, y: 77}
+        - {x: 61, y: 77}
+        - {x: 81, y: 85}
+        - {x: 98, y: 122}
+        - {x: 98, y: 149}
+        - {x: 97, y: 153}
+      - - {x: -96, y: 122}
+        - {x: -76, y: 80}
+        - {x: -38, y: 80}
+        - {x: -38, y: 121}
+        - {x: -39, y: 130}
+        - {x: -61, y: 155}
+        - {x: -91, y: 155}
+        - {x: -96, y: 152}
+      - - {x: -17, y: 173}
+        - {x: -17, y: 97}
+        - {x: -15, y: 96}
+        - {x: 7, y: 96}
+        - {x: 19, y: 98}
+        - {x: 19, y: 173}
+    - name: mingjie
+      rect:
+        serializedVersion: 2
+        x: 62
+        y: 444
+        width: 53
+        height: 58
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -15.5, y: 29}
+        - {x: -26.5, y: 24}
+        - {x: -26.5, y: -29}
+        - {x: 8.5, y: -29}
+        - {x: 26.5, y: -19}
+        - {x: 26.5, y: 25}
+        - {x: 25.5, y: 29}
+    - name: moduleShadow
+      rect:
+        serializedVersion: 2
+        x: 942
+        y: 641
+        width: 137
+        height: 138
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -41.5, y: 69}
+        - {x: -66.5, y: 63}
+        - {x: -68.5, y: 47}
+        - {x: -68.5, y: -52}
+        - {x: -62.5, y: -63}
+        - {x: -48.5, y: -69}
+        - {x: 57.5, y: -69}
+        - {x: 68.5, y: -61}
+        - {x: 68.5, y: 54}
+        - {x: 59.5, y: 69}
+    - name: mofa
+      rect:
+        serializedVersion: 2
+        x: 1026
+        y: 350
+        width: 47
+        height: 66
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -23.5, y: 33}
+        - {x: -23.5, y: -29}
+        - {x: -19.5, y: -33}
+        - {x: -3.5, y: -33}
+        - {x: 23.5, y: -13}
+        - {x: 23.5, y: 30}
+        - {x: 22.5, y: 33}
+    - name: pailieanniu
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 2
+        width: 359
+        height: 91
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 20, y: 20, z: 20, w: 20}
+      outline:
+      - - {x: 179.5, y: 41.5}
+        - {x: 175.5, y: 45.5}
+        - {x: -175.5, y: 45.5}
+        - {x: -179.5, y: 41.5}
+        - {x: -179.5, y: -41.5}
+        - {x: -176.5, y: -45.5}
+        - {x: 175.5, y: -45.5}
+        - {x: 179.5, y: -41.5}
+    - name: qudinganniu
+      rect:
+        serializedVersion: 2
+        x: 701
+        y: 418
+        width: 379
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 170, y: 0, z: 170, w: 0}
+      outline:
+      - - {x: 185.5, y: -47.5}
+        - {x: 185.5, y: -46.5}
+        - {x: 189.5, y: -42.5}
+        - {x: 189.5, y: 63.5}
+        - {x: 185.5, y: 67.5}
+        - {x: 184.5, y: 70.5}
+        - {x: 180.5, y: 74.5}
+        - {x: -156.5, y: 74.5}
+        - {x: -187.5, y: 43.5}
+        - {x: -187.5, y: 41.5}
+        - {x: -189.5, y: 39.5}
+        - {x: -189.5, y: -67.5}
+        - {x: -188.5, y: -70.5}
+        - {x: -186.5, y: -70.5}
+        - {x: -183.5, y: -74.5}
+        - {x: 158.5, y: -74.5}
+        - {x: 160.5, y: -72.5}
+        - {x: 165.5, y: -68.5}
+        - {x: 165.5, y: -67.5}
+    - name: renwuwenzikuang
+      rect:
+        serializedVersion: 2
+        x: 625
+        y: 103
+        width: 242
+        height: 46
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 20, y: 20, z: 20, w: 20}
+      outline:
+      - - {x: -121, y: 23}
+        - {x: -121, y: -23}
+        - {x: 121, y: -23}
+        - {x: 121, y: 23}
+    - name: rouxiang
+      rect:
+        serializedVersion: 2
+        x: 934
+        y: 187
+        width: 114
+        height: 123
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -57, y: 61.5}
+        - {x: -57, y: -61.5}
+        - {x: 50, y: -61.5}
+        - {x: 57, y: -54.5}
+        - {x: 57, y: 57.5}
+        - {x: 56, y: 61.5}
+    - name: sanxing
+      rect:
+        serializedVersion: 2
+        x: 988
+        y: 124
+        width: 62
+        height: 61
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -16, y: 30.5}
+        - {x: -27, y: 27.5}
+        - {x: -31, y: 12.5}
+        - {x: -31, y: -30.5}
+        - {x: 6, y: -30.5}
+        - {x: 31, y: -8.5}
+        - {x: 31, y: 25.5}
+        - {x: 29, y: 30.5}
+      - - {x: 28, y: -25.5}
+        - {x: 30, y: -27.5}
+        - {x: 31, y: -27.5}
+        - {x: 31, y: -19.5}
+        - {x: 28, y: -20.5}
+    - name: shengming
+      rect:
+        serializedVersion: 2
+        x: 117
+        y: 446
+        width: 63
+        height: 56
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -11.5, y: -28}
+        - {x: 6.5, y: -28}
+        - {x: 31.5, y: -13}
+        - {x: 31.5, y: 25}
+        - {x: 30.5, y: 28}
+        - {x: -31.5, y: 28}
+        - {x: -31.5, y: -6}
+    - name: tianjiaanniu
+      rect:
+        serializedVersion: 2
+        x: 609
+        y: 9
+        width: 77
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -23.5, y: 43}
+        - {x: -38.5, y: 38}
+        - {x: -38.5, y: -31}
+        - {x: -27.5, y: -43}
+        - {x: 22.5, y: -43}
+        - {x: 38.5, y: -28}
+        - {x: 38.5, y: 30}
+        - {x: 28.5, y: 43}
+    - name: wenzi
+      rect:
+        serializedVersion: 2
+        x: 274
+        y: 505
+        width: 256
+        height: 51
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 45, y: 0, z: 45, w: 0}
+      outline:
+      - - {x: -128, y: 25.5}
+        - {x: -128, y: -14.5}
+        - {x: -124, y: -25.5}
+        - {x: 119, y: -25.5}
+        - {x: 128, y: -24.5}
+        - {x: 128, y: 25.5}
+    - name: xing
+      rect:
+        serializedVersion: 2
+        x: 1116
+        y: 124
+        width: 32
+        height: 31
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: xinxin
+      rect:
+        serializedVersion: 2
+        x: 1116
+        y: 157
+        width: 46
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -17, y: 22}
+        - {x: -23, y: 11}
+        - {x: -23, y: -14}
+        - {x: -17, y: -22}
+        - {x: 21, y: -22}
+        - {x: 23, y: -15}
+        - {x: 23, y: 19}
+        - {x: 16, y: 22}
+    - name: yiny
+      rect:
+        serializedVersion: 2
+        x: 501
+        y: 312
+        width: 877
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: yixing
+      rect:
+        serializedVersion: 2
+        x: 1052
+        y: 140
+        width: 62
+        height: 61
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -21, y: 30.5}
+        - {x: -31, y: 16.5}
+        - {x: -31, y: -30.5}
+        - {x: 8, y: -30.5}
+        - {x: 31, y: -1.5}
+        - {x: 31, y: 12.5}
+        - {x: 25, y: 30.5}
+    - name: yuandi
+      rect:
+        serializedVersion: 2
+        x: 501
+        y: 151
+        width: 152
+        height: 159
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -57, y: 79.5}
+        - {x: -76, y: 36.5}
+        - {x: -76, y: -46.5}
+        - {x: -51, y: -79.5}
+        - {x: 41, y: -79.5}
+        - {x: 76, y: -57.5}
+        - {x: 76, y: 78.5}
+        - {x: 67, y: 79.5}
+    - name: zhili
+      rect:
+        serializedVersion: 2
+        x: 942
+        y: 571
+        width: 61
+        height: 68
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -24.5, y: 34}
+        - {x: -30.5, y: 19}
+        - {x: -30.5, y: -10}
+        - {x: -27.5, y: -16}
+        - {x: -0.5, y: -34}
+        - {x: 30.5, y: -34}
+        - {x: 30.5, y: 20}
+        - {x: 26.5, y: 34}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: res/ui/textures/common/common.bytes
+  assetBundleVariant: 

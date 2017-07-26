@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 852e176e892890746853dbc9f941311b
+timeCreated: 1491443885
+licenseType: Pro
+ShaderImporter:
+  defaultTextures: []
+  userData: 
+  assetBundleName: res/shaders/supermask/supermask.bytes
+  assetBundleVariant: 

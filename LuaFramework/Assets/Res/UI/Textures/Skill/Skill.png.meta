@@ -1,0 +1,189 @@
+fileFormatVersion: 2
+guid: 8a3fa633de5c2304db206165e06e01f6
+timeCreated: 1484309846
+licenseType: Pro
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: BottomEdge
+    21300002: Button
+    21300004: Edge
+    21300006: Star
+    21300008: StarGrey
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: 12
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 5
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: BottomEdge
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 62
+        width: 216
+        height: 278
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 103, y: 139}
+        - {x: -105, y: 139}
+        - {x: -108, y: 134}
+        - {x: -108, y: -136}
+        - {x: -100, y: -139}
+        - {x: 98, y: -139}
+        - {x: 106, y: -133}
+        - {x: 108, y: -131}
+        - {x: 108, y: 136}
+      - - {x: -90, y: -53}
+        - {x: -90, y: 111}
+        - {x: -78, y: 123}
+        - {x: 21, y: 123}
+        - {x: 23, y: 119}
+        - {x: 47, y: 91}
+        - {x: 52, y: 87}
+        - {x: 91, y: 87}
+        - {x: 90, y: -55}
+        - {x: 79, y: -66}
+        - {x: -77, y: -66}
+    - name: Button
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 342
+        width: 477
+        height: 168
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 238.5, y: 53}
+        - {x: 236.5, y: 58}
+        - {x: 231.5, y: 63}
+        - {x: 230.5, y: 63}
+        - {x: 216.5, y: 77}
+        - {x: 216.5, y: 78}
+        - {x: 212.5, y: 82}
+        - {x: 211.5, y: 82}
+        - {x: 209.5, y: 84}
+        - {x: -208.5, y: 84}
+        - {x: -209.5, y: 83}
+        - {x: -210.5, y: 83}
+        - {x: -235.5, y: 58}
+        - {x: -235.5, y: 57}
+        - {x: -238.5, y: 55}
+        - {x: -238.5, y: -53}
+        - {x: -237.5, y: -56}
+        - {x: -211.5, y: -82}
+        - {x: -206.5, y: -84}
+        - {x: 209.5, y: -84}
+        - {x: 236.5, y: -58}
+        - {x: 238.5, y: -53}
+    - name: Edge
+      rect:
+        serializedVersion: 2
+        x: 220
+        y: 150
+        width: 190
+        height: 190
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -88, y: 95}
+        - {x: -95, y: 84}
+        - {x: -95, y: -95}
+        - {x: 95, y: -95}
+        - {x: 95, y: 91}
+        - {x: 86, y: 95}
+      - - {x: -86, y: -68}
+        - {x: -68, y: 86}
+        - {x: 87, y: 68}
+        - {x: 68, y: -87}
+    - name: Star
+      rect:
+        serializedVersion: 2
+        x: 412
+        y: 253
+        width: 90
+        height: 87
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 15, y: 43.5}
+        - {x: -14, y: 43.5}
+        - {x: -45, y: 21.5}
+        - {x: -45, y: -8.5}
+        - {x: -39, y: -42.5}
+        - {x: -35, y: -43.5}
+        - {x: 33, y: -43.5}
+        - {x: 40, y: -41.5}
+        - {x: 45, y: -7.5}
+        - {x: 45, y: 20.5}
+    - name: StarGrey
+      rect:
+        serializedVersion: 2
+        x: 412
+        y: 164
+        width: 90
+        height: 87
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 15, y: 43.5}
+        - {x: -14, y: 43.5}
+        - {x: -45, y: 21.5}
+        - {x: -45, y: -8.5}
+        - {x: -39, y: -42.5}
+        - {x: -35, y: -43.5}
+        - {x: 33, y: -43.5}
+        - {x: 40, y: -41.5}
+        - {x: 45, y: -7.5}
+        - {x: 45, y: 20.5}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: res/ui/textures/skill/skill.bytes
+  assetBundleVariant: 

@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: 3b7f972212ff731478986e32007718ac
+timeCreated: 1484210651
+licenseType: Pro
+ShaderImporter:
+  defaultTextures:
+  - _MainTex: {fileID: 2800000, guid: be90686a12d0d044e8e5beec9d35b179, type: 3}
+  - _Mask: {fileID: 2800000, guid: fbe5c0b10175a324180dc1ffedc80bc4, type: 3}
+  userData: 
+  assetBundleName: res/shaders/spritemask/spritemask.bytes
+  assetBundleVariant: 

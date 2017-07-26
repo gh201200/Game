@@ -1,0 +1,13 @@
+<PanelConfig>
+  <Panel name="ArenaDeltaPanel" layer="Normal" prefabPath="UI/Panels/ArenaDeltaPanel/ArenaDeltaPanel.prefab" scriptPath="ArenaDeltaPanel.lua" />
+  <Panel name="BattlePanel" layer="Normal" prefabPath="UI/Panels/BattlePanel/BattlePanel.prefab" scriptPath="BattlePanel.lua" />
+  <Panel name="ExpeditionPanel" layer="Normal" prefabPath="UI/Panels/ExpeditionPanel/ExpeditionPanel.prefab" scriptPath="ExpeditionPanel.lua" />
+  <Panel name="LoadingPanel" layer="Middle" prefabPath="UI/Panels/LoadingPanel/LoadingPanel.prefab" scriptPath="LoadingPanel.lua" />
+  <Panel name="LoadingScenePanel" layer="Highest" prefabPath="UI/Panels/LoadingScenePanel/LoadingScenePanel.prefab" scriptPath="LoadingScenePanel.lua" />
+  <Panel name="LoginPanel" layer="Normal" prefabPath="UI/Panels/LoginPanel/LoginPanel.prefab" scriptPath="LoginPanel.lua" />
+  <Panel name="MainPanel" layer="Normal" prefabPath="UI/Panels/MainPanel/MainPanel.prefab" scriptPath="MainPanel.lua" />
+  <Panel name="MatchPanel" layer="Normal" prefabPath="UI/Panels/MatchPanel/MatchPanel.prefab" scriptPath="MatchPanel.lua" />
+  <Panel name="OpenBoxPanel" layer="Normal" prefabPath="UI/Panels/OpenBoxPanel/OpenBoxPanel.prefab" scriptPath="OpenBoxPanel.lua" />
+  <Panel name="PickHeroPanel" layer="Normal" prefabPath="UI/Panels/PickHeroPanel/PickHeroPanel.prefab" scriptPath="PickHeroPanel.lua" />
+  <Panel name="SettlementPanel" layer="Normal" prefabPath="UI/Panels/SettlementPanel/SettlementPanel.prefab" scriptPath="SettlementPanel.lua" />
+</PanelConfig>

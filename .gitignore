@@ -13,3 +13,5 @@ Library/
 /LuaFramework/Assets/Build
 /LuaFramework/Assets/StreamingAssets
 /LuaFramework/Temp/
+/LuaFramework/Assets/Build/LuaScripts
+/LuaFramework/Assets/Build/LuaScripts.meta

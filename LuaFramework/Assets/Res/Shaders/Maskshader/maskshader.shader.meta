@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: dc5420b71927180439c68dc730de9b5c
+timeCreated: 1476781481
+licenseType: Pro
+ShaderImporter:
+  defaultTextures: []
+  userData: 
+  assetBundleName: res/shaders/maskshader/maskshader.bytes
+  assetBundleVariant: 

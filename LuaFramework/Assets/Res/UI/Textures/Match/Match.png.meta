@@ -1,0 +1,182 @@
+fileFormatVersion: 2
+guid: 7e77a612681c7a148a1d2d35da9579ea
+timeCreated: 1484309095
+licenseType: Pro
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: CancelButton
+    21300002: TipBg
+    21300004: miaozhunj
+    21300006: xxx
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: 12
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 5
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: CancelButton
+      rect:
+        serializedVersion: 2
+        x: 1330
+        y: 114
+        width: 590
+        height: 184
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 291, y: -64}
+        - {x: 295, y: -60}
+        - {x: 295, y: 79}
+        - {x: 294, y: 83}
+        - {x: 290, y: 89}
+        - {x: 283, y: 92}
+        - {x: -262, y: 92}
+        - {x: -294, y: 60}
+        - {x: -294, y: 59}
+        - {x: -295, y: 58}
+        - {x: -295, y: -83}
+        - {x: -294, y: -86}
+        - {x: -289, y: -91}
+        - {x: -286, y: -92}
+        - {x: 263, y: -92}
+        - {x: 265, y: -90}
+        - {x: 266, y: -90}
+        - {x: 291, y: -65}
+    - name: TipBg
+      rect:
+        serializedVersion: 2
+        x: 291
+        y: 24
+        width: 1037
+        height: 274
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 514.5, y: -107}
+        - {x: 514.5, y: -105}
+        - {x: 518.5, y: -101}
+        - {x: 518.5, y: 106}
+        - {x: 487.5, y: 137}
+        - {x: -487.5, y: 137}
+        - {x: -518.5, y: 106}
+        - {x: -518.5, y: -102}
+        - {x: -514.5, y: -105}
+        - {x: -514.5, y: -107}
+        - {x: -501.5, y: -120}
+        - {x: -501.5, y: -121}
+        - {x: -491.5, y: -131}
+        - {x: -490.5, y: -131}
+        - {x: -484.5, y: -137}
+        - {x: 484.5, y: -137}
+        - {x: 495.5, y: -126}
+        - {x: 496.5, y: -126}
+        - {x: 507.5, y: -115}
+    - name: miaozhunj
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 5
+        width: 287
+        height: 293
+      alignment: 9
+      pivot: {x: 0.5017422, y: 0.49829352}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 128, y: 84}
+        - {x: 82, y: 130}
+        - {x: 39, y: 147}
+        - {x: -50, y: 147}
+        - {x: -124, y: 103}
+        - {x: -144, y: 61}
+        - {x: -144, y: -47}
+        - {x: -133, y: -72}
+        - {x: -77, y: -133}
+        - {x: -40, y: -146}
+        - {x: 44, y: -146}
+        - {x: 88, y: -136}
+        - {x: 143, y: -50}
+        - {x: 143, y: 34}
+      - - {x: -64, y: -74}
+        - {x: -91, y: -27}
+        - {x: -57, y: 14}
+        - {x: -98, y: 16}
+        - {x: -11, y: 93}
+        - {x: -12, y: 96}
+        - {x: -10, y: 99}
+        - {x: -11, y: 99}
+        - {x: -11, y: 95}
+        - {x: -13, y: 55}
+        - {x: 26, y: 90}
+        - {x: 70, y: 82}
+        - {x: 103, y: 15}
+        - {x: 73, y: 14}
+        - {x: 67, y: 9}
+        - {x: 66, y: 4}
+        - {x: 75, y: -3}
+        - {x: 64, y: -18}
+        - {x: 25, y: -69}
+        - {x: -6, y: -63}
+    - name: xxx
+      rect:
+        serializedVersion: 2
+        x: 1330
+        y: 48
+        width: 55
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -27.5, y: 32}
+        - {x: -27.5, y: -32}
+        - {x: -3.5, y: -32}
+        - {x: 27.5, y: -11}
+        - {x: 27.5, y: 25}
+        - {x: -0.5, y: 32}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: res/ui/textures/match/match.bytes
+  assetBundleVariant: 

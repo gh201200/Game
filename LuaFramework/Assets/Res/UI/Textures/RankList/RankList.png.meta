@@ -1,0 +1,325 @@
+fileFormatVersion: 2
+guid: 644fe7df775cb664eb5a3f03053758b1
+timeCreated: 1484309405
+licenseType: Pro
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: er
+    21300002: guangxiao
+    21300004: jiangbei
+    21300006: san
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: 12
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 5
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: er
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 134
+        width: 126
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 46, y: 41}
+        - {x: 39, y: 30}
+        - {x: 35, y: 33}
+        - {x: 25, y: 36}
+        - {x: 20, y: 33}
+        - {x: 19, y: 39}
+        - {x: 9, y: 50}
+        - {x: -15, y: 50}
+        - {x: -45, y: 43}
+        - {x: -63, y: 31}
+        - {x: -63, y: -1}
+        - {x: -41, y: -50}
+        - {x: 40, y: -50}
+        - {x: 61, y: -24}
+        - {x: 63, y: -2}
+        - {x: 63, y: 36}
+      - - {x: 49, y: -19}
+        - {x: 47, y: -23}
+        - {x: 47, y: -29}
+        - {x: 51, y: -29}
+        - {x: 54, y: -28}
+        - {x: 54, y: -21}
+        - {x: 52, y: -19}
+      - - {x: -49, y: -15}
+        - {x: -49, y: -11}
+        - {x: -50, y: -9}
+        - {x: -55, y: -9}
+        - {x: -55, y: -15}
+      - - {x: 53, y: -10}
+        - {x: 54, y: -13}
+        - {x: 57, y: -13}
+        - {x: 59, y: -11}
+        - {x: 58, y: -8}
+        - {x: 55, y: -8}
+      - - {x: 55, y: 3}
+        - {x: 50, y: -4}
+        - {x: 50, y: -7}
+        - {x: 51, y: -9}
+        - {x: 53, y: -9}
+        - {x: 61, y: -4}
+        - {x: 61, y: 1}
+        - {x: 59, y: 3}
+      - - {x: -49, y: -4}
+        - {x: -46, y: -3}
+        - {x: -46, y: 0}
+        - {x: -49, y: 1}
+        - {x: -51, y: -1}
+      - - {x: -54, y: 6}
+        - {x: -53, y: 3}
+        - {x: -50, y: 3}
+        - {x: -48, y: 5}
+        - {x: -49, y: 8}
+        - {x: -52, y: 8}
+      - - {x: 53, y: 14}
+        - {x: 51, y: 13}
+        - {x: 51, y: 8}
+        - {x: 57, y: 8}
+        - {x: 58, y: 10}
+        - {x: 58, y: 11}
+        - {x: 57, y: 14}
+      - - {x: 38, y: 46}
+        - {x: 37, y: 43}
+        - {x: 37, y: 40}
+        - {x: 39, y: 39}
+        - {x: 49, y: 39}
+        - {x: 50, y: 40}
+        - {x: 50, y: 45}
+        - {x: 49, y: 46}
+      - - {x: -43, y: 47}
+        - {x: -46, y: 46}
+        - {x: -46, y: 42}
+        - {x: -44, y: 40}
+        - {x: -40, y: 40}
+        - {x: -38, y: 41}
+        - {x: -38, y: 47}
+      - - {x: -15, y: 50}
+        - {x: -17, y: 48}
+        - {x: -17, y: 46}
+        - {x: -15, y: 44}
+        - {x: -13, y: 44}
+        - {x: -9, y: 48}
+        - {x: -10, y: 50}
+      - - {x: 17, y: 50}
+        - {x: 18, y: 47}
+        - {x: 21, y: 47}
+        - {x: 23, y: 49}
+        - {x: 23, y: 50}
+    - name: guangxiao
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 236
+        width: 272
+        height: 262
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 136, y: 5}
+        - {x: 136, y: 87}
+        - {x: 126, y: 105}
+        - {x: 59, y: 131}
+        - {x: -82, y: 131}
+        - {x: -118, y: 117}
+        - {x: -136, y: 109}
+        - {x: -136, y: 45}
+        - {x: -126, y: -6}
+        - {x: -87, y: -44}
+        - {x: -64, y: -66}
+        - {x: -68, y: -90}
+        - {x: -65, y: -105}
+        - {x: -48, y: -122}
+        - {x: -27, y: -131}
+        - {x: 49, y: -131}
+        - {x: 68, y: -118}
+        - {x: 87, y: -93}
+        - {x: 121, y: -34}
+    - name: jiangbei
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 3
+        width: 222
+        height: 231
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -91, y: 106.5}
+        - {x: -78, y: 81.5}
+        - {x: -76, y: 79.5}
+        - {x: -104, y: 95.5}
+        - {x: -111, y: 91.5}
+        - {x: -111, y: 28.5}
+        - {x: -101, y: -10.5}
+        - {x: -30, y: -70.5}
+        - {x: -27, y: -69.5}
+        - {x: -26, y: -65.5}
+        - {x: -17, y: -67.5}
+        - {x: -27, y: -69.5}
+        - {x: -37, y: -76.5}
+        - {x: -48, y: -95.5}
+        - {x: -49, y: -102.5}
+        - {x: -28, y: -115.5}
+        - {x: 21, y: -115.5}
+        - {x: 49, y: -108.5}
+        - {x: 111, y: 7.5}
+        - {x: 111, y: 106.5}
+      - - {x: -52, y: -84.5}
+        - {x: -60, y: -94.5}
+        - {x: -60, y: -102.5}
+        - {x: -54, y: -102.5}
+        - {x: -52, y: -101.5}
+        - {x: -46, y: -87.5}
+        - {x: -46, y: -85.5}
+        - {x: -48, y: -84.5}
+      - - {x: -65, y: -96.5}
+        - {x: -62, y: -95.5}
+        - {x: -62, y: -92.5}
+        - {x: -65, y: -91.5}
+        - {x: -67, y: -93.5}
+      - - {x: 53, y: -93.5}
+        - {x: 56, y: -92.5}
+        - {x: 56, y: -89.5}
+        - {x: 53, y: -88.5}
+        - {x: 51, y: -90.5}
+      - - {x: -41, y: -63.5}
+        - {x: -43, y: -64.5}
+        - {x: -43, y: -68.5}
+        - {x: -41, y: -70.5}
+        - {x: -39, y: -70.5}
+        - {x: -36, y: -68.5}
+        - {x: -36, y: -63.5}
+      - - {x: -99, y: -16.5}
+        - {x: -104, y: -17.5}
+        - {x: -104, y: -23.5}
+        - {x: -101, y: -26.5}
+        - {x: -87, y: -26.5}
+        - {x: -87, y: -22.5}
+        - {x: -92, y: -16.5}
+      - - {x: 91, y: 84.5}
+        - {x: 89, y: 82.5}
+        - {x: 89, y: 79.5}
+        - {x: 91, y: 77.5}
+        - {x: 92, y: 77.5}
+        - {x: 95, y: 80.5}
+        - {x: 95, y: 81.5}
+        - {x: 92, y: 84.5}
+      - - {x: 76, y: 86.5}
+        - {x: 78, y: 84.5}
+        - {x: 81, y: 85.5}
+        - {x: 81, y: 88.5}
+        - {x: 79, y: 90.5}
+        - {x: 76, y: 89.5}
+      - - {x: 96, y: 94.5}
+        - {x: 97, y: 91.5}
+        - {x: 100, y: 91.5}
+        - {x: 102, y: 93.5}
+        - {x: 101, y: 96.5}
+        - {x: 98, y: 96.5}
+      - - {x: -42, y: 98.5}
+        - {x: -40, y: 96.5}
+        - {x: -35, y: 98.5}
+        - {x: -35, y: 103.5}
+        - {x: -36, y: 105.5}
+        - {x: -38, y: 105.5}
+        - {x: -42, y: 103.5}
+      - - {x: -72, y: 107.5}
+        - {x: -69, y: 108.5}
+        - {x: -69, y: 111.5}
+        - {x: -72, y: 112.5}
+        - {x: -74, y: 110.5}
+      - - {x: 46, y: 110.5}
+        - {x: 49, y: 111.5}
+        - {x: 49, y: 114.5}
+        - {x: 46, y: 115.5}
+        - {x: 44, y: 113.5}
+      - - {x: -14, y: 113.5}
+        - {x: -14, y: 115.5}
+        - {x: -19, y: 115.5}
+        - {x: -17, y: 112.5}
+    - name: san
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 32
+        width: 123
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 41.5, y: 35}
+        - {x: 42.5, y: 23}
+        - {x: 32.5, y: 37}
+        - {x: 21.5, y: 39}
+        - {x: 9.5, y: 50}
+        - {x: -7.5, y: 50}
+        - {x: -11.5, y: 48}
+        - {x: -14.5, y: 33}
+        - {x: -21.5, y: 40}
+        - {x: -37.5, y: 33}
+        - {x: -35.5, y: 24}
+        - {x: -43.5, y: 34}
+        - {x: -51.5, y: 39}
+        - {x: -55.5, y: 39}
+        - {x: -61.5, y: 34}
+        - {x: -61.5, y: -23}
+        - {x: -60.5, y: -50}
+        - {x: 51.5, y: -50}
+        - {x: 61.5, y: -10}
+        - {x: 61.5, y: 41}
+        - {x: 56.5, y: 41}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: res/ui/textures/ranklist/ranklist.bytes
+  assetBundleVariant: 
