@@ -181,7 +181,6 @@ public class AssetLoader : MonoBehaviour
 
     private void Update()
     {
-        print(Progress);
         while (callbackToRemoveQue.Count > 0) callbackDict.Remove(callbackToRemoveQue.Dequeue());
         if (abToUnload.Count > 0)
         {
