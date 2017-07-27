@@ -13,7 +13,11 @@ public class Config
 #if DEBUG_MODE
             return Application.dataPath + "/Res/";
 #else
-            return Application.persistentDataPath + "/Res/";
+#if LOADABFROMPROJECT
+            return Application.dataPath + "/Build/res/";
+#else
+            return Application.persistentDataPath + "/res/";
+#endif
 #endif
         }
     }

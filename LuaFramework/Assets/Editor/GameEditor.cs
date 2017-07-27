@@ -10,8 +10,10 @@ using Object = UnityEngine.Object;
 using Debug = UnityEngine.Debug;
 using ICSharpCode.SharpZipLib.Zip;
 using System.Diagnostics;
+using System.Text;
 using System.Timers;
 using System.Xml;
+using MiniJSON;
 
 public class GameEditor
 {
@@ -27,7 +29,7 @@ public class GameEditor
         //float progress = 0f;
         //try
         //{
-        //    ZipUtil.UnpackFile(@"C:\Users\Administrator\Desktop\test", Config.StreamingAssetsPath + "/data.zip",
+        //    ZipUtil.UnpackFile(@"C:\Users\Administrator\Desktop\Test", Config.StreamingAssetsPath + "/data.zip",
         //        (cur, total) =>
         //        {
         //            progress = (float)cur / total;
@@ -50,7 +52,22 @@ public class GameEditor
         //    AssetDatabase.Refresh();
         //}
 
-        GenerateAssetInfo();
+        //GenerateAssetInfoXml();
+        //GenerateAssetInfoJson();
+
+        AssetDesc desc = new AssetDesc("Prefabs/Tip.prefab", AssetType.Prefab);
+        Debug.Log("AssetName");
+        Debug.Log(desc.AssetName);
+        Debug.Log("AssetType");
+        Debug.Log(desc.AssetType);
+        Debug.Log("AssetBundleTag");
+        Debug.Log(desc.AssetBundleTag);
+        Debug.Log("RelativePath");
+        Debug.Log(desc.RelativePath);
+        Debug.Log("EditorPath");
+        Debug.Log(desc.EditorPath);
+        Debug.Log("FullPath");
+        Debug.Log(desc.FullPath);
     }
 
     [MenuItem("Tool/BuildSetting", false, 1)]
@@ -227,7 +244,65 @@ public class GameEditor
         }
     }
 
-    static void GenerateAssetInfo()
+    static void GenerateAssetInfoJson()
+    {
+        try
+        {
+            BuildSetting bs = GetBuildSettingAsset();
+            string path = Application.dataPath.Replace("Assets", "") + bs.buildPath;
+            path = path.Replace('/', '\\');
+            string[] files = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
+            Dictionary<string, object> dic = new Dictionary<string, object>();
+            List<object> list = new List<object>();
+            int fileCount = 0;
+            long totalSize = 0;
+            foreach (string file in files)
+            {
+                if (file.EndsWith(".meta") || file.EndsWith("AssetsInfo.xml") || file.EndsWith("AssetsInfo.txt")) continue;
+                string filePath = file.Replace('\\', '/');
+                filePath = filePath.Replace(Application.dataPath + "/Build/", "");
+
+                string md5 = GameUtil.MD5File(file);
+
+                string fileName = Path.GetFileName(file);
+
+                FileInfo info = new FileInfo(file);
+
+                string size = info.Length.ToString();
+
+                fileCount++;
+                totalSize += info.Length;
+
+                Dictionary<string, object> item = new Dictionary<string, object>();
+                item.Add("name", fileName);
+                item.Add("path", filePath);
+                item.Add("md5", md5);
+                item.Add("size", size);
+                list.Add(item);
+
+                EditorUtility.DisplayProgressBar("generate AssetsInfo.json", filePath, (float)fileCount / files.Length * 2);
+            }
+            Dictionary<string, object> infoDict = new Dictionary<string, object>();
+            infoDict.Add("fileCount", fileCount.ToString());
+            infoDict.Add("totalSize", totalSize.ToString());
+            infoDict.Add("resVertion", bs.resVersion.ToString());
+            infoDict.Add("generateTime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            dic.Add("info", infoDict);
+            dic.Add("files", list);
+            File.WriteAllText(path + "AssetsInfo.json", Json.Serialize(dic));
+        }
+        catch (System.Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+        finally
+        {
+            EditorUtility.ClearProgressBar();
+            AssetDatabase.Refresh();
+        }
+    }
+
+    static void GenerateAssetInfoXml()
     {
         try
         {
@@ -242,7 +317,7 @@ public class GameEditor
             doc.AppendChild(root);
             foreach (string file in files)
             {
-                if (file.EndsWith(".meta") || file.EndsWith("AssetsInfo.xml")) continue;
+                if (file.EndsWith(".meta") || file.EndsWith("AssetsInfo.xml") || file.EndsWith("AssetsInfo.txt")) continue;
                 string filePath = file.Replace('\\', '/');
                 filePath = filePath.Replace(Application.dataPath + "/Build/", "");
 
@@ -318,7 +393,7 @@ public class GameEditor
         BuildPipeline.BuildAssetBundles(bs.buildPath, BuildAssetBundleOptions.ChunkBasedCompression | BuildAssetBundleOptions.DeterministicAssetBundle, bs.buildTarget);
         AssetDatabase.RemoveUnusedAssetBundleNames();
         AssetDatabase.Refresh();
-        GenerateAssetInfo();
+        GenerateAssetInfoJson();
     }
 
     /// <summary>
@@ -329,14 +404,7 @@ public class GameEditor
     /// <returns></returns>
     static string GetAssetBundleTag(string path)
     {
-        string tag = "";
-        string fileName = Path.GetFileName(path);
-#if PerFile
-        tag = path.Replace("Assets/", "").Replace(fileName, "") + Path.GetFileNameWithoutExtension(path) + ".bytes";
-#else
-        tag = path.Replace("Assets/", "").Replace("/" + fileName, "") + ".bytes";
-#endif
-        return tag;
+        return GameUtil.GetAssetBundleTag(path);
     }
 
     static HashSet<string> GetAllAssets()

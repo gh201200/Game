@@ -22,6 +22,24 @@ public class BuildSettingExpand : Editor
 
     private bool perFile = prePerFile;
 
+    private bool loadABFromProject = PreLoadABFromProject;
+
+    private static bool PreLoadABFromProject
+    {
+        get { return GameEditor.ExistsSymbols("LOADABFROMPROJECT"); }
+        set
+        {
+            if (value)
+            {
+                GameEditor.AddSymbols("LOADABFROMPROJECT");
+            }
+            else
+            {
+                GameEditor.RemoveSymbols("LOADABFROMPROJECT");
+            }
+        }
+    }
+
     private static bool PreDebugMode
     {
         get { return GameEditor.ExistsSymbols(debugStr); }
@@ -59,11 +77,17 @@ public class BuildSettingExpand : Editor
         base.OnInspectorGUI();
         if (EditorApplication.isCompiling) return;
         GUILayout.BeginVertical();
-        EditorGUILayout.Separator();
+        GUILayout.Space(8);
+        GUI.enabled = !loadABFromProject;
         debugMode = GUILayout.Toggle(debugMode, "    Debug Mode");
-        EditorGUILayout.Separator();
+        GUILayout.Space(8);
+        GUI.enabled = true;
         perFile = GUILayout.Toggle(perFile, "    Pack AssetBundle PerFile");
-        EditorGUILayout.Separator();
+        GUILayout.Space(8);
+        GUI.enabled = !debugMode;
+        loadABFromProject = GUILayout.Toggle(loadABFromProject, "    Load AB From Project");
+        GUILayout.Space(8);
+        GUI.enabled = true;
         GUILayout.BeginHorizontal();
         if (GUILayout.Button("Apply"))
         {
@@ -82,7 +106,7 @@ public class BuildSettingExpand : Editor
         if (EditorApplication.isCompiling) return false;
         if (Selection.activeObject == null)
         {
-            if (debugMode != PreDebugMode || perFile != prePerFile)
+            if (debugMode != PreDebugMode || perFile != prePerFile || loadABFromProject != PreLoadABFromProject)
             {
                 bool ok = EditorUtility.DisplayDialog("提示", "use settings?", "Apply", "Revert");
                 if (ok)
@@ -109,11 +133,13 @@ public class BuildSettingExpand : Editor
     {
         PreDebugMode = debugMode;
         prePerFile = perFile;
+        PreLoadABFromProject = loadABFromProject;
     }
 
     private void OnRevert()
     {
         debugMode = PreDebugMode;
         perFile = prePerFile;
+        loadABFromProject = PreLoadABFromProject;
     }
 }

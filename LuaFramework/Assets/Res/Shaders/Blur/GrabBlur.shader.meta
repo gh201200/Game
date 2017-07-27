@@ -1,9 +1,0 @@
-fileFormatVersion: 2
-guid: 5da4b2449aa22484f879fd653bf4eaeb
-timeCreated: 1482905320
-licenseType: Pro
-ShaderImporter:
-  defaultTextures: []
-  userData: 
-  assetBundleName: res/shaders/blur/grabblur.bytes
-  assetBundleVariant: 

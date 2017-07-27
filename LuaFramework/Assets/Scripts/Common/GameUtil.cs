@@ -4,6 +4,7 @@ using System.Collections;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using UnityEngine.SceneManagement;
 
 public class GameUtil : MonoBehaviour
 {
@@ -184,4 +185,58 @@ public class GameUtil : MonoBehaviour
     }
 
     #endregion
+
+    /// <summary>
+    /// 生成AssetBundle的标签
+    /// 路径以Assets/开头
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    public static string GetAssetBundleTag(string path)
+    {
+        string tag = "";
+        string fileName = Path.GetFileName(path);
+#if PerFile
+        tag = path.Replace("Assets/", "").Replace(fileName, "") + Path.GetFileNameWithoutExtension(path) + ".bytes";
+#else
+        tag = path.Replace("Assets/", "").Replace("/" + fileName, "") + ".bytes";
+#endif
+        return tag.ToLower();
+    }
+
+    public static Type GetAssetType(AssetType at)
+    {
+        Type t = typeof(object);
+        switch (at)
+        {
+            case AssetType.Sprite:
+                t = typeof(Sprite);
+                break;
+            case AssetType.Texture2D:
+                t = typeof(Texture2D);
+                break;
+            case AssetType.TextAsset:
+                t = typeof(TextAsset);
+                break;
+            case AssetType.AudioClip:
+                t = typeof(AudioClip);
+                break;
+            case AssetType.AnimationClip:
+                t = typeof(AnimationClip);
+                break;
+            case AssetType.Font:
+                t = typeof(Font);
+                break;
+            case AssetType.Material:
+                t = typeof(Material);
+                break;
+            case AssetType.Prefab:
+                t = typeof(GameObject);
+                break;
+            default:
+                t = typeof(object);
+                break;
+        }
+        return t;
+    }
 }
