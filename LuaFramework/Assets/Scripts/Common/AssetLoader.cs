@@ -46,11 +46,7 @@ public class AssetLoader : MonoBehaviour
 
     private Dictionary<string, object> cacheDict = new Dictionary<string, object>();
 
-    private Dictionary<DateTime, List<AssetBundleCreateRequest>> abToUnload = new Dictionary<DateTime, List<AssetBundleCreateRequest>>();
-
     private Queue<string> callbackToRemoveQue = new Queue<string>();
-
-    private Queue<DateTime> que = new Queue<DateTime>();
 
     private bool ready = true;
 
@@ -141,19 +137,18 @@ public class AssetLoader : MonoBehaviour
             //等待依赖加载完成
             for (int i = 0; i < index; i++)
             {
-                yield return array[i].isDone;
+                while (!array[i].isDone) yield return null;
                 curIndex++;
             }
             //异步加载目标AssetBundle
             AssetBundleCreateRequest re = AssetBundle.LoadFromFileAsync(des.FullPath);
             array[index] = re;
-            yield return re.isDone;
+            while (!re.isDone) yield return null;
             curIndex++;
             //从目标AssetBundle中异步加载资源
             AssetBundleRequest abre = re.assetBundle.LoadAssetAsync(des.AssetName, GameUtil.GetAssetType(des.AssetType));
-            yield return abre.isDone;
+            while (!abre.isDone) yield return null;
             des.Asset = abre.asset;
-            Debug.Log(abre.asset);
             //添加资源到缓存
             if (!cacheDict.ContainsKey(des.RelativePath)) cacheDict.Add(des.RelativePath, des.Asset);
             //发布加载结束回调
@@ -166,13 +161,9 @@ public class AssetLoader : MonoBehaviour
             {
                 callback(des.Asset);
             }
-            callbackToRemoveQue.Enqueue(des.RelativePath);
-            //把已加载的AssetBundle添加到等待卸载列表中
-            DateTime key = DateTime.Now.AddMilliseconds(500);
-            if (!abToUnload.ContainsKey(key)) abToUnload.Add(key, new List<AssetBundleCreateRequest>());
             foreach (AssetBundleCreateRequest t in array)
             {
-                abToUnload[key].Add(t);
+                t.assetBundle.Unload(false);
             }
         }
         loadingDict = new Dictionary<string, AssetDesc>();
@@ -181,26 +172,12 @@ public class AssetLoader : MonoBehaviour
 
     private void Update()
     {
+        //if (Progress < 1) print(Progress);
+
+        //print(curIndex + "/" + totalIndex);
+
         while (callbackToRemoveQue.Count > 0) callbackDict.Remove(callbackToRemoveQue.Dequeue());
-        if (abToUnload.Count > 0)
-        {
-            foreach (var p in abToUnload)
-            {
-                if (DateTime.Now >= p.Key)
-                {
-                    foreach (var re in p.Value)
-                    {
-                        Debug.Log("unload: " + re.assetBundle.GetAllAssetNames()[0]);
-                        re.assetBundle.Unload(false);
-                    }
-                    que.Enqueue(p.Key);
-                }
-            }
-            while (que.Count > 0)
-            {
-                abToUnload.Remove(que.Dequeue());
-            }
-        }
+
         if (!ready) return;
         if (loadingDict.Count > 0)
         {
