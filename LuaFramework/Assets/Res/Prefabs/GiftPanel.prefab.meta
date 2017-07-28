@@ -3,6 +3,7 @@ guid: 7a4207556fe11b64cbdda8e31dcf7f7b
 timeCreated: 1501235999
 licenseType: Pro
 NativeFormatImporter:
+  mainObjectFileID: -1
   userData: 
-  assetBundleName: res/prefabs/giftpanel.bytes
+  assetBundleName: res/prefabs.bytes
   assetBundleVariant: 

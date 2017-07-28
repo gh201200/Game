@@ -1,11 +1,5 @@
-﻿using System;
-using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Net;
+﻿using UnityEngine;
 using System.Diagnostics;
-using UnityEditor;
 using Debug = UnityEngine.Debug;
 
 public class Test : MonoBehaviour
@@ -29,39 +23,39 @@ public class Test : MonoBehaviour
             Debug.Log("load AssetBundle: " + sw.ElapsedMilliseconds + "ms");
         });
 
-        //Stopwatch sw2 = new Stopwatch();
-        //sw2.Start();
-        //AssetLoader.Instance.Load("prefabs/tip.prefab", AssetType.Prefab, obj =>
-        //{
-        //    GameObject go = Instantiate((UnityEngine.Object)obj) as GameObject;
-        //    go.transform.SetParent(this.transform);
-        //    go.transform.localPosition = Vector3.zero;
-        //    go.transform.localScale = Vector3.one;
-        //    go.transform.localEulerAngles = Vector3.zero;
-        //    //RectTransform rt = go.GetComponent<RectTransform>();
-        //    //rt.anchorMin = Vector3.zero;
-        //    //rt.anchorMax = Vector3.one;
-        //    //rt.offsetMin = Vector3.zero;
-        //    //rt.offsetMax = Vector3.zero;
-        //    Debug.Log("load AssetBundle: " + sw2.ElapsedMilliseconds + "ms");
-        //});
+        Stopwatch sw2 = new Stopwatch();
+        sw2.Start();
+        AssetLoader.Instance.Load("prefabs/tip.prefab", AssetType.Prefab, obj =>
+        {
+            GameObject go = Instantiate((UnityEngine.Object)obj) as GameObject;
+            go.transform.SetParent(this.transform);
+            go.transform.localPosition = Vector3.zero;
+            go.transform.localScale = Vector3.one;
+            go.transform.localEulerAngles = Vector3.zero;
+            //RectTransform rt = go.GetComponent<RectTransform>();
+            //rt.anchorMin = Vector3.zero;
+            //rt.anchorMax = Vector3.one;
+            //rt.offsetMin = Vector3.zero;
+            //rt.offsetMax = Vector3.zero;
+            Debug.Log("load AssetBundle: " + sw2.ElapsedMilliseconds + "ms");
+        });
 
-        //Stopwatch sw3 = new Stopwatch();
-        //sw3.Start();
-        //AssetLoader.Instance.Load("prefabs/test.prefab", AssetType.Prefab, obj =>
-        //{
-        //    GameObject go = Instantiate((UnityEngine.Object)obj) as GameObject;
-        //    go.transform.SetParent(this.transform);
-        //    go.transform.localPosition = Vector3.zero;
-        //    go.transform.localScale = Vector3.one;
-        //    go.transform.localEulerAngles = Vector3.zero;
-        //    //RectTransform rt = go.GetComponent<RectTransform>();
-        //    //rt.anchorMin = Vector3.zero;
-        //    //rt.anchorMax = Vector3.one;
-        //    //rt.offsetMin = Vector3.zero;
-        //    //rt.offsetMax = Vector3.zero;
-        //    Debug.Log("load AssetBundle: " + sw3.ElapsedMilliseconds + "ms");
-        //});
+        Stopwatch sw3 = new Stopwatch();
+        sw3.Start();
+        AssetLoader.Instance.Load("prefabs/test.prefab", AssetType.Prefab, obj =>
+        {
+            GameObject go = Instantiate((UnityEngine.Object)obj) as GameObject;
+            go.transform.SetParent(this.transform);
+            go.transform.localPosition = Vector3.zero;
+            go.transform.localScale = Vector3.one;
+            go.transform.localEulerAngles = Vector3.zero;
+            //RectTransform rt = go.GetComponent<RectTransform>();
+            //rt.anchorMin = Vector3.zero;
+            //rt.anchorMax = Vector3.one;
+            //rt.offsetMin = Vector3.zero;
+            //rt.offsetMax = Vector3.zero;
+            Debug.Log("load AssetBundle: " + sw3.ElapsedMilliseconds + "ms");
+        });
 
         //Queue<int> que = new Queue<int>();
         //for (int i = 0; i < 10; i++)

@@ -3,6 +3,7 @@ guid: ddee9e16a0256fc4691acebfe01ade1d
 timeCreated: 1501239147
 licenseType: Pro
 NativeFormatImporter:
+  mainObjectFileID: -1
   userData: 
-  assetBundleName: res/prefabs/test.bytes
+  assetBundleName: res/prefabs.bytes
   assetBundleVariant: 

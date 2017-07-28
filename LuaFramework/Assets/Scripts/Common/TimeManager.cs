@@ -105,7 +105,7 @@ public class TimeManager : MonoBehaviour
     private void DoDelay(Timer timer)
     {
         timer.ready = false;
-        timer.coroutine = StartCoroutine_Auto(_DoDelay(timer));
+        timer.coroutine = StartCoroutine(_DoDelay(timer));
     }
 
     private IEnumerator _DoDelay(Timer timer)

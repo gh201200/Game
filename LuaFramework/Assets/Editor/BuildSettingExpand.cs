@@ -10,7 +10,7 @@ using UnityEditorInternal;
 [CustomEditor(typeof(BuildSetting))]
 public class BuildSettingExpand : Editor
 {
-    private static bool debugMode = PreDebugMode;
+    private static bool debugMode;
 
     private static bool preDebugMode = true;
 
@@ -20,9 +20,9 @@ public class BuildSettingExpand : Editor
 
     private const string perFileStr = "PerFile";
 
-    private bool perFile = prePerFile;
+    private bool perFile;
 
-    private bool loadABFromProject = PreLoadABFromProject;
+    private bool loadABFromProject;
 
     private static bool PreLoadABFromProject
     {
@@ -141,5 +141,12 @@ public class BuildSettingExpand : Editor
         debugMode = PreDebugMode;
         perFile = prePerFile;
         loadABFromProject = PreLoadABFromProject;
+    }
+
+    private void OnEnable()
+    {
+        debugMode = PreDebugMode;
+        loadABFromProject = PreLoadABFromProject;
+        perFile = prePerFile;
     }
 }

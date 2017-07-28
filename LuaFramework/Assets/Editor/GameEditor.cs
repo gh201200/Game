@@ -22,52 +22,52 @@ public class GameEditor
     [MenuItem("Tool/Test", false, 1000)]
     static void Test()
     {
-        ////测试解压
-        //Stopwatch sp = new Stopwatch();
-        //sp.Start();
-        //string content = "";
-        //float progress = 0f;
-        //try
-        //{
-        //    ZipUtil.UnpackFile(@"C:\Users\Administrator\Desktop\Test", Config.StreamingAssetsPath + "/data.zip",
-        //        (cur, total) =>
-        //        {
-        //            progress = (float)cur / total;
-        //            content = (progress * 100).ToString("0.0") + "% " + (cur / 1024d / 1024d).ToString("0.0") + "M/" +
-        //                      (total / 1024d / 1024d).ToString("0.0") + "M";
-        //            EditorUtility.DisplayProgressBar("unpack zip", content, progress);
-        //        },
-        //        () =>
-        //        {
-        //            Debug.Log("unpack finish! 耗时:" + sp.Elapsed.TotalSeconds + "s");
-        //        });
-        //}
-        //catch (Exception e)
-        //{
-        //    throw new Exception(e.Message);
-        //}
-        //finally
-        //{
-        //    EditorUtility.ClearProgressBar();
-        //    AssetDatabase.Refresh();
-        //}
+        //测试解压
+        Stopwatch sp = new Stopwatch();
+        sp.Start();
+        string content = "";
+        float progress = 0f;
+        try
+        {
+            ZipUtil.UnpackFile(@"C:\Users\Administrator\Desktop\Test", Config.StreamingAssetsPath + "/data.zip",
+                (cur, total) =>
+                {
+                    progress = (float)cur / total;
+                    content = (progress * 100).ToString("0.0") + "% " + (cur / 1024d / 1024d).ToString("0.0") + "M/" +
+                              (total / 1024d / 1024d).ToString("0.0") + "M";
+                    EditorUtility.DisplayProgressBar("unpack zip", content, progress);
+                },
+                () =>
+                {
+                    Debug.Log("unpack finish! 耗时:" + sp.Elapsed.TotalSeconds + "s");
+                });
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+        finally
+        {
+            EditorUtility.ClearProgressBar();
+            AssetDatabase.Refresh();
+        }
 
         //GenerateAssetInfoXml();
         //GenerateAssetInfoJson();
 
-        AssetDesc desc = new AssetDesc("Prefabs/Tip.prefab", AssetType.Prefab);
-        Debug.Log("AssetName");
-        Debug.Log(desc.AssetName);
-        Debug.Log("AssetType");
-        Debug.Log(desc.AssetType);
-        Debug.Log("AssetBundleTag");
-        Debug.Log(desc.AssetBundleTag);
-        Debug.Log("RelativePath");
-        Debug.Log(desc.RelativePath);
-        Debug.Log("EditorPath");
-        Debug.Log(desc.EditorPath);
-        Debug.Log("FullPath");
-        Debug.Log(desc.FullPath);
+        //AssetDesc desc = new AssetDesc("Prefabs/Tip.prefab", AssetType.Prefab);
+        //Debug.Log("AssetName");
+        //Debug.Log(desc.AssetName);
+        //Debug.Log("AssetType");
+        //Debug.Log(desc.AssetType);
+        //Debug.Log("AssetBundleTag");
+        //Debug.Log(desc.AssetBundleTag);
+        //Debug.Log("RelativePath");
+        //Debug.Log(desc.RelativePath);
+        //Debug.Log("EditorPath");
+        //Debug.Log(desc.EditorPath);
+        //Debug.Log("FullPath");
+        //Debug.Log(desc.FullPath);
     }
 
     [MenuItem("Tool/BuildSetting", false, 1)]
@@ -258,7 +258,7 @@ public class GameEditor
             long totalSize = 0;
             foreach (string file in files)
             {
-                if (file.EndsWith(".meta") || file.EndsWith("AssetsInfo.xml") || file.EndsWith("AssetsInfo.txt")) continue;
+                if (file.EndsWith(".meta") || file.EndsWith("AssetsInfo.xml") || file.EndsWith("AssetsInfo.json")) continue;
                 string filePath = file.Replace('\\', '/');
                 filePath = filePath.Replace(Application.dataPath + "/Build/", "");
 
@@ -472,7 +472,6 @@ public class GameEditor
 
     public static bool ExistsSymbols(string str)
     {
-        List<string> defines = PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup).Split(';').ToList();
-        return defines.Contains(str);
+        return PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup).Split(';').ToList().Contains(str);
     }
 }

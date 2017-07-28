@@ -181,7 +181,7 @@ public class AssetLoader : MonoBehaviour
         if (!ready) return;
         if (loadingDict.Count > 0)
         {
-            StartCoroutine_Auto(CoLoad());
+            StartCoroutine(CoLoad());
         }
     }
 }
