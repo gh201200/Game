@@ -22,35 +22,35 @@ public class GameEditor
     [MenuItem("Tool/Test", false, 1000)]
     static void Test()
     {
-        //测试解压
-        Stopwatch sp = new Stopwatch();
-        sp.Start();
-        string content = "";
-        float progress = 0f;
-        try
-        {
-            ZipUtil.UnpackFile(@"C:\Users\Administrator\Desktop\Test", Config.StreamingAssetsPath + "/data.zip",
-                (cur, total) =>
-                {
-                    progress = (float)cur / total;
-                    content = (progress * 100).ToString("0.0") + "% " + (cur / 1024d / 1024d).ToString("0.0") + "M/" +
-                              (total / 1024d / 1024d).ToString("0.0") + "M";
-                    EditorUtility.DisplayProgressBar("unpack zip", content, progress);
-                },
-                () =>
-                {
-                    Debug.Log("unpack finish! 耗时:" + sp.Elapsed.TotalSeconds + "s");
-                });
-        }
-        catch (Exception e)
-        {
-            throw new Exception(e.Message);
-        }
-        finally
-        {
-            EditorUtility.ClearProgressBar();
-            AssetDatabase.Refresh();
-        }
+        ////测试解压
+        //Stopwatch sp = new Stopwatch();
+        //sp.Start();
+        //string content = "";
+        //float progress = 0f;
+        //try
+        //{
+        //    ZipUtil.UnpackFile(@"C:\Users\Administrator\Desktop\Test", Config.StreamingAssetsPath + "/data.zip",
+        //        (cur, total) =>
+        //        {
+        //            progress = (float)cur / total;
+        //            content = (progress * 100).ToString("0.0") + "% " + (cur / 1024d / 1024d).ToString("0.0") + "M/" +
+        //                      (total / 1024d / 1024d).ToString("0.0") + "M";
+        //            EditorUtility.DisplayProgressBar("unpack zip", content, progress);
+        //        },
+        //        () =>
+        //        {
+        //            Debug.Log("unpack finish! 耗时:" + sp.Elapsed.TotalSeconds + "s");
+        //        });
+        //}
+        //catch (Exception e)
+        //{
+        //    throw new Exception(e.Message);
+        //}
+        //finally
+        //{
+        //    EditorUtility.ClearProgressBar();
+        //    AssetDatabase.Refresh();
+        //}
 
         //GenerateAssetInfoXml();
         //GenerateAssetInfoJson();
@@ -68,6 +68,15 @@ public class GameEditor
         //Debug.Log(desc.EditorPath);
         //Debug.Log("FullPath");
         //Debug.Log(desc.FullPath);
+
+        HttpHelper.Instance.DownLoadFile("http://localhost/test.pdf", Application.dataPath + "/test.pdf", (cur, total) =>
+        {
+            EditorUtility.DisplayProgressBar("download file", "http://localhost/test.pdf", cur / total);
+        }, () =>
+        {
+            EditorUtility.ClearProgressBar();
+            AssetDatabase.Refresh();
+        });
     }
 
     [MenuItem("Tool/BuildSetting", false, 1)]

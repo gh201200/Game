@@ -7,9 +7,9 @@ using UnityEngine;
 
 public class HttpHelper : MonoBehaviour
 {
-    private HttpHelper _instance;
+    private static HttpHelper _instance;
 
-    public HttpHelper Instance
+    public static HttpHelper Instance
     {
         get
         {
@@ -28,50 +28,46 @@ public class HttpHelper : MonoBehaviour
     /// <param name="complete"></param>
     public void DownLoadFile(string url, string fileName, Action<float, float> progress, Action complete)
     {
-        Action<string, string, Action<float, float>, Action> act = (_url, _fileName, _progress, _complete) =>
+        try
         {
-            try
+            print("start download");
+            download = true;
+            WebClient wc = new WebClient();
+            FileStream fs = new FileStream(fileName, FileMode.Append);
+            Stream s = wc.OpenRead(url);
+            int length = 0;
+            float curSize = 0f;
+            float totalSize = GetRemoteHTTPFileSize(url) / 1024f / 1024f;
+            print("total size: " + totalSize + "M");
+            byte[] buffer = new byte[1024 * 1024];
+            while (true)
             {
-                print("start download");
-                download = true;
-                WebClient wc = new WebClient();
-                FileStream fs = new FileStream(_fileName, FileMode.Append);
-                Stream s = wc.OpenRead(_url);
-                int length = 0;
-                float curSize = 0f;
-                float totalSize = GetRemoteHTTPFileSize(_url) / 1024f / 1024f;
-                print("total size: " + totalSize + "M");
-                byte[] buffer = new byte[1024 * 1024];
-                while (true)
+                length = s.Read(buffer, 0, buffer.Length);
+                if (length <= 0) break;
+                fs.Write(buffer, 0, length);
+                curSize += length / 1024f / 1024f;
+                if (progress != null)
                 {
-                    length = s.Read(buffer, 0, buffer.Length);
-                    if (length <= 0) break;
-                    fs.Write(buffer, 0, length);
-                    curSize += length / 1024f / 1024f;
-                    if (_progress != null)
-                    {
-                        _progress(curSize, totalSize);
-                    }
-                    if (!download)
-                    {
-                        fs.Close();
-                        s.Close();
-                        wc.Dispose();
-                        UnityEngine.Debug.LogError("意外中止！");
-                        return;
-                    }
+                    progress(curSize, totalSize);
                 }
-                fs.Close();
-                s.Close();
-                wc.Dispose();
-                if (_complete != null) _complete();
+                if (!download)
+                {
+                    fs.Close();
+                    s.Close();
+                    wc.Dispose();
+                    UnityEngine.Debug.LogError("意外中止！");
+                    return;
+                }
             }
-            catch (Exception e)
-            {
-                UnityEngine.Debug.LogError(e);
-            }
-        };
-        act.BeginInvoke(url, fileName, progress, complete, null, null);
+            fs.Close();
+            s.Close();
+            wc.Dispose();
+            if (complete != null) complete();
+        }
+        catch (Exception e)
+        {
+            UnityEngine.Debug.LogError(e);
+        }
     }
 
     /// <summary>

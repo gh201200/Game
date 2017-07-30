@@ -1,110 +1,148 @@
-﻿using Server.Tool;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace TCPClient
 {
     class Program
     {
-        static Message msg;
-        static Socket clientSocket;
+        static Socket socket;
+        static IPEndPoint adress;
+        static ByteArray buffer;
 
         static void Main(string[] args)
         {
-            clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            clientSocket.Connect(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 88));
-
-            if (!clientSocket.Connected)
-            {
-                Console.WriteLine("connect failed");
-                Console.ReadKey();
-                return;
-            }
-            msg = new Message();
-            clientSocket.BeginReceive(msg.Buffer, msg.EndIndex, msg.Remain, SocketFlags.None, ReceiveCallback, null);
-
-            //while (true)
-            //{
-            //    Console.WriteLine("enter a msg to send to server:");
-            //    string msg = Console.ReadLine();
-            //    if (msg == "q")
-            //    {
-            //        clientSocket.Close();
-            //        return;
-            //    }
-            //    clientSocket.Send(Encoding.UTF8.GetBytes(msg));
-            //}
-
+            buffer = new ByteArray(1024 * 1024 * 2);
+            adress = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 88);
+            socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            socket.NoDelay = true;
+            socket.BeginConnect(adress, ConnectCallback, null);
             while (true)
             {
-                string res = Console.ReadLine();
-                if (res == "0")
+                string str = Console.ReadLine();
+                if (!string.IsNullOrEmpty(str))
                 {
-                    for (int i = 0; i < 1; i++)
-                    {
-                        Message _msg = new Message();
-                        _msg.WriteInt(0);
-                        _msg.WriteInt(0);
-                        _msg.WriteString("this is a default message");
-                        _msg.EndWrite();
-                        clientSocket.Send(_msg.Buffer, _msg.EndIndex, SocketFlags.None);
-                    }
-                }
-                if (res == "1")
-                {
-                    for (int i = 0; i < 1; i++)
-                    {
-                        Message _msg = new Message();
-                        _msg.WriteInt(0);
-                        _msg.WriteInt(1);
-                        _msg.WriteString("this is a register message");
-                        _msg.EndWrite();
-                        clientSocket.Send(_msg.Buffer, _msg.EndIndex, SocketFlags.None);
-                    }
-                }
-                if (res == "2")
-                {
-                    for (int i = 0; i < 1; i++)
-                    {
-                        Message _msg = new Message();
-                        _msg.WriteInt(0);
-                        _msg.WriteInt(2);
-                        _msg.WriteString("this is a login message");
-                        _msg.EndWrite();
-                        clientSocket.Send(_msg.Buffer, _msg.EndIndex, SocketFlags.None);
-                    }
+                    ByteArray msg = new ByteArray();
+                    msg.WriteInt(1);
+                    msg.WriteInt(1);
+                    msg.WriteString(str);
+                    Send(socket, msg);
                 }
             }
+        }
 
-            //StringBuilder sb = new StringBuilder();
-            //for (int i = 0; i < 100; i++)
-            //{
-            //    sb.Append("message index " + i + "\n");
-            //}
-            //Message m = new Message();
-            //m.WriteString(sb.ToString());
-            //m.EndWrite();
-            //clientSocket.Send(m.Buffer, m.EndIndex, 0);
-
-            Console.ReadKey();
+        static void ConnectCallback(IAsyncResult ar)
+        {
+            socket.EndConnect(ar);
+            socket.BeginReceive(buffer.Buffer, buffer.EndIndex, buffer.Remain, SocketFlags.None, ReceiveCallback, null);
+            UploadFile();
         }
 
         static void ReceiveCallback(IAsyncResult ar)
         {
-            int amount = clientSocket.EndReceive(ar);
-            msg.UpdateEndIndex(amount);
-            while (msg.Check())
+            try
             {
-                Console.WriteLine(msg.ReadInt());
-                Console.WriteLine(msg.ReadBool());
-                Console.WriteLine(msg.ReadString());
+                int len = socket.EndReceive(ar);
+                //Console.WriteLine("----------------------------\nreceive count: " + len + "\n----------------------------");
+                while (len > 4)
+                {
+                    int msgLen = BitConverter.ToInt32(buffer.Buffer, 0);
+                    if (len - 4 >= msgLen)
+                    {
+                        ByteArray data = new ByteArray(buffer.GetData(4, msgLen));
+                        HandleMessage(data);
+                        buffer.MoveToHead(msgLen + 4, len - msgLen - 4);
+                        len -= (msgLen + 4);
+                    }
+                }
+                socket.BeginReceive(buffer.Buffer, buffer.EndIndex, buffer.Remain, SocketFlags.None, ReceiveCallback, null);
             }
-            clientSocket.BeginReceive(msg.Buffer, msg.EndIndex, msg.Remain, SocketFlags.None, ReceiveCallback, null);
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                socket.Close();
+            }
+        }
+
+        static void HandleMessage(ByteArray data)
+        {
+            Console.WriteLine();
+            Console.WriteLine("receive msg from server:");
+            Console.WriteLine(data.ReadString());
+            Console.WriteLine();
+        }
+
+
+        static void Send(Socket client, ByteArray data)
+        {
+            SocketAsyncEventArgs arg = new SocketAsyncEventArgs();
+            arg.Completed += (arg1, arg2) =>
+              {
+                  Console.WriteLine("send length: " + arg2.Count);
+              };
+            byte[] lenArray = BitConverter.GetBytes(data.Data.Length);
+            byte[] b = lenArray.Concat(data.Data).ToArray();
+            arg.SetBuffer(b, 0, b.Length);
+            client.SendAsync(arg);
+        }
+
+        static void UploadFile()
+        {
+            string path = "test.pdf";
+            FileInfo info = new FileInfo(path);
+            if (!info.Exists)
+            {
+                Console.WriteLine(info.FullName + " is not found!");
+                return;
+            }
+
+            byte[] buffer = new byte[1024 * 1024];
+            long curSize = 0;
+            FileStream reader = info.OpenRead();
+
+            try
+            {
+                while (true)
+                {
+                    ByteArray data = new ByteArray(1024 * 1024 * 2);
+                    data.WriteInt((int)RequestCode.File);
+                    data.WriteInt((int)ActionCode.UploadFile);
+
+                    string fileName = path;
+                    long totalSize = info.Length;
+                    int blockSize = 1024 * 1024;
+                    int len = reader.Read(buffer, 0, buffer.Length);
+                    if (len <= 0) break;
+                    data.WriteString(fileName);
+                    data.WriteLong(totalSize);
+                    data.WriteInt(blockSize);
+                    data.WriteInt(len);
+                    data.WriteBytes(buffer, 0, len);
+                    Send(socket, data);
+                    curSize += len;
+                    ShowProgress(curSize / 1024f / 1024f, totalSize / 1024f / 1024f);
+                    //Thread.Sleep(100);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                reader.Close();
+                socket.Close();
+            }
+        }
+
+        static void ShowProgress(float cur, float total)
+        {
+            double progress = cur / total;
+            progress = Math.Round(progress, 2);
+            Console.WriteLine(progress * 100 + "%" + "    " + cur + "M/" + total + "M");
         }
     }
 }
