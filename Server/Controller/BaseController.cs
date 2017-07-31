@@ -12,11 +12,9 @@ namespace Server.Controller
 {
     public abstract class BaseController
     {
-        public abstract RequestCode RequestCode
+        public abstract OperationCode RequestCode
         {
             get;
         }
-
-        public abstract void HandleMessage(ActionCode actionCode, Message msg, Client client, Server.Server server);
     }
 }

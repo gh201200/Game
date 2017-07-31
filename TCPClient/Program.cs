@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Common;
 
 namespace TCPClient
 {
@@ -15,6 +16,7 @@ namespace TCPClient
         static Socket socket;
         static IPEndPoint adress;
         static ByteArray buffer;
+        private static string assetInfoPath;
 
         static void Main(string[] args)
         {
@@ -23,25 +25,17 @@ namespace TCPClient
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             socket.NoDelay = true;
             socket.BeginConnect(adress, ConnectCallback, null);
-            while (true)
-            {
-                string str = Console.ReadLine();
-                if (!string.IsNullOrEmpty(str))
-                {
-                    ByteArray msg = new ByteArray();
-                    msg.WriteInt(1);
-                    msg.WriteInt(1);
-                    msg.WriteString(str);
-                    Send(socket, msg);
-                }
-            }
+            Console.ReadKey();
         }
 
         static void ConnectCallback(IAsyncResult ar)
         {
             socket.EndConnect(ar);
             socket.BeginReceive(buffer.Buffer, buffer.EndIndex, buffer.Remain, SocketFlags.None, ReceiveCallback, null);
-            UploadFile();
+
+            assetInfoPath = Environment.CurrentDirectory;
+            assetInfoPath = assetInfoPath.Substring(0, assetInfoPath.LastIndexOf('\\')) + "\\AssetsInfo.json";
+            CheckUpdate(assetInfoPath);
         }
 
         static void ReceiveCallback(IAsyncResult ar)
@@ -70,31 +64,77 @@ namespace TCPClient
             }
         }
 
-        static void HandleMessage(ByteArray data)
-        {
-            Console.WriteLine();
-            Console.WriteLine("receive msg from server:");
-            Console.WriteLine(data.ReadString());
-            Console.WriteLine();
-        }
-
-
         static void Send(Socket client, ByteArray data)
         {
             SocketAsyncEventArgs arg = new SocketAsyncEventArgs();
-            arg.Completed += (arg1, arg2) =>
-              {
-                  Console.WriteLine("send length: " + arg2.Count);
-              };
+            //arg.Completed += (arg1, arg2) =>
+            //  {
+            //      Console.WriteLine("send length: " + arg2.Count);
+            //  };
             byte[] lenArray = BitConverter.GetBytes(data.Data.Length);
             byte[] b = lenArray.Concat(data.Data).ToArray();
             arg.SetBuffer(b, 0, b.Length);
             client.SendAsync(arg);
         }
 
-        static void UploadFile()
+        static void HandleMessage(ByteArray data)
         {
-            string path = "test.pdf";
+            OperationCode oc = (OperationCode)data.ReadInt();
+            if (oc == OperationCode.UploadFile)
+            {
+                UploadFileResponse(oc, data);
+            }
+            else if (oc == OperationCode.CheckUpdate)
+            {
+                CheckUpdateResponse(oc, data);
+            }
+        }
+
+        private static void CheckUpdate(string fileName, long seek = 0)
+        {
+            FileInfo info = new FileInfo(fileName);
+            if (!info.Exists)
+            {
+                Console.WriteLine(info.FullName + " is not found!");
+                return;
+            }
+            byte[] buffer = new byte[100];
+            long totalSize = info.Length;
+            long curSize = 0;
+            FileStream reader = info.OpenRead();
+            reader.Seek(seek, SeekOrigin.Begin);
+
+            var length = reader.Read(buffer, 0, buffer.Length);
+            if (length <= 0) return;
+            ByteArray data = new ByteArray(buffer.Length + 200);
+            data.WriteInt((int)OperationCode.CheckUpdate);
+            data.WriteString(Path.GetFileName(fileName));
+            data.WriteLong(totalSize);
+            data.WriteInt(length);
+            data.WriteLong(reader.Position - length);
+            data.WriteBytes(buffer, 0, length);
+            Send(socket, data);
+            curSize += length;
+            reader.Close();
+            Tools.ShowProgress(curSize, totalSize, "check update...");
+        }
+
+        private static void CheckUpdateResponse(OperationCode oc, ByteArray data)
+        {
+            bool complete = data.ReadBool();
+            long seek = data.ReadLong();
+            if (!complete) CheckUpdate(assetInfoPath, seek);
+        }
+
+        private static void UploadFileResponse(OperationCode oc, ByteArray data)
+        {
+            long length = data.ReadLong();
+            string fileName = data.ReadString();
+            UploadFile(fileName, length);
+        }
+
+        private static void UploadFile(string path, long seek = 0)
+        {
             FileInfo info = new FileInfo(path);
             if (!info.Exists)
             {
@@ -102,33 +142,32 @@ namespace TCPClient
                 return;
             }
 
+            if (seek == info.Length)
+            {
+                return;
+            }
+
             byte[] buffer = new byte[1024 * 1024];
-            long curSize = 0;
+            long curSize = seek;
             FileStream reader = info.OpenRead();
+            reader.Seek(seek, SeekOrigin.Begin);
 
             try
             {
-                while (true)
-                {
-                    ByteArray data = new ByteArray(1024 * 1024 * 2);
-                    data.WriteInt((int)RequestCode.File);
-                    data.WriteInt((int)ActionCode.UploadFile);
+                ByteArray data = new ByteArray(1024 * 1024 * 2);
+                data.WriteInt((int)OperationCode.UploadFile);
 
-                    string fileName = path;
-                    long totalSize = info.Length;
-                    int blockSize = 1024 * 1024;
-                    int len = reader.Read(buffer, 0, buffer.Length);
-                    if (len <= 0) break;
-                    data.WriteString(fileName);
-                    data.WriteLong(totalSize);
-                    data.WriteInt(blockSize);
-                    data.WriteInt(len);
-                    data.WriteBytes(buffer, 0, len);
-                    Send(socket, data);
-                    curSize += len;
-                    ShowProgress(curSize / 1024f / 1024f, totalSize / 1024f / 1024f);
-                    //Thread.Sleep(100);
-                }
+                string fileName = path;
+                long totalSize = info.Length;
+                int len = reader.Read(buffer, 0, buffer.Length);
+                if (len <= 0) return;
+                data.WriteString(fileName);
+                data.WriteLong(totalSize);
+                data.WriteInt(len);
+                data.WriteBytes(buffer, 0, len);
+                Send(socket, data);
+                curSize += len;
+                Tools.ShowProgress(curSize, totalSize, "send file: " + fileName);
             }
             catch (Exception e)
             {
@@ -138,11 +177,27 @@ namespace TCPClient
             }
         }
 
-        static void ShowProgress(float cur, float total)
+        private static byte[] GetFileBytes(string fileName, long seek, int length)
         {
-            double progress = cur / total;
-            progress = Math.Round(progress, 2);
-            Console.WriteLine(progress * 100 + "%" + "    " + cur + "M/" + total + "M");
+            FileInfo info = new FileInfo(fileName);
+            if (!info.Exists)
+            {
+                Console.WriteLine(fileName + " is not found!");
+                return null;
+            }
+            FileStream reader = info.OpenRead();
+            reader.Seek(seek, SeekOrigin.Begin);
+            var buffer = new byte[length];
+            int len = reader.Read(buffer, 0, length);
+            if (len <= 0)
+            {
+                Console.WriteLine(fileName + " read to end!");
+                return null;
+            }
+            if (len >= length) return buffer;
+            var data = new byte[len];
+            Array.Copy(buffer, 0, data, 0, len);
+            return data;
         }
     }
 }

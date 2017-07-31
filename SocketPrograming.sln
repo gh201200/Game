@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCPServer", "TCPServer\TCPServer.csproj", "{A84B827B-A742-48FE-B63D-CAFD55CAEE06}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{7912F746-FB80-4D86-941A-3DBB55ED3733}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{EEA6BE5E-5A65-4DE2-AA49-C8E211B35CEB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileServer", "FileServer\FileServer.csproj", "{919025EF-E117-40A8-826D-96A13BAFE721}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -97,6 +99,18 @@ Global
 		{EEA6BE5E-5A65-4DE2-AA49-C8E211B35CEB}.Release|x64.Build.0 = Release|Any CPU
 		{EEA6BE5E-5A65-4DE2-AA49-C8E211B35CEB}.Release|x86.ActiveCfg = Release|Any CPU
 		{EEA6BE5E-5A65-4DE2-AA49-C8E211B35CEB}.Release|x86.Build.0 = Release|Any CPU
+		{919025EF-E117-40A8-826D-96A13BAFE721}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{919025EF-E117-40A8-826D-96A13BAFE721}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{919025EF-E117-40A8-826D-96A13BAFE721}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{919025EF-E117-40A8-826D-96A13BAFE721}.Debug|x64.Build.0 = Debug|Any CPU
+		{919025EF-E117-40A8-826D-96A13BAFE721}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{919025EF-E117-40A8-826D-96A13BAFE721}.Debug|x86.Build.0 = Debug|Any CPU
+		{919025EF-E117-40A8-826D-96A13BAFE721}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{919025EF-E117-40A8-826D-96A13BAFE721}.Release|Any CPU.Build.0 = Release|Any CPU
+		{919025EF-E117-40A8-826D-96A13BAFE721}.Release|x64.ActiveCfg = Release|Any CPU
+		{919025EF-E117-40A8-826D-96A13BAFE721}.Release|x64.Build.0 = Release|Any CPU
+		{919025EF-E117-40A8-826D-96A13BAFE721}.Release|x86.ActiveCfg = Release|Any CPU
+		{919025EF-E117-40A8-826D-96A13BAFE721}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

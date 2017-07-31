@@ -33,6 +33,16 @@ namespace FileServer.Controller
             clientMap.Remove(adress);
         }
 
+        public static Client Get(string adress)
+        {
+            if (!clientMap.ContainsKey(adress))
+            {
+                Console.WriteLine("client {0} is not in clientMap!", adress);
+                return null;
+            }
+            return clientMap[adress];
+        }
+
         public static Dictionary<string, Client> GetClientMap()
         {
             return clientMap;

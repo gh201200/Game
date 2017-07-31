@@ -11,7 +11,7 @@ namespace Server.Controller
     public class ControllerManager
     {
         private static ControllerManager _instance;
-        private Dictionary<RequestCode, BaseController> controllerDic = new Dictionary<RequestCode, BaseController>();
+        private Dictionary<OperationCode, BaseController> controllerDic = new Dictionary<OperationCode, BaseController>();
 
         public static ControllerManager Instance
         {
@@ -40,7 +40,7 @@ namespace Server.Controller
             }
         }
 
-        public BaseController GetController(RequestCode requestCode)
+        public BaseController GetController(OperationCode requestCode)
         {
             return controllerDic[requestCode];
         }

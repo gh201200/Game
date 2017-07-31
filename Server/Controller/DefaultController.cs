@@ -12,21 +12,9 @@ namespace Server.Controller
 {
     public class DefaultController : BaseController
     {
-        public override RequestCode RequestCode
+        public override OperationCode RequestCode
         {
-            get { return RequestCode.None; }
-        }
-
-        public override void HandleMessage(ActionCode actionCode, Message msg, Client client, Server.Server server)
-        {
-            Console.WriteLine("DefaultController Handle Message, ActionCode: " + actionCode);
-            Console.WriteLine(msg.ReadString());
-            Message m = new Message();
-            m.WriteInt(1);
-            m.WriteBool(true);
-            m.WriteString("收到请求");
-            m.EndWrite();
-            client.Send(m);
+            get { return OperationCode.None; }
         }
     }
 }

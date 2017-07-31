@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FileServer.Common;
 using System.Net.Sockets;
 using System.Net;
 using FileServer.Controller;
@@ -25,6 +24,8 @@ namespace FileServer
 
             Console.WriteLine("server start complete!\nListen: " + endPoint.Address + ":" + endPoint.Port);
 
+            NetManager.Instance.Init();
+
             server.BeginAccept(ListenAsync, null);
             Console.ReadKey();
         }
@@ -32,7 +33,7 @@ namespace FileServer
         static void ListenAsync(IAsyncResult ar)
         {
             Socket socket = server.EndAccept(ar);
-            Console.WriteLine("new client from: " + socket.RemoteEndPoint.ToString());
+            Console.WriteLine("new client from: " + socket.RemoteEndPoint);
             Client client = new Client(socket);
             ClientManager.AddClient(socket.RemoteEndPoint.ToString(), client);
             server.BeginAccept(ListenAsync, null);

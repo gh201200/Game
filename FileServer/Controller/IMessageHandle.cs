@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Common
+namespace FileServer.Controller
 {
-    public enum ActionCode
+    public interface IMessageHandle
     {
-        None,
-        Register,
-        Login,
+        void Init();
     }
 }

@@ -55,7 +55,7 @@ namespace Server.Server
                 while (msg.Check())
                 {
                     //Console.WriteLine("{0}, {1}, {2}", msg.ReadString(), msg.ReadInt(), msg.ReadBool());
-                    RequestCode requestCode = (RequestCode)msg.ReadInt();
+                    OperationCode requestCode = (OperationCode)msg.ReadInt();
                     ActionCode actionCode = (ActionCode)msg.ReadInt();
                     //string data = msg.ReadString();
                     BaseController bc = ControllerManager.Instance.GetController(requestCode);
