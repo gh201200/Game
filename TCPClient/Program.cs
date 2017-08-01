@@ -100,7 +100,6 @@ namespace TCPClient
             }
             byte[] buffer = new byte[100];
             long totalSize = info.Length;
-            long curSize = 0;
             FileStream reader = info.OpenRead();
             reader.Seek(seek, SeekOrigin.Begin);
 
@@ -114,15 +113,16 @@ namespace TCPClient
             data.WriteLong(reader.Position - length);
             data.WriteBytes(buffer, 0, length);
             Send(socket, data);
-            curSize += length;
             reader.Close();
-            Tools.ShowProgress(curSize, totalSize, "check update...");
+            seek += length;
+            Tools.ShowProgress(seek, totalSize, "check update...");
         }
 
         private static void CheckUpdateResponse(OperationCode oc, ByteArray data)
         {
             bool complete = data.ReadBool();
             long seek = data.ReadLong();
+            //Thread.Sleep(100);
             if (!complete) CheckUpdate(assetInfoPath, seek);
         }
 

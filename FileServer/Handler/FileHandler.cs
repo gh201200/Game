@@ -3,11 +3,15 @@ using System.IO;
 using FileServer.Controller;
 using Common;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace FileServer.Handler
 {
     class FileHandler : IMessageHandle
     {
+        private string assetRoot = "\\Assets";
+        private string assetInfoName = "";
+
         public void Init()
         {
             NetManager.Instance.AddListener(OperationCode.UploadFile, UploadFile);
@@ -22,10 +26,15 @@ namespace FileServer.Handler
             long pos = msg.ReadLong();
             byte[] data = msg.ReadBytes();
 
+            long curLength = 0;
+
+            assetInfoName = fileName;
+
             FileInfo res = new FileInfo(fileName);
             if (res.Exists) res.Delete();
 
             FileInfo info = new FileInfo(fileName + ".record");
+
             ByteArray rep = new ByteArray(100);
             rep.WriteInt((int)oc);
 
@@ -35,13 +44,49 @@ namespace FileServer.Handler
                 {
                     FileStream writer = new FileStream(fileName + ".record", FileMode.Append);
                     writer.Write(data, 0, length);
-                    long curLength = writer.Length;
+                    curLength = writer.Length;
                     writer.Close();
 
                     if (curLength == totalSize)
                     {
                         rep.WriteBool(true);
+                        if (File.Exists(fileName)) File.Delete(fileName);
                         info.MoveTo(fileName);
+                        OnCheckUpdateComplete(adress);
+                    }
+                    else rep.WriteBool(false);
+
+                    rep.WriteLong(curLength);
+                }
+                else
+                {
+                    if (info.Length == totalSize)
+                    {
+                        rep.WriteBool(true);
+                        if (File.Exists(fileName)) File.Delete(fileName);
+                        info.MoveTo(fileName);
+                    }
+                    else
+                    {
+                        rep.WriteBool(false);
+                    }
+                    rep.WriteLong(info.Length);
+                }
+            }
+            else
+            {
+                if (pos == 0)
+                {
+                    FileStream writer = new FileStream(fileName + ".record", FileMode.Append);
+                    writer.Write(data, 0, length);
+                    curLength = writer.Length;
+                    writer.Close();
+                    if (curLength == totalSize)
+                    {
+                        rep.WriteBool(true);
+                        if (File.Exists(fileName)) File.Delete(fileName);
+                        info.MoveTo(fileName);
+                        OnCheckUpdateComplete(adress);
                     }
                     else rep.WriteBool(false);
 
@@ -50,18 +95,22 @@ namespace FileServer.Handler
                 else
                 {
                     rep.WriteBool(false);
-                    rep.WriteLong(info.Length);
+                    rep.WriteLong(0);
                 }
             }
-            else
-            {
-                FileStream writer = new FileStream(fileName + ".record", FileMode.Append);
-                writer.Close();
-                rep.WriteBool(false);
-                rep.WriteLong(0);
-            }
             NetManager.Instance.Send(adress, rep);
-            if (info.Exists) Tools.ShowProgress(info.Length, totalSize, "check update");
+            if (info.Exists)
+            {
+                Tools.ShowProgress(info.Length, totalSize, "check update");
+                Console.WriteLine(info.FullName);
+            }
+        }
+
+        private void OnCheckUpdateComplete(string adress)
+        {
+            FileInfo info = new FileInfo(assetInfoName);
+            HashSet<string> updateList = new HashSet<string>();
+            HashSet<string> deleteList = new HashSet<string>();
         }
 
         private void UploadFile(string adress, OperationCode oc, ByteArray msg)
