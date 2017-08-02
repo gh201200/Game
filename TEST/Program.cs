@@ -12,7 +12,8 @@ namespace TEST
     {
         static void Main(string[] args)
         {
-
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            Console.WriteLine(dict["name"] == null);
             Console.ReadKey();
         }
     }

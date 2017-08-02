@@ -13,10 +13,10 @@ namespace TcpServer.Handler
 
         public void Init()
         {
-            NetManager.Instance.AddListener(OperationCode.UploadFile, UploadFile);
+            NetManager.Instance.AddListener(OperationType.Request, OperationCode.UploadFile, UploadFile);
         }
 
-        private void UploadFile(string adress, OperationCode oc, ByteArray msg)
+        private void UploadFile(string adress, OperationType ot, OperationCode oc, ByteArray msg)
         {
             string fileName = msg.ReadString();
             int curIndex = msg.ReadInt();
@@ -42,6 +42,7 @@ namespace TcpServer.Handler
             FileInfo info = new FileInfo(fileName + ".record");
 
             ByteArray rep = new ByteArray(1024);
+            rep.WriteInt((int)OperationType.Response);
             rep.WriteInt((int)oc);
             rep.WriteString(fileName);
 

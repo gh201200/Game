@@ -17,7 +17,7 @@ namespace TcpServer
             endPoint = new IPEndPoint(IPAddress.Parse(ip), 88);
             server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             server.Bind(endPoint);
-            server.Listen(1);
+            server.Listen(-1);
 
             Console.WriteLine("server start complete!\nListen: " + ip + ":" + endPoint.Port);
 
@@ -32,7 +32,14 @@ namespace TcpServer
             Socket socket = server.EndAccept(ar);
             if (ClientManager.GetClientMap().Count > 0)
             {
-
+                ByteArray msg = new ByteArray(200);
+                msg.WriteInt((int)OperationType.Request);
+                msg.WriteInt((int)OperationCode.ShowMessage);
+                msg.WriteString("服务器连接数达到上限，请稍后再试！");
+                NetManager.Instance.Send(socket.RemoteEndPoint.ToString(), msg);
+                socket.Close();
+                server.BeginAccept(ListenAsync, null);
+                return;
             }
             Console.WriteLine("new client from: " + socket.RemoteEndPoint);
             Client client = new Client(socket);

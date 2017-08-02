@@ -10,7 +10,7 @@ namespace TcpServer.Controller
     public class NetManager
     {
         private static NetManager _instance;
-        private Dictionary<OperationCode, List<Action<string, OperationCode, ByteArray>>> operationDict;
+        private static Dictionary<OperationType, Dictionary<OperationCode, List<Action<string, OperationType, OperationCode, ByteArray>>>> operationMap;
 
         public static NetManager Instance
         {
@@ -27,7 +27,7 @@ namespace TcpServer.Controller
 
         public void Init()
         {
-            operationDict = new Dictionary<OperationCode, List<Action<string, OperationCode, ByteArray>>>();
+            operationMap = new Dictionary<OperationType, Dictionary<OperationCode, List<Action<string, OperationType, OperationCode, ByteArray>>>>();
             Assembly assembly = Assembly.GetExecutingAssembly();
             Type[] ts = assembly.GetTypes();
             foreach (Type t in ts)
@@ -60,38 +60,53 @@ namespace TcpServer.Controller
 
         public void HandleMessage(Client client, ByteArray msg)
         {
-            OperationCode req = (OperationCode)msg.ReadInt();
-            Console.WriteLine("handle message: " + req);
-            List<Action<string, OperationCode, ByteArray>> list = null;
-            operationDict.TryGetValue(req, out list);
-            if (list == null || list.Count <= 0)
+            OperationType ot = (OperationType)msg.ReadInt();
+            OperationCode oc = (OperationCode)msg.ReadInt();
+            if (operationMap.ContainsKey(ot) && operationMap[ot].ContainsKey(oc) && operationMap[ot][oc].Count > 0)
             {
-                Console.WriteLine("no function to handle message: {0}", req);
-                return;
-            }
-            foreach (var act in list)
-            {
-                if (act != null)
+                foreach (var handler in operationMap[ot][oc])
                 {
-                    act(client.IpAndPort, req, msg);
+                    handler(client.IpAndPort, ot, oc, msg);
                 }
             }
-        }
-
-        public void AddListener(OperationCode oc, Action<string, OperationCode, ByteArray> handle)
-        {
-            List<Action<string, OperationCode, ByteArray>> obj = null;
-            operationDict.TryGetValue(oc, out obj);
-            if (obj == null)
+            else
             {
-                operationDict.Add(oc, new List<Action<string, OperationCode, ByteArray>>());
+                Console.WriteLine("未处理的消息: {0}  {1}", ot, oc);
+                return;
             }
-            operationDict[oc].Add(handle);
         }
 
-        public void RemoveListener(OperationCode oc)
+        public void AddListener(OperationType ot, OperationCode oc, Action<string, OperationType, OperationCode, ByteArray> handler)
         {
-            operationDict[oc] = new List<Action<string, OperationCode, ByteArray>>();
+            if (!operationMap.ContainsKey(ot)) operationMap.Add(ot, new Dictionary<OperationCode, List<Action<string, OperationType, OperationCode, ByteArray>>>());
+            if (!operationMap[ot].ContainsKey(oc)) operationMap[ot].Add(oc, new List<Action<string, OperationType, OperationCode, ByteArray>>());
+            operationMap[ot][oc].Add(handler);
+        }
+
+        public void RemoveListener(OperationType ot, OperationCode oc)
+        {
+            if (operationMap.ContainsKey(ot) && operationMap[ot].ContainsKey(oc))
+            {
+                operationMap[ot].Remove(oc);
+            }
+            else
+            {
+                Console.WriteLine(oc + " is not contains in operationMap");
+                return;
+            }
+        }
+
+        public void RemoveListener(OperationType ot, OperationCode oc, Action<string, OperationType, OperationCode, ByteArray> handler)
+        {
+            if (operationMap.ContainsKey(ot) && operationMap[ot].ContainsKey(oc) && operationMap[ot][oc].Contains(handler))
+            {
+                operationMap[ot][oc].Remove(handler);
+            }
+            else
+            {
+                Console.WriteLine(handler + " is not contains in operationMap");
+                return;
+            }
         }
     }
 }
