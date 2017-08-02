@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCPServer", "TCPServer\TCPServer.csproj", "{A84B827B-A742-48FE-B63D-CAFD55CAEE06}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCPClient", "TCPClient\TCPClient.csproj", "{89494B78-B5DC-4D89-AA3C-439FA738DB65}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TEST", "TEST\TEST.csproj", "{E7FF8EF1-275B-4202-A08D-6841F26C4F87}"
@@ -15,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{EEA6BE5E-5A65-4DE2-AA49-C8E211B35CEB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileServer", "FileServer\FileServer.csproj", "{919025EF-E117-40A8-826D-96A13BAFE721}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TcpServer", "FileServer\TcpServer.csproj", "{919025EF-E117-40A8-826D-96A13BAFE721}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,18 +25,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A84B827B-A742-48FE-B63D-CAFD55CAEE06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A84B827B-A742-48FE-B63D-CAFD55CAEE06}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A84B827B-A742-48FE-B63D-CAFD55CAEE06}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{A84B827B-A742-48FE-B63D-CAFD55CAEE06}.Debug|x64.Build.0 = Debug|Any CPU
-		{A84B827B-A742-48FE-B63D-CAFD55CAEE06}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{A84B827B-A742-48FE-B63D-CAFD55CAEE06}.Debug|x86.Build.0 = Debug|Any CPU
-		{A84B827B-A742-48FE-B63D-CAFD55CAEE06}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A84B827B-A742-48FE-B63D-CAFD55CAEE06}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A84B827B-A742-48FE-B63D-CAFD55CAEE06}.Release|x64.ActiveCfg = Release|Any CPU
-		{A84B827B-A742-48FE-B63D-CAFD55CAEE06}.Release|x64.Build.0 = Release|Any CPU
-		{A84B827B-A742-48FE-B63D-CAFD55CAEE06}.Release|x86.ActiveCfg = Release|Any CPU
-		{A84B827B-A742-48FE-B63D-CAFD55CAEE06}.Release|x86.Build.0 = Release|Any CPU
 		{89494B78-B5DC-4D89-AA3C-439FA738DB65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{89494B78-B5DC-4D89-AA3C-439FA738DB65}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89494B78-B5DC-4D89-AA3C-439FA738DB65}.Debug|x64.ActiveCfg = Debug|Any CPU

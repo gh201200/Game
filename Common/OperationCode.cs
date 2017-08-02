@@ -6,18 +6,24 @@ using System.Threading.Tasks;
 
 namespace Common
 {
+    public enum OperationType
+    {
+        Request,
+
+        Response,
+    }
+
     public enum OperationCode
     {
         None = 0,
-        
+
         /// <summary>
-        /// 检测文件是否存在
+        /// 显示文字消息
         /// </summary>
-        CheckUpdate,
+        ShowMessage,
 
         /// <summary>
         /// 上传文件
-        /// reponse: 服务端已写入的文件长度
         /// </summary>
         UploadFile,
     }

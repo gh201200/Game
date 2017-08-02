@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net;
-using System.Net.Sockets;
+using System.Diagnostics;
 
-namespace FileServer.Controller
+namespace TcpServer.Controller
 {
     public class ClientManager
     {
@@ -26,10 +22,11 @@ namespace FileServer.Controller
         {
             if (!clientMap.ContainsKey(adress))
             {
-                Console.WriteLine("the key {0} is not in clientMap!", adress);
+                StackTrace st = new StackTrace(false);
+                Console.WriteLine("the key {0} is not in clientMap!\n{1}", adress, st);
                 return;
             }
-            if (clientMap[adress] != null) clientMap[adress].Socket.Close();
+            if (clientMap[adress] != null) clientMap[adress].Close();
             clientMap.Remove(adress);
         }
 

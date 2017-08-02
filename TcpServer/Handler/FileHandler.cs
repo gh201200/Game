@@ -1,11 +1,10 @@
 ﻿using System;
-using System.IO;
-using FileServer.Controller;
-using Common;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.IO;
+using Common;
+using TcpServer.Controller;
 
-namespace FileServer.Handler
+namespace TcpServer.Handler
 {
     class FileHandler : IMessageHandle
     {
@@ -15,12 +14,13 @@ namespace FileServer.Handler
         public void Init()
         {
             NetManager.Instance.AddListener(OperationCode.UploadFile, UploadFile);
-            NetManager.Instance.AddListener(OperationCode.CheckUpdate, CheckUpdate);
         }
 
-        private void CheckUpdate(string adress, OperationCode oc, ByteArray msg)
+        private void UploadFile(string adress, OperationCode oc, ByteArray msg)
         {
             string fileName = msg.ReadString();
+            int curIndex = msg.ReadInt();
+            int totalIndex = msg.ReadInt();
             long totalSize = msg.ReadLong();
             int length = msg.ReadInt();
             long pos = msg.ReadLong();
@@ -30,13 +30,20 @@ namespace FileServer.Handler
 
             assetInfoName = fileName;
 
+            string dir = Path.GetDirectoryName(fileName);
+            if (!string.IsNullOrEmpty(dir))
+            {
+                if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+            }
+
             FileInfo res = new FileInfo(fileName);
             if (res.Exists) res.Delete();
 
             FileInfo info = new FileInfo(fileName + ".record");
 
-            ByteArray rep = new ByteArray(100);
+            ByteArray rep = new ByteArray(1024);
             rep.WriteInt((int)oc);
+            rep.WriteString(fileName);
 
             if (info.Exists)
             {
@@ -52,7 +59,6 @@ namespace FileServer.Handler
                         rep.WriteBool(true);
                         if (File.Exists(fileName)) File.Delete(fileName);
                         info.MoveTo(fileName);
-                        OnCheckUpdateComplete(adress);
                     }
                     else rep.WriteBool(false);
 
@@ -86,7 +92,6 @@ namespace FileServer.Handler
                         rep.WriteBool(true);
                         if (File.Exists(fileName)) File.Delete(fileName);
                         info.MoveTo(fileName);
-                        OnCheckUpdateComplete(adress);
                     }
                     else rep.WriteBool(false);
 
@@ -101,39 +106,9 @@ namespace FileServer.Handler
             NetManager.Instance.Send(adress, rep);
             if (info.Exists)
             {
-                Tools.ShowProgress(info.Length, totalSize, "check update");
-                Console.WriteLine(info.FullName);
+                Tools.ShowProgress(curIndex, totalIndex, info.Length, totalSize, "接收文件: " + fileName);
+                if (curIndex == totalIndex) Console.WriteLine("接收结束");
             }
-        }
-
-        private void OnCheckUpdateComplete(string adress)
-        {
-            FileInfo info = new FileInfo(assetInfoName);
-            HashSet<string> updateList = new HashSet<string>();
-            HashSet<string> deleteList = new HashSet<string>();
-        }
-
-        private void UploadFile(string adress, OperationCode oc, ByteArray msg)
-        {
-            string fileName = msg.ReadString();
-            long totalSize = msg.ReadLong();
-            int len = msg.ReadInt();
-            byte[] data = msg.ReadBytes();
-            FileStream writer = new FileStream(fileName, FileMode.Append);
-            if (writer.Length == totalSize)
-            {
-                Console.WriteLine("{0} is already complete!", fileName);
-                writer.Close();
-                return;
-            }
-            writer.Write(data, 0, len);
-            ByteArray rep = new ByteArray(128);
-            rep.WriteInt((int)oc);
-            rep.WriteLong(writer.Length);
-            rep.WriteString(fileName);
-            NetManager.Instance.Send(adress, rep);
-            Tools.ShowProgress(writer.Length, totalSize, "receiving file: " + fileName);
-            writer.Close();
         }
     }
 }

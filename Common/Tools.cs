@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -53,11 +54,29 @@ namespace Common
         }
         #endregion
 
-        public static void ShowProgress(long cur, long total, string title = "")
+        public static void ShowProgress(int curIndex, int totalIndex, long curSize, long totalSize, string title = "")
         {
-            double progress = (double)cur / total;
+            double progress = (double)curIndex / totalIndex;
             progress = Math.Round(progress, 2);
-            Console.WriteLine(title + "\n" + progress * 100 + "%" + "    " + cur / 1024f / 1024f + "M/" + total / 1024f / 1024f + "M");
+            double cs = Math.Round(curSize / 1024d / 1024d, 2);
+            double ts = Math.Round(totalSize / 1024d / 1024d, 2);
+            Console.WriteLine(title + "\t" + cs + "M/" + ts + "M" + "\n" + progress * 100 + "%" + "    " + curIndex + "/" + totalIndex);
+        }
+
+        public static string GetIpAdress()
+        {
+            string str = "";
+            string hostName = Dns.GetHostName();
+            IPHostEntry entry = Dns.GetHostEntry(hostName);
+            foreach (var addr in entry.AddressList)
+            {
+                if (addr.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                {
+                    str = addr.ToString();
+                    break;
+                }
+            }
+            return str;
         }
     }
 }
