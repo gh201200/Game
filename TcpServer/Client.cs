@@ -2,7 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using Common;
-using MySql.Data.MySqlClient;
+//using MySql.Data.MySqlClient;
 using TcpServer.Controller;
 
 namespace TcpServer
@@ -11,7 +11,7 @@ namespace TcpServer
     {
         public Socket Socket { get; private set; }
 
-        private MySqlConnection sqlCon = null;
+        //private MySqlConnection sqlCon = null;
 
         public string Ip
         {
@@ -42,15 +42,15 @@ namespace TcpServer
         public Client(Socket client)
         {
             this.Socket = client;
-            this.buffer = new ByteArray(1024 * 1024 * 2);
-            this.sqlCon = ConnHelper.Connect();
+            this.buffer = new ByteArray(Program.config.ReceiveLength_EachTime);
+            //this.sqlCon = ConnHelper.Connect();
             this.Socket.BeginReceive(buffer.Buffer, buffer.EndIndex, buffer.Remain, SocketFlags.None, ReceiveCallback, null);
         }
 
         public void Close()
         {
             Socket?.Close();
-            if (sqlCon != null) ConnHelper.Close(sqlCon);
+            //if (sqlCon != null) ConnHelper.Close(sqlCon);
         }
 
         void ReceiveCallback(IAsyncResult ar)

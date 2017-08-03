@@ -271,14 +271,12 @@ namespace Common
         {
             bool res = BitConverter.ToBoolean(buffer, startIndex);
             startIndex += 1;
-            Check();
             return res;
         }
 
         public byte ReadByte()
         {
             byte res = buffer[startIndex++];
-            Check();
             return res;
         }
 
@@ -289,7 +287,6 @@ namespace Common
                 res = (sbyte)(buffer[startIndex++] - 256);
             else
                 res = (sbyte)(buffer[startIndex++]);
-            Check();
             return res;
         }
 
@@ -297,7 +294,6 @@ namespace Common
         {
             char res = BitConverter.ToChar(buffer, startIndex);
             startIndex += 2;
-            Check();
             return res;
         }
 
@@ -305,7 +301,6 @@ namespace Common
         {
             short res = BitConverter.ToInt16(buffer, startIndex);
             startIndex += 2;
-            Check();
             return res;
         }
 
@@ -313,7 +308,6 @@ namespace Common
         {
             ushort res = BitConverter.ToUInt16(buffer, startIndex);
             startIndex += 2;
-            Check();
             return res;
         }
 
@@ -321,7 +315,6 @@ namespace Common
         {
             var res = BitConverter.ToInt32(buffer, startIndex);
             startIndex += 4;
-            Check();
             return res;
         }
 
@@ -329,7 +322,6 @@ namespace Common
         {
             var res = BitConverter.ToUInt32(buffer, startIndex);
             startIndex += 4;
-            Check();
             return res;
         }
 
@@ -337,7 +329,6 @@ namespace Common
         {
             var res = BitConverter.ToInt64(buffer, startIndex);
             startIndex += 8;
-            Check();
             return res;
         }
 
@@ -345,7 +336,6 @@ namespace Common
         {
             var res = BitConverter.ToUInt64(buffer, startIndex);
             startIndex += 8;
-            Check();
             return res;
         }
 
@@ -353,7 +343,6 @@ namespace Common
         {
             var res = BitConverter.ToSingle(buffer, startIndex);
             startIndex += 4;
-            Check();
             return res;
         }
 
@@ -361,7 +350,6 @@ namespace Common
         {
             var res = BitConverter.ToDouble(buffer, startIndex);
             startIndex += 8;
-            Check();
             return res;
         }
 
@@ -370,7 +358,6 @@ namespace Common
             int len = ReadInt();
             var res = Encoding.UTF8.GetString(buffer, startIndex, len);
             startIndex += len;
-            Check();
             return res;
         }
 
@@ -380,7 +367,6 @@ namespace Common
             byte[] data = new byte[len];
             Array.Copy(buffer, startIndex, data, 0, len);
             startIndex += len;
-            Check();
             return data;
         }
 
@@ -388,11 +374,6 @@ namespace Common
         {
             startIndex = 0;
             endIndex = 0;
-        }
-
-        private void Check()
-        {
-            if (startIndex == endIndex) Init();
         }
     }
 }

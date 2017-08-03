@@ -1,5 +1,6 @@
 ﻿using Common;
 using System;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using TcpServer.Controller;
@@ -8,13 +9,17 @@ namespace TcpServer
 {
     class Program
     {
-        static Socket server;
-        static IPEndPoint endPoint;
+        public static Config config;
+        private static Socket server;
+        private static IPEndPoint endPoint;
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
+            config = new Config("Config.json");
+            if (!Directory.Exists(config.SaveDirectory)) Directory.CreateDirectory(config.SaveDirectory);
+            Directory.SetCurrentDirectory(config.SaveDirectory);
             string ip = Tools.GetIpAdress();
-            endPoint = new IPEndPoint(IPAddress.Parse(ip), 88);
+            endPoint = new IPEndPoint(IPAddress.Parse(ip), config.Port);
             server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             server.Bind(endPoint);
             server.Listen(-1);
@@ -27,7 +32,7 @@ namespace TcpServer
             Console.ReadKey();
         }
 
-        static void ListenAsync(IAsyncResult ar)
+        private static void ListenAsync(IAsyncResult ar)
         {
             Socket socket = server.EndAccept(ar);
             if (ClientManager.GetClientMap().Count > 0)

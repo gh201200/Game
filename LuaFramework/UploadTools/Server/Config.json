@@ -1,0 +1,5 @@
+{
+	"Port" : 88,
+	"ReceiveLength_EachTime" : 2097152,
+	"SaveDirectory" : "..",
+}

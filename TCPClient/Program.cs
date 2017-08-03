@@ -19,16 +19,42 @@ namespace TCPClient
         private static int index = 0;
         private static int totalCount = 0;
 
+        private static string ip;
+        private static int port;
+        private static int sendSize;
+        private static string workDir;
+        private static string sendDir;
+
         static void Main(string[] args)
         {
             operationMap = new Dictionary<OperationType, Dictionary<OperationCode, List<Action<OperationType, OperationCode, ByteArray>>>>();
             uploadQue = new Queue<string>();
-            receiveBuffer = new ByteArray(1024 * 1024 * 2);
-            adress = new IPEndPoint(IPAddress.Parse("192.168.0.102"), 88);
-            socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            LoadConfig();
             Init();
-            socket.BeginConnect(adress, ConnectCallback, null);
             Console.ReadKey();
+        }
+
+        private static void LoadConfig()
+        {
+            if (!File.Exists("Config.json"))
+            {
+                Console.WriteLine("Config.json is not found!");
+                return;
+            }
+
+            StreamReader sr = File.OpenText("Config.json");
+            Dictionary<string, object> dic = Json.Deserialize(sr.ReadToEnd()) as Dictionary<string, object>;
+            sr.Close();
+            ip = dic["Ip"].ToString();
+            port = int.Parse(dic["Port"].ToString());
+            sendSize = int.Parse(dic["SendLength_EachTime"].ToString());
+            workDir = dic["WorkDirectory"].ToString();
+            sendDir = dic["SendDirectory"].ToString();
+            Directory.SetCurrentDirectory(workDir);
+            receiveBuffer = new ByteArray(sendSize);
+            adress = new IPEndPoint(IPAddress.Parse(ip), port);
+            socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            socket.BeginConnect(adress, ConnectCallback, null);
         }
 
         private static void Init()
@@ -45,7 +71,7 @@ namespace TCPClient
                 socket.BeginReceive(receiveBuffer.Buffer, receiveBuffer.EndIndex, receiveBuffer.Remain, SocketFlags.None, ReceiveCallback, null);
                 //return;
                 Console.WriteLine("正在上传文件");
-                string[] files = Directory.GetFiles("PDF/", "*", SearchOption.AllDirectories);
+                string[] files = Directory.GetFiles(sendDir, "*", SearchOption.AllDirectories);
                 foreach (string f in files)
                 {
                     uploadQue.Enqueue(f);

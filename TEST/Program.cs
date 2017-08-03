@@ -12,8 +12,9 @@ namespace TEST
     {
         static void Main(string[] args)
         {
-            Dictionary<string, string> dict = new Dictionary<string, string>();
-            Console.WriteLine(dict["name"] == null);
+            Directory.SetCurrentDirectory("..");
+            string curDir = Directory.GetCurrentDirectory();
+            Console.WriteLine(curDir);
             Console.ReadKey();
         }
     }
