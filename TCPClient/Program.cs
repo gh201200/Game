@@ -25,24 +25,30 @@ namespace TCPClient
         private static string workDir;
         private static string sendDir;
 
+        private static string configPath = null;
+
         static void Main(string[] args)
         {
+            if (args.Length > 0) configPath = args[0];
+            Console.WriteLine("params count: " + args.Length);
+            if (!string.IsNullOrEmpty(configPath)) Console.WriteLine(configPath);
             operationMap = new Dictionary<OperationType, Dictionary<OperationCode, List<Action<OperationType, OperationCode, ByteArray>>>>();
             uploadQue = new Queue<string>();
-            LoadConfig();
             Init();
+            LoadConfig();
             Console.ReadKey();
         }
 
         private static void LoadConfig()
         {
-            if (!File.Exists("Config.json"))
+            if (string.IsNullOrEmpty(configPath)) configPath = "Config.json";
+            if (!File.Exists(configPath))
             {
                 Console.WriteLine("Config.json is not found!");
                 return;
             }
 
-            StreamReader sr = File.OpenText("Config.json");
+            StreamReader sr = File.OpenText(configPath);
             Dictionary<string, object> dic = Json.Deserialize(sr.ReadToEnd()) as Dictionary<string, object>;
             sr.Close();
             ip = dic["Ip"].ToString();
@@ -61,6 +67,7 @@ namespace TCPClient
         {
             AddListener(OperationType.Response, OperationCode.UploadFile, UploadFileResponse);
             AddListener(OperationType.Request, OperationCode.ShowMessage, ShowMessageRequest);
+            AddListener(OperationType.Response, OperationCode.CleanFiles, CleanFilesResponse);
         }
 
         private static void ConnectCallback(IAsyncResult ar)
@@ -69,32 +76,8 @@ namespace TCPClient
             {
                 socket.EndConnect(ar);
                 socket.BeginReceive(receiveBuffer.Buffer, receiveBuffer.EndIndex, receiveBuffer.Remain, SocketFlags.None, ReceiveCallback, null);
-                //return;
-                Console.WriteLine("正在上传文件");
-                string[] files = Directory.GetFiles(sendDir, "*", SearchOption.AllDirectories);
-                foreach (string f in files)
-                {
-                    uploadQue.Enqueue(f);
-                }
-
-                index = 0;
-                totalCount = uploadQue.Count;
-
-                while (true)
-                {
-                    if (uploadQue.Count <= 0)
-                    {
-                        Console.WriteLine("上传结束");
-                        break;
-                    }
-                    if (!uploading)
-                    {
-                        index++;
-                        uploading = true;
-                        string name = uploadQue.Dequeue();
-                        UploadFile(name);
-                    }
-                }
+                CleanFiles();
+                //UploadFileRequest();
             }
             catch (Exception ex)
             {
@@ -163,10 +146,62 @@ namespace TCPClient
             }
         }
 
+        private static void CleanFiles()
+        {
+            ByteArray msg = new ByteArray(100);
+            msg.WriteInt((int)OperationType.Request);
+            msg.WriteInt((int)OperationCode.CleanFiles);
+            Send(socket, msg);
+        }
+
+        private static void CleanFilesResponse(OperationType ot, OperationCode oc, ByteArray data)
+        {
+            bool res = data.ReadBool();
+            if (res)
+            {
+                Console.WriteLine("clean server files success!");
+                Action act = UploadFileRequest;
+                act.BeginInvoke(ar =>
+                {
+                    act.EndInvoke(ar);
+                    Console.WriteLine("上传结束");
+                }, null);
+            }
+            else
+            {
+                Console.WriteLine("failed to clean server files!");
+            }
+        }
+
         private static void ShowMessageRequest(OperationType ot, OperationCode oc, ByteArray data)
         {
             string msg = data.ReadString();
             Console.WriteLine(msg);
+        }
+
+        private static void UploadFileRequest()
+        {
+            Console.WriteLine("正在上传文件");
+            string[] files = Directory.GetFiles(sendDir, "*", SearchOption.AllDirectories);
+            foreach (string f in files)
+            {
+                uploadQue.Enqueue(f);
+            }
+
+            index = 0;
+            totalCount = uploadQue.Count;
+
+            while (true)
+            {
+                if (uploadQue.Count <= 0) break;
+                if (!uploading)
+                {
+                    index++;
+                    uploading = true;
+                    string name = uploadQue.Dequeue();
+                    UploadFile(name);
+                }
+            }
         }
 
         private static void UploadFile(string fileName, long seek = 0)

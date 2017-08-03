@@ -202,7 +202,7 @@ public class GameEditor
     [MenuItem("Tool/Compile LuaScripts", false, 100)]
     static void CompileLuaScripts()
     {
-        LuajitGen.exportLuajit(Config.LuaPath.Replace(Application.dataPath.Replace("Assets", ""), ""), "*.lua", GetBuildSettingAsset().buildPath + "LuaScripts/", JITBUILDTYPE.X86);
+        LuajitGen.exportLuajit("Assets/LuaScripts/", "*.lua", GetBuildSettingAsset().buildPath + "LuaScripts/", JITBUILDTYPE.X86);
     }
 
     [MenuItem("Tool/Clear Lua Bytecode", false, 110)]
@@ -214,6 +214,19 @@ public class GameEditor
         DirectoryInfo di = new DirectoryInfo(path + "LuaScripts");
         if (di.Exists) di.Delete(true);
         AssetDatabase.Refresh();
+    }
+
+    [MenuItem("Tool/Push Assets To Remote", false, 150)]
+    static void PushAssetsToRemote()
+    {
+        string path = Application.dataPath;
+        int index = path.LastIndexOf("/", StringComparison.Ordinal);
+        path = path.Substring(0, index);
+        string exePath = path + "/UploadTools/Client/TCPClient.exe";
+        string configPath = path + "/UploadTools/Client/Config.json";
+        Process p = Process.Start(exePath, configPath);
+        p.WaitForExit();
+        Debug.Log("上传成功!");
     }
 
     [MenuItem("Tool/Pack Assets", false, 200)]

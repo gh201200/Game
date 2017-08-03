@@ -370,7 +370,7 @@ namespace Common
             return data;
         }
 
-        private void Init()
+        public void Init()
         {
             startIndex = 0;
             endIndex = 0;

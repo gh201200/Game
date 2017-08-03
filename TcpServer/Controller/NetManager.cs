@@ -62,6 +62,7 @@ namespace TcpServer.Controller
         {
             OperationType ot = (OperationType)msg.ReadInt();
             OperationCode oc = (OperationCode)msg.ReadInt();
+            Console.WriteLine("handle message {0} {1}", ot.ToString(), oc.ToString());
             if (operationMap.ContainsKey(ot) && operationMap[ot].ContainsKey(oc) && operationMap[ot][oc].Count > 0)
             {
                 foreach (var handler in operationMap[ot][oc])

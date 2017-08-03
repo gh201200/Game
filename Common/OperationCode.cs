@@ -23,6 +23,11 @@ namespace Common
         ShowMessage,
 
         /// <summary>
+        /// 清理服务器文件
+        /// </summary>
+        CleanFiles,
+
+        /// <summary>
         /// 上传文件
         /// </summary>
         UploadFile,

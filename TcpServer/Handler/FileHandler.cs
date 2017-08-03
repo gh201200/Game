@@ -14,6 +14,7 @@ namespace TcpServer.Handler
         public void Init()
         {
             NetManager.Instance.AddListener(OperationType.Request, OperationCode.UploadFile, UploadFile);
+            NetManager.Instance.AddListener(OperationType.Request, OperationCode.CleanFiles, CleanFilesRequest);
         }
 
         private void UploadFile(string adress, OperationType ot, OperationCode oc, ByteArray msg)
@@ -110,6 +111,20 @@ namespace TcpServer.Handler
                 Tools.ShowProgress(curIndex, totalIndex, info.Length, totalSize, "接收文件: " + fileName);
                 if (curIndex == totalIndex) Console.WriteLine("接收结束");
             }
+        }
+
+        private void CleanFilesRequest(string adress, OperationType ot, OperationCode oc, ByteArray msg)
+        {
+            Console.WriteLine("clean directory: " + Program.config.SaveDirectory);
+            DirectoryInfo di = new DirectoryInfo(Program.config.SaveDirectory);
+            foreach (var info in di.GetDirectories()) info.Delete(true);
+            foreach (var info in di.GetFiles()) info.Delete();
+            bool success = !(di.GetFiles("*", SearchOption.AllDirectories).Length > 0);
+            ByteArray data = new ByteArray(50);
+            data.WriteInt((int)OperationType.Response);
+            data.WriteInt((int)OperationCode.CleanFiles);
+            data.WriteBool(success);
+            NetManager.Instance.Send(adress, data);
         }
     }
 }
