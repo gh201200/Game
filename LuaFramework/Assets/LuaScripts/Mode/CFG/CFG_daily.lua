@@ -1,0 +1,9 @@
+CFG_daily = {}
+CFG_daily[1] = {livenessId = 1, name = "捕鱼达人", preId = 0, active = "call", count = 10, awardType = 0, awardId = 0, awardCount = 0, livenessValue = 10, level = 0, icon = "Texture/Gui/DailyPanel/13", }
+CFG_daily[2] = {livenessId = 2, name = "每日首次充值", preId = 0, active = "call", count = 1, awardType = 0, awardId = 0, awardCount = 0, livenessValue = 60, level = 0, icon = "Texture/Gui/DailyPanel/10", }
+CFG_daily[3] = {livenessId = 3, name = "美酒佳酿", preId = 0, active = "call", count = 2, awardType = 0, awardId = 0, awardCount = 0, livenessValue = 5, level = 0, icon = "Texture/Gui/DailyPanel/1", }
+CFG_daily[4] = {livenessId = 4, name = "港口争霸", preId = 0, active = "call", count = 1, awardType = 0, awardId = 0, awardCount = 0, livenessValue = 10, level = 0, icon = "Texture/Gui/DailyPanel/8", }
+CFG_daily[5] = {livenessId = 5, name = "擒王夺宝", preId = 0, active = "call", count = 1, awardType = 0, awardId = 0, awardCount = 0, livenessValue = 10, level = 0, icon = "Texture/Gui/DailyPanel/qwdb", }
+CFG_daily[6] = {livenessId = 6, name = "寻宝探图", preId = 0, active = "call", count = 2, awardType = 0, awardId = 0, awardCount = 0, livenessValue = 10, level = 0, icon = "Texture/Gui/DailyPanel/7", }
+CFG_daily[7] = {livenessId = 7, name = "冥界来袭", preId = 0, active = "call", count = 1, awardType = 0, awardId = 0, awardCount = 0, livenessValue = 10, level = 0, icon = "Texture/Gui/DailyPanel/9", }
+CFG_daily[8] = {livenessId = 8, name = "死亡游戏", preId = 0, active = "call", count = 1, awardType = 0, awardId = 0, awardCount = 0, livenessValue = 10, level = 0, icon = "Texture/Gui/DailyPanel/11", }

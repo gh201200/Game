@@ -69,14 +69,14 @@ public class GameEditor
         //Debug.Log("FullPath");
         //Debug.Log(desc.FullPath);
 
-        HttpHelper.Instance.DownLoadFile("http://localhost/test.pdf", Application.dataPath + "/test.pdf", (cur, total) =>
-        {
-            EditorUtility.DisplayProgressBar("download file", "http://localhost/test.pdf", cur / total);
-        }, () =>
-        {
-            EditorUtility.ClearProgressBar();
-            AssetDatabase.Refresh();
-        });
+        //HttpHelper.Instance.DownLoadFile("http://localhost/test.pdf", Application.dataPath + "/test.pdf", (cur, total) =>
+        //{
+        //    EditorUtility.DisplayProgressBar("download file", "http://localhost/test.pdf", cur / total);
+        //}, () =>
+        //{
+        //    EditorUtility.ClearProgressBar();
+        //    AssetDatabase.Refresh();
+        //});
     }
 
     [MenuItem("Tool/BuildSetting", false, 1)]
@@ -199,13 +199,50 @@ public class GameEditor
 
     }
 
-    [MenuItem("Tool/Compile LuaScripts", false, 100)]
-    static void CompileLuaScripts()
+    [MenuItem("Tool/Compress Lua Code", false, 100)]
+    static void CompressLuaCode()
     {
-        LuajitGen.exportLuajit("Assets/LuaScripts/", "*.lua", GetBuildSettingAsset().buildPath + "LuaScripts/", JITBUILDTYPE.X86);
+        string savePath = Application.dataPath + "/Build/LuaCode.bytes";
+        string passwd = "sexsexsex";
+
+        if (File.Exists(savePath)) File.Delete(savePath);
+
+        FileStream writer = new FileStream(savePath, FileMode.Append);
+        try
+        {
+
+            Common.ByteArray buffer = new Common.ByteArray(1024*1024*2);
+            buffer.WriteString(passwd);
+
+            writer.Write(buffer.Data, 0, buffer.Length);
+
+            string[] files = Directory.GetFiles(Application.dataPath + "/LuaScripts", "*.lua",
+                SearchOption.AllDirectories);
+            for (int i = 0; i < files.Length; i++)
+            {
+                string name = files[i];
+                name = name.Replace('\\', '/');
+                name = name.Replace(Application.dataPath + "/LuaScripts/", "");
+                buffer.Init();
+                buffer.WriteString(name);
+                buffer.WriteBytes(File.ReadAllBytes(files[i]));
+                writer.Write(buffer.Data, 0, buffer.Length);
+                EditorUtility.DisplayProgressBar("compress lua code...", name, (float) i/files.Length);
+            }
+            writer.Close();
+            EditorUtility.ClearProgressBar();
+            AssetDatabase.Refresh();
+        }
+        catch (Exception ex)
+        {
+            writer.Close();
+            EditorUtility.ClearProgressBar();
+            AssetDatabase.Refresh();
+            throw new Exception(ex.Message);
+        }
     }
 
-    [MenuItem("Tool/Clear Lua Bytecode", false, 110)]
+    [MenuItem("Tool/Clear Lua Bytecode", false, 103)]
     static void ClearLuaBytecode()
     {
         BuildSetting bs = GetBuildSettingAsset();
@@ -264,6 +301,30 @@ public class GameEditor
             EditorUtility.ClearProgressBar();
             AssetDatabase.Refresh();
         }
+    }
+
+    [MenuItem("Assets/Reimport UI Assemblies", false, 100)]
+    public static void ReimportUI()
+    {
+#if UNITY_4_6
+        var path = EditorApplication.applicationContentsPath + "/UnityExtensions/Unity/GUISystem/{0}/{1}";
+       var version = Regex.Match(Application.unityVersion, @"^[0-9]+\.[0-9]+\.[0-9]+").Value;
+#else
+        var path = EditorApplication.applicationContentsPath + "/UnityExtensions/Unity/GUISystem/{1}";
+        var version = string.Empty;
+#endif
+        string engineDll = string.Format(path, version, "UnityEngine.UI.dll");
+        string editorDll = string.Format(path, version, "Editor/UnityEditor.UI.dll");
+        ReimportDll(engineDll);
+        ReimportDll(editorDll);
+    }
+
+    static void ReimportDll(string path)
+    {
+        if (File.Exists(path))
+            AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate | ImportAssetOptions.DontDownloadFromCacheServer);
+        else
+            Debug.LogError(string.Format("DLL not found {0}", path));
     }
 
     static void GenerateAssetInfoJson()

@@ -1,0 +1,21 @@
+CFG_role = {}
+CFG_role[101] = {id = 101, sex = 0, resId = 1, quality = 1, }
+CFG_role[102] = {id = 102, sex = 0, resId = 2, quality = 1, }
+CFG_role[103] = {id = 103, sex = 1, resId = 3, quality = 1, }
+CFG_role[104] = {id = 104, sex = 1, resId = 4, quality = 1, }
+CFG_role[105] = {id = 105, sex = 0, resId = 5, quality = 1, }
+CFG_role[106] = {id = 106, sex = 0, resId = 1, quality = 2, }
+CFG_role[107] = {id = 107, sex = 0, resId = 2, quality = 2, }
+CFG_role[108] = {id = 108, sex = 1, resId = 3, quality = 2, }
+CFG_role[109] = {id = 109, sex = 1, resId = 4, quality = 2, }
+CFG_role[110] = {id = 110, sex = 0, resId = 5, quality = 2, }
+CFG_role[111] = {id = 111, sex = 0, resId = 1, quality = 3, }
+CFG_role[112] = {id = 112, sex = 0, resId = 2, quality = 3, }
+CFG_role[113] = {id = 113, sex = 1, resId = 3, quality = 3, }
+CFG_role[114] = {id = 114, sex = 1, resId = 4, quality = 3, }
+CFG_role[115] = {id = 115, sex = 0, resId = 5, quality = 3, }
+CFG_role[116] = {id = 116, sex = 0, resId = 1, quality = 4, }
+CFG_role[117] = {id = 117, sex = 0, resId = 2, quality = 4, }
+CFG_role[118] = {id = 118, sex = 1, resId = 3, quality = 4, }
+CFG_role[119] = {id = 119, sex = 1, resId = 4, quality = 4, }
+CFG_role[120] = {id = 120, sex = 0, resId = 5, quality = 4, }

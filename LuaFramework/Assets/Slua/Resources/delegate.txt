@@ -1,11 +1,10 @@
 
 
 
-function xx(path,a,b,c)
-	assert(c==4) -- modified by first delegation, it is ref value
-	print(2,path,a,b,c)
+function xx()
+	print(2,path,flag)
 	--multi return for out flag parameter
-	return true,4,"http://www.sineysoft.com",1
+	return true,"http://www.sineysoft.com",1,32,11
 end
 
 
@@ -32,11 +31,10 @@ end
 
 function main()
 	
-	Deleg.d=function(path,a,b,c)
+	Deleg.d=function(path)
 		print(1,path)
-		assert(c==3)
 		--multi return for out flag parameter
-		return true,4,"http://www.sineysoft.com",1
+		return true,"http://www.sineysoft.com",1
 	end
 
 	-- add handler

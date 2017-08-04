@@ -1,0 +1,22 @@
+CFG_loginContinuAward = {}
+CFG_loginContinuAward[1] = {id = 1, continu = 1, id = 14, type = 0, count = 10000, }
+CFG_loginContinuAward[2] = {id = 2, continu = 1, id = 13, type = 0, count = 40, }
+CFG_loginContinuAward[3] = {id = 3, continu = 1, id = 28, type = 0, count = 110, }
+CFG_loginContinuAward[4] = {id = 4, continu = 2, id = 14, type = 0, count = 20000, }
+CFG_loginContinuAward[5] = {id = 5, continu = 2, id = 13, type = 0, count = 50, }
+CFG_loginContinuAward[6] = {id = 6, continu = 2, id = 28, type = 0, count = 120, }
+CFG_loginContinuAward[7] = {id = 7, continu = 3, id = 14, type = 0, count = 30000, }
+CFG_loginContinuAward[8] = {id = 8, continu = 3, id = 13, type = 0, count = 60, }
+CFG_loginContinuAward[9] = {id = 9, continu = 3, id = 28, type = 0, count = 130, }
+CFG_loginContinuAward[10] = {id = 10, continu = 4, id = 14, type = 0, count = 40000, }
+CFG_loginContinuAward[11] = {id = 11, continu = 4, id = 13, type = 0, count = 70, }
+CFG_loginContinuAward[12] = {id = 12, continu = 4, id = 28, type = 0, count = 140, }
+CFG_loginContinuAward[13] = {id = 13, continu = 5, id = 14, type = 0, count = 50000, }
+CFG_loginContinuAward[14] = {id = 14, continu = 5, id = 13, type = 0, count = 80, }
+CFG_loginContinuAward[15] = {id = 15, continu = 5, id = 28, type = 0, count = 150, }
+CFG_loginContinuAward[16] = {id = 16, continu = 6, id = 14, type = 0, count = 60000, }
+CFG_loginContinuAward[17] = {id = 17, continu = 6, id = 13, type = 0, count = 90, }
+CFG_loginContinuAward[18] = {id = 18, continu = 6, id = 28, type = 0, count = 160, }
+CFG_loginContinuAward[19] = {id = 19, continu = 7, id = 14, type = 0, count = 70000, }
+CFG_loginContinuAward[20] = {id = 20, continu = 7, id = 13, type = 0, count = 100, }
+CFG_loginContinuAward[21] = {id = 21, continu = 7, id = 28, type = 0, count = 170, }

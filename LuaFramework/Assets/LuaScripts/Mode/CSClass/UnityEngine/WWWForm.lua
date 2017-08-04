@@ -1,0 +1,5 @@
+-- local CSWWWForm = CsFindType("UnityEngine.WWWForm")
+-- WWWForm = {}
+-- WWWForm.GetType = function()
+	-- return UnityEngine.WWWForm.GetClassType()
+-- end

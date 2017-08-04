@@ -1,0 +1,79 @@
+ActivityType = {
+	GoodDrinking = 1,
+	LevelAward = 2,
+	GiftList = 3,
+	FirstRechange = 4,
+	RechangeAward = 5,
+	CostAward = 6,
+	Gamble = 7,
+	RMBShop = 8,
+	HarborBattle = 9,
+	EnemyTreasure = 10,
+	CollectTreasureMap = 11,
+	EmenyAttack = 12,
+	DeadGame = 13,
+	Fish = 14,
+	GOODS = 15,
+	MonthCard = 16,
+}
+
+ActivityName = {
+	[1] = "美酒佳酿",
+	[2] = "成长基金",
+	[3] = "礼包列表",
+	[4] = "首冲礼包",
+	[5] = "充值好礼",
+	[6] = "消费好礼",
+	[7] = "秘境寻宝",
+	[8] = "奇珍异宝",
+	[9] = "港口争霸",
+	[10] = "擒王夺宝",
+	[11] = "寻图探宝",
+	[12] = "冥界来袭",
+	[13] = "死亡游戏",
+	[14] = "捕鱼达人",
+	[15] = "风靡全球",
+	[16] = "超值月卡",
+}
+
+ActivityButton = {
+	[1] = {GUIStyleButton.ActivityBtn_7,GUIStyleButton.ActivityBtn_8},
+	[2] = {GUIStyleButton.ActivityBtn_3,GUIStyleButton.ActivityBtn_4},
+	[3] = {GUIStyleButton.ActivityBtn_17,GUIStyleButton.ActivityBtn_18},
+	[4] = {GUIStyleButton.ActivityBtn_1,GUIStyleButton.ActivityBtn_2},
+	[5] = {GUIStyleButton.ActivityBtn_5,GUIStyleButton.ActivityBtn_6},
+	[6] = {GUIStyleButton.ActivityBtn_23,GUIStyleButton.ActivityBtn_24},
+	[7] = {GUIStyleButton.ActivityBtn_29,GUIStyleButton.ActivityBtn_30},
+	[8] = {GUIStyleButton.ActivityBtn_19,GUIStyleButton.ActivityBtn_20},
+	[9] = {GUIStyleButton.ActivityBtn_9,GUIStyleButton.ActivityBtn_10},
+	[10] = {GUIStyleButton.ActivityBtn_11,GUIStyleButton.ActivityBtn_12},
+	[11] = {GUIStyleButton.ActivityBtn_15,GUIStyleButton.ActivityBtn_16},
+	[12] = {GUIStyleButton.ActivityBtn_13,GUIStyleButton.ActivityBtn_14},
+	[13] = {GUIStyleButton.ActivityBtn_21,GUIStyleButton.ActivityBtn_22},
+	[14] = {GUIStyleButton.ActivityBtn_25,GUIStyleButton.ActivityBtn_26},
+	[15] = {GUIStyleButton.ActivityBtn_27,GUIStyleButton.ActivityBtn_28},
+	[16] = {GUIStyleButton.ActivityBtn_card_1,GUIStyleButton.ActivityBtn_card_2},
+}
+
+ActivityIconPath = {
+	[1] = "Texture/Gui/Button/OngoingTaskIcon/11",
+	[2] = "Texture/Gui/Button/OngoingTaskIcon/1",
+	[3] = "Texture/Gui/Button/OngoingTaskIcon/4",
+	[4] = "Texture/Gui/Button/OngoingTaskIcon/1", 
+	[5] = "Texture/Gui/Button/OngoingTaskIcon/17", 
+	[6] = "Texture/Gui/Button/OngoingTaskIcon/18", 
+	[7] = "Texture/Gui/Button/OngoingTaskIcon/16",
+	[8] = "Texture/Gui/Button/OngoingTaskIcon/19", 
+	[9] = "Texture/Gui/Button/OngoingTaskIcon/5", -- 港口争霸
+	[10] = "Texture/Gui/Button/OngoingTaskIcon/3",
+	[11] = "Texture/Gui/Button/OngoingTaskIcon/8",
+	[12] = "Texture/Gui/Button/OngoingTaskIcon/7",
+	[13] = "Texture/Gui/Button/OngoingTaskIcon/6",
+	[14] = "Texture/Gui/Button/OngoingTaskIcon/2",
+	[15] = "Texture/Gui/Button/OngoingTaskIcon/10",
+	[16] = "Texture/Gui/Button/OngoingTaskIcon/9",
+	[17] = "Texture/Gui/Button/OngoingTaskIcon/14", -- 港口竞拍
+	[18] = "Texture/Gui/Button/OngoingTaskIcon/15", -- 查看宝图
+	[19] = "Texture/Gui/Button/OngoingTaskIcon/12", -- 主程税收
+	[20] = "Texture/Gui/Button/OngoingTaskIcon/13", -- 每日签到
+}

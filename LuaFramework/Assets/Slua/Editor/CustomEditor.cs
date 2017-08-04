@@ -37,7 +37,6 @@ namespace SLua
 			if (GUILayout.Button("Lua GC"))
 			{
 				LuaDLL.lua_gc(myTarget.state.L, LuaGCOptions.LUA_GCCOLLECT, 0);
-				System.GC.Collect ();
 			}
 		}
 	}

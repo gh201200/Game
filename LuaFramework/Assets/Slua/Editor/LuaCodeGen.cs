@@ -104,7 +104,7 @@ namespace SLua
 			}
 
 		}
-			
+	
 		[MenuItem("SLua/All/Make")]
 		static public void GenerateAll()
 		{
@@ -466,10 +466,6 @@ namespace SLua
             }
             #endregion
 			
-            //generate AssemblyInfo
-            string AssemblyInfoFile = Application.dataPath + "/AssemblyInfo.cs";
-            File.WriteAllText(AssemblyInfoFile, string.Format("[assembly: UnityEngine.UnityAPICompatibilityVersionAttribute(\"{0}\")]", Application.unityVersion));
-
             #region mono compile            
             string editorData = EditorApplication.applicationContentsPath;
 #if UNITY_EDITOR_OSX && !UNITY_5_4_OR_NEWER
@@ -477,20 +473,25 @@ namespace SLua
 #endif
             List<string> arg = new List<string>();
             arg.Add("/target:library");
-            arg.Add("/sdk:2");
             arg.Add(string.Format("/out:\"{0}\"", WrapperName));
             arg.Add(string.Format("/r:\"{0}\"", string.Join(";", libraries.ToArray())));
             arg.AddRange(scripts);
-            arg.Add(AssemblyInfoFile);
 
             const string ArgumentFile = "LuaCodeGen.txt";
             File.WriteAllLines(ArgumentFile, arg.ToArray());
             
-            string mcs = editorData + "/MonoBleedingEdge/bin/mcs";
-            // wrapping since we may have space
+			Environment.SetEnvironmentVariable ("MONO_PATH", editorData+"/Mono/lib/mono/unity");
+			Environment.SetEnvironmentVariable ("MONO_CFG_DIR", editorData+"/Mono/etc");
+			string mono = editorData+ "/Mono/bin/mono";
 #if UNITY_EDITOR_WIN
-            mcs += ".bat";
+            mono += ".exe";
 #endif
+			string smcs = editorData + "/Mono/lib/mono/unity/smcs.exe";
+			// wrapping since we may have space
+#if UNITY_EDITOR_WIN
+            mono = "\"" + mono + "\"";
+#endif
+            smcs = "\"" + smcs + "\"";
             #endregion
 
             #region execute bash
@@ -500,8 +501,8 @@ namespace SLua
             try
             {
                 var process = new System.Diagnostics.Process();
-                process.StartInfo.FileName = mcs;
-                process.StartInfo.Arguments = "@" + ArgumentFile;
+                process.StartInfo.FileName = mono;
+                process.StartInfo.Arguments = smcs + " @" + ArgumentFile;
                 process.StartInfo.UseShellExecute = false;
                 process.StartInfo.RedirectStandardOutput = true;
                 process.StartInfo.RedirectStandardError = true;
@@ -560,7 +561,6 @@ namespace SLua
 				File.Move (WrapperName, GenPath + WrapperName);
 				// AssetDatabase.Refresh();
                 File.Delete(ArgumentFile);
-                File.Delete(AssemblyInfoFile);
             }
             else
             {
@@ -656,7 +656,6 @@ namespace SLua
 #endif
 
 			"Light.lightmappingMode",
-			"Light.lightmapBakeType",
 			"MonoBehaviour.runInEditMode",
 			"MonoBehaviour.useGUILayout",
 			"PlayableGraph.CreateScriptPlayable",
@@ -870,15 +869,6 @@ namespace SLua
 			return false;
 		}
 
-		struct ArgMode {
-			public int index;
-			public int mode;
-
-			public ArgMode(int index,int mode) {
-				this.index=index;
-				this.mode=mode;
-			}
-		};
 
 		void WriteDelegate(Type t, StreamWriter file)
 		{
@@ -920,26 +910,20 @@ namespace SLua
 			temp = temp.Replace("$TN", t.Name);
 			temp = temp.Replace("$FN", SimpleType(t));
 			MethodInfo mi = t.GetMethod("Invoke");
-
-			temp = temp.Replace("$ARGS", ArgsList(mi));
+			List<int> outindex = new List<int>();
+			List<int> refindex = new List<int>();
+			temp = temp.Replace("$ARGS", ArgsList(mi, ref outindex, ref refindex));
 			Write(file, temp);
 			
 			this.indent = 4;
-
-
-			ParameterInfo[] pis = mi.GetParameters ();
 			
-			for (int n = 0; n < pis.Length; n++)
+			for (int n = 0; n < mi.GetParameters().Length; n++)
 			{
-				if (!pis[n].IsOut)
+				if (!outindex.Contains(n))
 					Write(file, "pushValue(l,a{0});", n + 1);
 			}
-
-			int outcount = pis.Count ((ParameterInfo p) => {
-				return p.ParameterType.IsByRef && p.IsOut;
-			});
-
-			Write(file, "ld.pcall({0}, error);", pis.Length - outcount);
+			
+			Write(file, "ld.pcall({0}, error);", mi.GetParameters().Length - outindex.Count);
 
 			int offset = 0;
 			if (mi.ReturnType != typeof(void))
@@ -947,12 +931,17 @@ namespace SLua
 				offset = 1;
 				WriteValueCheck(file, mi.ReturnType, offset, "ret", "error+");
 			}
-
-			for (int n = 0; n < pis.Length; n++) {
-				if (pis [n].ParameterType.IsByRef) {
-					string a = string.Format ("a{0}", n + 1);
-					WriteCheckType (file, pis[n].ParameterType, ++offset, a, "error+");
-				}
+			
+			foreach (int i in outindex)
+			{
+				string a = string.Format("a{0}", i + 1);
+				WriteCheckType(file, mi.GetParameters()[i].ParameterType, i + offset, a, "error+");
+			}
+			
+			foreach (int i in refindex)
+			{
+				string a = string.Format("a{0}", i + 1);
+				WriteCheckType(file, mi.GetParameters()[i].ParameterType, i + offset, a, "error+");
 			}
 			
 			
@@ -968,7 +957,7 @@ namespace SLua
 			Write(file, "}");
 		}
 		
-		string ArgsList(MethodInfo m)
+		string ArgsList(MethodInfo m, ref List<int> outindex, ref List<int> refindex)
 		{
 			string str = "";
 			ParameterInfo[] pars = m.GetParameters();
@@ -979,9 +968,15 @@ namespace SLua
 				
 				ParameterInfo p = pars[n];
 				if (p.ParameterType.IsByRef && p.IsOut)
+				{
 					str += string.Format("out {0} a{1}", t, n + 1);
+					outindex.Add(n);
+				}
 				else if (p.ParameterType.IsByRef)
+				{
 					str += string.Format("ref {0} a{1}", t, n + 1);
+					refindex.Add(n);
+				}
 				else
 					str += string.Format("{0} a{1}", t, n + 1);
 				if (n < pars.Length - 1)
@@ -1674,7 +1669,7 @@ namespace SLua
 						Write(file, "}");
 						first_get = false;
 					}
-					WriteNotMatch (file, "getItem");
+					WriteError(file, "No matched override function to call");
 				}
 				WriteCatchExecption(file);
 				Write(file, "}");
@@ -1695,7 +1690,6 @@ namespace SLua
 					WriteValueCheck(file, _set.PropertyType, 3, "c");
 					Write(file, "self[v]=c;");
 					WriteOk(file);
-					Write(file, "return 1;");
 				}
 				else
 				{
@@ -1718,8 +1712,9 @@ namespace SLua
 						if (t.IsValueType)
 							Write(file, "setBack(l,self);");
 					}
-					WriteNotMatch (file, "setItem");
+					Write(file, "LuaDLL.lua_pushstring(l,\"No matched override function to call\");");
 				}
+				Write(file, "return 1;");
 				WriteCatchExecption(file);
 				Write(file, "}");
 				funcname.Add("setItem");
@@ -2119,17 +2114,11 @@ namespace SLua
 			return methods.ToArray();
 
 		}
-
-		void WriteNotMatch(StreamWriter file,string fn) {
-			WriteError(file, string.Format("No matched override function {0} to call",fn));
-		}
 		
 		void WriteFunctionImpl(StreamWriter file, MethodInfo m, Type t, BindingFlags bf)
 		{
 			WriteTry(file);
 			MethodBase[] cons = GetMethods(t, m.Name, bf);
-
-			Dictionary<string,MethodInfo> overridedMethods = null;
 
 			if (cons.Length == 1) // no override function
 			{
@@ -2137,7 +2126,7 @@ namespace SLua
 					WriteFunctionCall(m, file, t,bf);
 				else
 				{
-					WriteNotMatch (file, m.Name);
+					WriteError(file, "No matched override function to call");
 				}
 			}
 			else // 2 or more override function
@@ -2151,18 +2140,6 @@ namespace SLua
 					if (cons[n].MemberType == MemberTypes.Method)
 					{
 						MethodInfo mi = cons[n] as MethodInfo;
-
-						if (mi.IsDefined (typeof(LuaOverrideAttribute), false)) {
-							if (overridedMethods == null)
-								overridedMethods = new Dictionary<string,MethodInfo> ();
-
-							LuaOverrideAttribute attr = mi.GetCustomAttributes (typeof(LuaOverrideAttribute), false)[0] as LuaOverrideAttribute;
-							string fn = attr.fn;
-							if(overridedMethods.ContainsKey(fn))
-								throw new Exception(string.Format("Found function with same name {0}",fn));	
-							overridedMethods.Add (fn,mi);
-							continue;
-						}
 						
 						ParameterInfo[] pars = mi.GetParameters();
 						if (isUsefullMethod(mi)
@@ -2180,57 +2157,25 @@ namespace SLua
 						}
 					}
 				}
-				WriteNotMatch (file, m.Name);
+				WriteError(file, "No matched override function to call");
 			}
 			WriteCatchExecption(file);
 			Write(file, "}");
-
-			WriteOverridedMethod (file,overridedMethods,t,bf);
 		}
-
-		void WriteOverridedMethod(StreamWriter file,Dictionary<string,MethodInfo> methods,Type t,BindingFlags bf) {
-			if (methods == null)
-				return;
-
-			foreach (var pair in methods) {
-				string fn = pair.Value.IsStatic ? staticName (pair.Key) : pair.Key;
-				WriteSimpleFunction (file,fn,pair.Value,t,bf);
-				funcname.Add(fn);
+		
+		bool isUniqueArgsCount(MethodBase[] cons, MethodBase mi)
+		{
+			foreach (MethodBase member in cons)
+			{
+				MethodBase m = (MethodBase)member;
+				if (m != mi && mi.GetParameters().Length == m.GetParameters().Length)
+					return false;
 			}
-
+			return true;
 		}
-
-		void WriteSimpleFunction(StreamWriter file,string fn,MethodInfo mi,Type t,BindingFlags bf) {
-			WriteFunctionDec(file, fn);
-			WriteTry(file);
-			WriteFunctionCall (mi, file, t, bf);
-			WriteCatchExecption(file);
-			Write(file, "}");
-		}
-
-        int GetMethodArgc(MethodBase mi)
-        {
-            bool isExtension = IsExtensionMethod(mi);
-            if (isExtension)
-                return mi.GetParameters().Length - 1;
-            return mi.GetParameters().Length;
-        }
-
-        bool isUniqueArgsCount(MethodBase[] cons, MethodBase mi)
-        {
-            int argcLength = GetMethodArgc(mi);
-            foreach (MethodBase member in cons)
-            {
-                MethodBase m = (MethodBase)member;
-                if (m == mi)
-                    continue;
-                if (argcLength == GetMethodArgc(m))
-                    return false;
-            }
-            return true;
-        }
-
-        void WriteCheckSelf(StreamWriter file, Type t)
+		
+		
+		void WriteCheckSelf(StreamWriter file, Type t)
 		{
 			if (t.IsValueType)
 			{
@@ -2448,7 +2393,7 @@ namespace SLua
 
 		bool IsValueType(Type t)
 		{
-            return t.IsValueType || (t.BaseType == typeof(ValueType) && !IsBaseType(t));
+			return t.BaseType == typeof(ValueType) && !IsBaseType(t);
 		}
 
 		bool IsBaseType(Type t)

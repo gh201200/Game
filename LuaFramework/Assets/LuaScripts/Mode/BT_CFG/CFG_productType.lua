@@ -1,0 +1,20 @@
+CFG_productType = {}
+CFG_productType[1] = {id = 1, type = "食品", }
+CFG_productType[2] = {id = 2, type = "调味料", }
+CFG_productType[3] = {id = 3, type = "医药品", }
+CFG_productType[4] = {id = 4, type = "家畜", }
+CFG_productType[5] = {id = 5, type = "酒类", }
+CFG_productType[6] = {id = 6, type = "矿石", }
+CFG_productType[7] = {id = 7, type = "工业品", }
+CFG_productType[8] = {id = 8, type = "嗜好品", }
+CFG_productType[9] = {id = 9, type = "染料", }
+CFG_productType[10] = {id = 10, type = "纤维", }
+CFG_productType[11] = {id = 11, type = "纺织品", }
+CFG_productType[12] = {id = 12, type = "冷武器", }
+CFG_productType[13] = {id = 13, type = "热武器", }
+CFG_productType[14] = {id = 14, type = "工艺品", }
+CFG_productType[15] = {id = 15, type = "文学作品", }
+CFG_productType[16] = {id = 16, type = "贵金属", }
+CFG_productType[17] = {id = 17, type = "香料", }
+CFG_productType[18] = {id = 18, type = "香辛料", }
+CFG_productType[19] = {id = 19, type = "宝石", }

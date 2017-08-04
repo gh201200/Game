@@ -25,7 +25,7 @@ namespace SLua
     using System;
     class LuaValueType : LuaObject
     {
-#if !LUA_5_3 && !SLUA_STANDALONE
+#if !UNITY_IPHONE && !LUA_5_3 && !SLUA_STANDALONE
         static string script = @"
 if not UnityEngine or not UnityEngine.Vector2 then
     print('No static code gen yet, ignore `LuaValueType:reg` !!! ')
@@ -66,7 +66,7 @@ end
 
 local function inherite(cls,base)
 	for k,v in pairs(getmetatable(base)) do
-		if not cls[k] and k:sub(1,2)~='__' and  k:sub(1,1)>='A' and k:sub(1,1)<='Z' then
+		if k:sub(1,2)~='__' and  k:sub(1,1)>='A' and k:sub(1,1)<='Z' then
 			cls[k]=v
 		end
 	end
@@ -547,7 +547,6 @@ do
 	    return (normal * Vector3.Dot(vector, normal)) / num
 	end
 
-	inherite(Vector3,Raw)
 	setmetatable(Vector3,Vector3)
 end
 
@@ -672,7 +671,6 @@ do
 	end
 
 
-	inherite(Color,Raw)
 	setmetatable(Color,Color)
 
 end
@@ -741,9 +739,7 @@ do
 	function get.one() return Vector2.New(1,1) end
 	function get.zero() return Vector2.New(0,0) end
 	function get.up() return Vector2.New(0,1) end
-	function get.down() return Vector2.New(0,-1) end
 	function get.right() return Vector2.New(1,0) end
-	function get.left() return Vector2.New(-1,0) end
 	function get:magnitude() return sqrt(self[1]^2+self[2]^2) end
 	function get:sqrMagnitude() return self[1]^2+self[2]^2 end
 	function get:normalized() 
@@ -1085,15 +1081,9 @@ end
 #endif
         public static void reg(IntPtr l)
         {
-#if !LUA_5_3 && !SLUA_STANDALONE
+#if !UNITY_IPHONE && !LUA_5_3 && !SLUA_STANDALONE
             // lua implemented valuetype isn't faster than raw under non-jit.
-            LuaState ls = LuaState.get(l);
-            ls.regPushVar(typeof(UnityEngine.Vector2), (IntPtr L, object o) => { LuaObject.pushValue(L, (UnityEngine.Vector2)o); });
-            ls.regPushVar(typeof(UnityEngine.Vector3), (IntPtr L, object o) => { LuaObject.pushValue(L, (UnityEngine.Vector3)o); });
-            ls.regPushVar(typeof(UnityEngine.Vector4), (IntPtr L, object o) => { LuaObject.pushValue(L, (UnityEngine.Vector4)o); });
-            ls.regPushVar(typeof(UnityEngine.Quaternion), (IntPtr L, object o) => { LuaObject.pushValue(L, (UnityEngine.Quaternion)o); });
-            ls.regPushVar(typeof(UnityEngine.Color), (IntPtr L, object o) => { LuaObject.pushValue(L, (UnityEngine.Color)o); });
-            ls.doString(script, "ValueTypeScript");
+			LuaState.get(l).doString(script,"ValueTypeScript");
 #endif
         }
     }

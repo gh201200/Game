@@ -1,25 +1,3 @@
-// The MIT License (MIT)
-
-// Copyright 2015 Siney/Pangweiwei siney@yeah.net
-// 
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-// 
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-// 
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
-
 using System;
 using System.Runtime.InteropServices;
 
@@ -320,10 +298,6 @@ namespace SLua
 
 		[DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int lua_resume(IntPtr L, IntPtr from, int narg);
-        public static int lua_resume(IntPtr L, int narg)
-        {
-            return lua_resume(L, IntPtr.Zero, narg);
-        }
 
 		public static void lua_replace(IntPtr luaState, int index) {
 			lua_copy(luaState, -1, (index));
@@ -555,19 +529,12 @@ namespace SLua
             int strlen;
 
             IntPtr str = luaS_tolstring32(luaState, index, out strlen); // fix il2cpp 64 bit
-            string s = null;
-            if (strlen > 0 && str != IntPtr.Zero)
+
+            if (str != IntPtr.Zero)
             {
-                s = Marshal.PtrToStringAnsi(str);
-                // fallback method
-                if(s == null)
-                {
-                    byte[] b = new byte[strlen];
-                    Marshal.Copy(str, b, 0, strlen);
-                    s = System.Text.Encoding.Default.GetString(b);
-                }
+                return Marshal.PtrToStringAnsi(str, strlen);
             }
-            return (s == null) ? string.Empty : s;
+            return null;
         }
 
 		public static byte[] lua_tobytes(IntPtr luaState, int index)

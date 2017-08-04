@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+
 using System.Runtime.CompilerServices;
 
 namespace SLua
@@ -185,9 +186,7 @@ namespace SLua
         }
 
 		Dictionary<object, int> objMap = new Dictionary<object, int>(new ObjEqualityComparer());
-        public Dictionary<object, int>.KeyCollection Objs { get { return objMap.Keys; } }
-
-        int udCacheRef = 0;
+		int udCacheRef = 0;
 
 
 		public ObjectCache(IntPtr l)
@@ -220,11 +219,6 @@ namespace SLua
 			oldl = l;
 			oldoc = oc;
 		}
-
-        public int size()
-        {
-            return objMap.Count;
-        }
 
 		internal void gc(int index)
 		{
@@ -332,7 +326,7 @@ namespace SLua
 
 #if SLUA_CHECK_REFLECTION
 			int isReflect = LuaDLL.luaS_pushobject(l, index, getAQName(o), gco, udCacheRef);
-			if (isReflect != 0 && checkReflect && !(o is LuaClassObject))
+			if (isReflect != 0 && checkReflect)
 			{
 				Logger.LogWarning(string.Format("{0} not exported, using reflection instead", o.ToString()));
 			}
@@ -366,11 +360,6 @@ namespace SLua
 		{
 			return obj.GetType().IsValueType == false;
 		}
-
-        public bool isObjInLua(object obj)
-        {
-            return objMap.ContainsKey(obj);
-        }
 	}
 }
 

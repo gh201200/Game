@@ -1,0 +1,1 @@
+CSdouble = CsFindType("System.Double")

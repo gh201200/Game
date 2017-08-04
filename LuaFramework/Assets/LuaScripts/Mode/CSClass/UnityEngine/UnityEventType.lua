@@ -1,0 +1,9 @@
+UnityEventType = {}
+local CSUnityEventType = CsFindType("UnityEngine.EventType")
+UnityEventType.Repaint = UnityEngine.EventType.Repaint
+UnityEventType.Layout = UnityEngine.EventType.Layout
+UnityEventType.KeyDown = UnityEngine.EventType.KeyDown
+UnityEventType.MouseDown = UnityEngine.EventType.MouseDown
+UnityEventType.MouseUp = UnityEngine.EventType.MouseUp
+UnityEventType.Used = UnityEngine.EventType.Used
+UnityEventType.MouseDrag = UnityEngine.EventType.MouseDrag
