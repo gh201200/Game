@@ -77,6 +77,8 @@ public class GameEditor
         //    EditorUtility.ClearProgressBar();
         //    AssetDatabase.Refresh();
         //});
+
+        GameUtil.DecompressLuaCode(Application.dataPath + "/Build/LuaCode.bytes", progress => EditorUtility.DisplayProgressBar("progress", "decompressing lua code...   " + progress + "%", progress / 100f), () => EditorUtility.ClearProgressBar());
     }
 
     [MenuItem("Tool/BuildSetting", false, 1)]
@@ -210,14 +212,12 @@ public class GameEditor
         FileStream writer = new FileStream(savePath, FileMode.Append);
         try
         {
-
-            Common.ByteArray buffer = new Common.ByteArray(1024*1024*2);
+            string[] files = Directory.GetFiles(Application.dataPath + "/LuaScripts", "*.lua", SearchOption.AllDirectories);
+            Common.ByteArray buffer = new Common.ByteArray(1024 * 1024 * 2);
             buffer.WriteString(passwd);
-
+            buffer.WriteInt(files.Length);
             writer.Write(buffer.Data, 0, buffer.Length);
 
-            string[] files = Directory.GetFiles(Application.dataPath + "/LuaScripts", "*.lua",
-                SearchOption.AllDirectories);
             for (int i = 0; i < files.Length; i++)
             {
                 string name = files[i];
@@ -227,9 +227,11 @@ public class GameEditor
                 buffer.WriteString(name);
                 buffer.WriteBytes(File.ReadAllBytes(files[i]));
                 writer.Write(buffer.Data, 0, buffer.Length);
-                EditorUtility.DisplayProgressBar("compress lua code...", name, (float) i/files.Length);
+                EditorUtility.DisplayProgressBar("compress lua code...", name, (float)i / files.Length);
             }
             writer.Close();
+            byte[] compressData = GameUtil.CompressBytes(File.ReadAllBytes(savePath));
+            File.WriteAllBytes(savePath, compressData);
             EditorUtility.ClearProgressBar();
             AssetDatabase.Refresh();
         }
@@ -256,14 +258,21 @@ public class GameEditor
     [MenuItem("Tool/Push Assets To Remote", false, 150)]
     static void PushAssetsToRemote()
     {
-        string path = Application.dataPath;
-        int index = path.LastIndexOf("/", StringComparison.Ordinal);
-        path = path.Substring(0, index);
-        string exePath = path + "/UploadTools/Client/TCPClient.exe";
-        string configPath = path + "/UploadTools/Client/Config.json";
-        Process p = Process.Start(exePath, configPath);
-        p.WaitForExit();
-        Debug.Log("上传成功!");
+        try
+        {
+            string path = Application.dataPath;
+            int index = path.LastIndexOf("/", StringComparison.Ordinal);
+            path = path.Substring(0, index);
+            string exePath = path + "/UploadTools/Client/TCPClient.exe";
+            string configPath = path + "/UploadTools/Client/Config.json";
+            Process p = Process.Start(exePath, configPath);
+            p.WaitForExit();
+            Debug.Log("上传成功!");
+        }
+        catch (Exception ex)
+        {
+            Debug.Log(ex.Message);
+        }
     }
 
     [MenuItem("Tool/Pack Assets", false, 200)]

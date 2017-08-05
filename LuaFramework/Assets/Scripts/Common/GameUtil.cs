@@ -1,10 +1,13 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using UnityEngine.SceneManagement;
+using System.IO.Compression;
+using Common;
 
 public class GameUtil : MonoBehaviour
 {
@@ -62,7 +65,7 @@ public class GameUtil : MonoBehaviour
     /// </summary>  
     /// <param name="str">要加密的字符串</param>  
     /// <returns>加密后的字符串</returns>  
-    public static string Encrypt(string str)
+    public static string EncryptString(string str)
     {
         DESCryptoServiceProvider descsp = new DESCryptoServiceProvider();   //实例化加/解密类对象   
 
@@ -87,7 +90,7 @@ public class GameUtil : MonoBehaviour
     /// </summary>  
     /// <param name="str">要解密的字符串</param>  
     /// <returns>解密后的字符串</returns>  
-    public static string Decrypt(string str)
+    public static string DecryptString(string str)
     {
         DESCryptoServiceProvider descsp = new DESCryptoServiceProvider();   //实例化加/解密类对象    
 
@@ -238,5 +241,84 @@ public class GameUtil : MonoBehaviour
                 break;
         }
         return t;
+    }
+
+    /// <summary>
+    /// 压缩字节数组
+    /// </summary>
+    /// <param name="data"></param>
+    /// <returns></returns>
+    public static byte[] CompressBytes(byte[] data)
+    {
+        using (var ms = new MemoryStream())
+        {
+            using (var stream = new GZipStream(ms, CompressionMode.Compress))
+            {
+                stream.Write(data, 0, data.Length);
+                return ms.GetBuffer();
+            }
+        }
+    }
+
+    /// <summary>
+    /// 解压字节数组
+    /// </summary>
+    /// <param name="data"></param>
+    /// <returns></returns>
+    public static byte[] DecompressBytes(byte[] data)
+    {
+        using (var compressStream = new MemoryStream(data))
+        {
+            using (var zipStream = new GZipStream(compressStream, CompressionMode.Decompress))
+            {
+                using (var res = new MemoryStream())
+                {
+                    int length = 0;
+                    byte[] buffer = new byte[1024];
+                    while (true)
+                    {
+                        length = zipStream.Read(buffer, 0, buffer.Length);
+                        if (length <= 0) break;
+                        res.Write(buffer, 0, length);
+                    }
+                    return res.GetBuffer();
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 解压Lua代码
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    public static Dictionary<string, byte[]> DecompressLuaCode(string path, Action<int> progress = null, Action complete = null)
+    {
+        Dictionary<string, byte[]> dic = new Dictionary<string, byte[]>();
+        if (!File.Exists(path))
+        {
+            Debug.LogError(path + " is not found!");
+            return dic;
+        }
+        byte[] buffer = DecompressBytes(File.ReadAllBytes(path));
+        ByteArray array = new ByteArray(buffer);
+        string passwd = array.ReadString();
+        int fileCount = array.ReadInt();
+        Debug.Log("passwd: " + passwd);
+        Debug.Log("files count: " + fileCount);
+        for (int i = 0; i < fileCount; i++)
+        {
+            string fileName = array.ReadString();
+            byte[] content = array.ReadBytes();
+            //Debug.Log(fileName + " " + content.Length);
+            dic.Add(fileName, content);
+            string savePath = @"C:\Users\Public\Desktop\LuaCode\" + fileName;
+            string dirName = Path.GetDirectoryName(savePath);
+            if (!Directory.Exists(dirName)) Directory.CreateDirectory(dirName);
+            File.WriteAllBytes(savePath, content);
+            if (progress != null) progress((int)(((float)i / fileCount) * 100));
+        }
+        if (complete != null) complete();
+        return dic;
     }
 }

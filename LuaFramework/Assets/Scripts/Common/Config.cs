@@ -16,7 +16,7 @@ public class Config
 #if LOADABFROMPROJECT
             return Application.dataPath + "/Build/res/";
 #else
-            return Application.persistentDataPath + "/res/";
+            return Application.persistentDataPath + "/Build/res/";
 #endif
 #endif
         }
