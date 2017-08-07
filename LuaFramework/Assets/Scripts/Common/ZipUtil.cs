@@ -49,7 +49,6 @@ public class ZipUtil
             os.PutNextEntry(entry);
             os.SetLevel(packLevel);
             os.Password = passwd;
-            Debug.Log(packLevel + " " + passwd);
             int length = 0;
             byte[] buffer = new byte[1024 * 1024];   //每次读取一兆的字节
 

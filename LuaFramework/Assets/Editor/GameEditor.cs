@@ -78,7 +78,23 @@ public class GameEditor
         //    AssetDatabase.Refresh();
         //});
 
-        GameUtil.DecompressLuaCode(Application.dataPath + "/Build/LuaCode.bytes", progress => EditorUtility.DisplayProgressBar("progress", "decompressing lua code...   " + progress + "%", progress / 100f), () => EditorUtility.ClearProgressBar());
+        try
+        {
+            ZipUtil.PackDirectory(Application.dataPath + "/Build/LuaScripts", Application.dataPath + "/LuaCode.zip",
+                (cur, total) =>
+                {
+                    EditorUtility.DisplayProgressBar("progress",
+                        "pack direcory..." + Mathf.Ceil((float)cur * 100 / total) + "%", (float)cur / total);
+                });
+        }
+        catch
+        {
+        }
+        finally
+        {
+            EditorUtility.ClearProgressBar();
+            AssetDatabase.Refresh();
+        }
     }
 
     [MenuItem("Tool/BuildSetting", false, 1)]
@@ -201,50 +217,71 @@ public class GameEditor
 
     }
 
-    [MenuItem("Tool/Compress Lua Code", false, 100)]
-    static void CompressLuaCode()
+    [MenuItem("Tool/Encrypt Lua Code", false, 100)]
+    static void EncryptLuaCode()
     {
-        string savePath = Application.dataPath + "/Build/LuaCode.bytes";
-        string passwd = "sexsexsex";
-
-        if (File.Exists(savePath)) File.Delete(savePath);
-
-        FileStream writer = new FileStream(savePath, FileMode.Append);
         try
         {
             string[] files = Directory.GetFiles(Application.dataPath + "/LuaScripts", "*.lua", SearchOption.AllDirectories);
-            Common.ByteArray buffer = new Common.ByteArray(1024 * 1024 * 2);
-            buffer.WriteString(passwd);
-            buffer.WriteInt(files.Length);
-            writer.Write(buffer.Data, 0, buffer.Length);
 
             for (int i = 0; i < files.Length; i++)
             {
                 string name = files[i];
                 name = name.Replace('\\', '/');
-                name = name.Replace(Application.dataPath + "/LuaScripts/", "");
-                buffer.Init();
-                buffer.WriteString(name);
-                buffer.WriteBytes(File.ReadAllBytes(files[i]));
-                writer.Write(buffer.Data, 0, buffer.Length);
-                EditorUtility.DisplayProgressBar("compress lua code...", name, (float)i / files.Length);
+                name = name.Replace(Application.dataPath + "/", "");
+                string outName = Application.dataPath + "/Build/" + name;
+                GameUtil.CreateDirectory(outName);
+                EncryptUtil.EncryptFile(files[i], outName, "19930822");
+                //byte[] compressedBytes = GameUtil.CompressBytes(File.ReadAllBytes(files[i]));
+                //byte[] encryptBytes = EncryptUtil.EncryptBytes(compressedBytes, "19930822");
+                //File.WriteAllBytes(outName, encryptBytes);
+                EditorUtility.DisplayProgressBar("encrypt lua code...", name, (float)i / files.Length);
             }
-            writer.Close();
-            byte[] compressData = GameUtil.CompressBytes(File.ReadAllBytes(savePath));
-            File.WriteAllBytes(savePath, compressData);
             EditorUtility.ClearProgressBar();
             AssetDatabase.Refresh();
         }
         catch (Exception ex)
         {
-            writer.Close();
             EditorUtility.ClearProgressBar();
             AssetDatabase.Refresh();
-            throw new Exception(ex.Message);
+            throw new Exception(ex.Message + "\n" + ex.StackTrace);
         }
     }
 
-    [MenuItem("Tool/Clear Lua Bytecode", false, 103)]
+    [MenuItem("Tool/Decrypt Lua Code", false, 101)]
+    static void DecryptLuaCode()
+    {
+        try
+        {
+            string[] files = Directory.GetFiles(Application.dataPath + "/Build/LuaScripts", "*.lua", SearchOption.AllDirectories);
+
+            for (int i = 0; i < files.Length; i++)
+            {
+                string name = files[i];
+                name = name.Replace('\\', '/');
+                name = name.Replace(Application.dataPath + "/Build/", "");
+                string outName = @"C:\Users\Administrator\Desktop\" + name;
+                GameUtil.CreateDirectory(outName);
+                //byte[] decryptBytes = EncryptUtil.DecryptFileToBytes(files[i], "19930822");
+                //byte[] decompressedBytes = GameUtil.DecompressBytes(decryptBytes);
+                //File.WriteAllBytes(outName, decompressedBytes);
+                EncryptUtil.DecryptFile(files[i], outName, "19930822");
+                //GameUtil.CreateDirectory(outName);
+                //File.WriteAllBytes(outName, Encrypt.DecryptFileToBytes(files[i], "19930822"));
+                EditorUtility.DisplayProgressBar("decrypt lua code...", name, (float)i / files.Length);
+            }
+            EditorUtility.ClearProgressBar();
+            AssetDatabase.Refresh();
+        }
+        catch (Exception ex)
+        {
+            EditorUtility.ClearProgressBar();
+            AssetDatabase.Refresh();
+            throw new Exception(ex.Message + "\n" + ex.StackTrace);
+        }
+    }
+
+    [MenuItem("Tool/Clear Encrypt Lua Code", false, 103)]
     static void ClearLuaBytecode()
     {
         BuildSetting bs = GetBuildSettingAsset();
@@ -327,6 +364,47 @@ public class GameEditor
         ReimportDll(engineDll);
         ReimportDll(editorDll);
     }
+
+    [MenuItem("Tool/Compress Lua Code", false, 1001)]
+    public static void CompressLuaCode()
+    {
+        string[] files = Directory.GetFiles(Application.dataPath + "/LuaScripts", "*.lua", SearchOption.AllDirectories);
+
+        for (int i = 0; i < files.Length; i++)
+        {
+            string name = files[i];
+            name = name.Replace('\\', '/');
+            name = name.Replace(Application.dataPath + "/", "");
+            string outName = Application.dataPath + "/Build/" + name;
+            GameUtil.CreateDirectory(outName);
+            byte[] cbytes = GameUtil.CompressBytes(File.ReadAllBytes(files[i]));
+            File.WriteAllBytes(outName, cbytes);
+            EditorUtility.DisplayProgressBar("encrypt lua code...", name, (float)i / files.Length);
+        }
+        EditorUtility.ClearProgressBar();
+        AssetDatabase.Refresh();
+    }
+
+    [MenuItem("Tool/Decompress Lua Code", false, 1002)]
+    public static void DecompressLuaCode()
+    {
+        string[] files = Directory.GetFiles(Application.dataPath + "/Build/LuaScripts", "*.lua", SearchOption.AllDirectories);
+
+        for (int i = 0; i < files.Length; i++)
+        {
+            string name = files[i];
+            name = name.Replace('\\', '/');
+            name = name.Replace(Application.dataPath + "/Build/", "");
+            string outName = @"C:\Users\Administrator\Desktop\" + name;
+            GameUtil.CreateDirectory(outName);
+            byte[] bytes = GameUtil.DecompressBytes(File.ReadAllBytes(files[i]));
+            File.WriteAllBytes(outName, bytes);
+            EditorUtility.DisplayProgressBar("encrypt lua code...", name, (float)i / files.Length);
+        }
+        EditorUtility.ClearProgressBar();
+        AssetDatabase.Refresh();
+    }
+
 
     static void ReimportDll(string path)
     {

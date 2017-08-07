@@ -8,6 +8,7 @@ using System.Text;
 using UnityEngine.SceneManagement;
 using System.IO.Compression;
 using Common;
+using ICSharpCode.SharpZipLib.BZip2;
 
 public class GameUtil : MonoBehaviour
 {
@@ -243,82 +244,73 @@ public class GameUtil : MonoBehaviour
         return t;
     }
 
-    /// <summary>
-    /// 压缩字节数组
-    /// </summary>
-    /// <param name="data"></param>
-    /// <returns></returns>
+    public static void CreateDirectory(string path)
+    {
+        string dirName = Path.GetDirectoryName(path);
+        if (!string.IsNullOrEmpty(dirName)) if (!Directory.Exists(dirName)) Directory.CreateDirectory(dirName);
+    }
+
     public static byte[] CompressBytes(byte[] data)
     {
-        using (var ms = new MemoryStream())
+        //using (MemoryStream outs = new MemoryStream())
+        //{
+        //    using (GZipStream zipStream = new GZipStream(outs, CompressionMode.Compress))
+        //    {
+        //        zipStream.Write(data, 0, data.Length);
+        //        return outs.GetBuffer();
+        //    }
+        //}
+
+        using (MemoryStream ms = new MemoryStream())
         {
-            using (var stream = new GZipStream(ms, CompressionMode.Compress))
+            using (BZip2OutputStream outStream = new BZip2OutputStream(ms))
             {
-                stream.Write(data, 0, data.Length);
+                outStream.Write(data, 0, data.Length);
+                outStream.Close();
                 return ms.GetBuffer();
             }
         }
     }
 
-    /// <summary>
-    /// 解压字节数组
-    /// </summary>
-    /// <param name="data"></param>
-    /// <returns></returns>
     public static byte[] DecompressBytes(byte[] data)
     {
-        using (var compressStream = new MemoryStream(data))
+        //using (MemoryStream ins = new MemoryStream(data))
+        //{
+        //    using (MemoryStream outs = new MemoryStream())
+        //    {
+        //        using (GZipStream zipStream = new GZipStream(ins, CompressionMode.Decompress))
+        //        {
+        //            byte[] buffer = new byte[1024 * 1024];
+        //            int len = 0;
+        //            while (true)
+        //            {
+        //                len = zipStream.Read(buffer, 0, buffer.Length);
+        //                if (len <= 0) break;
+        //                outs.Write(buffer, 0, len);
+        //            }
+        //            return outs.GetBuffer();
+        //        }
+        //    }
+        //}
+
+        using (MemoryStream ins = new MemoryStream(data))
         {
-            using (var zipStream = new GZipStream(compressStream, CompressionMode.Decompress))
+            using (MemoryStream outs = new MemoryStream())
             {
-                using (var res = new MemoryStream())
+                using (BZip2InputStream inStream = new BZip2InputStream(ins))
                 {
-                    int length = 0;
-                    byte[] buffer = new byte[1024];
+                    byte[] buffer = new byte[1024 * 1024];
+                    int len = 0;
                     while (true)
                     {
-                        length = zipStream.Read(buffer, 0, buffer.Length);
-                        if (length <= 0) break;
-                        res.Write(buffer, 0, length);
+                        len = inStream.Read(buffer, 0, buffer.Length);
+                        inStream.Close();
+                        if (len <= 0) break;
+                        outs.Write(buffer, 0, len);
                     }
-                    return res.GetBuffer();
+                    return outs.GetBuffer();
                 }
             }
         }
-    }
-
-    /// <summary>
-    /// 解压Lua代码
-    /// </summary>
-    /// <param name="path"></param>
-    /// <returns></returns>
-    public static Dictionary<string, byte[]> DecompressLuaCode(string path, Action<int> progress = null, Action complete = null)
-    {
-        Dictionary<string, byte[]> dic = new Dictionary<string, byte[]>();
-        if (!File.Exists(path))
-        {
-            Debug.LogError(path + " is not found!");
-            return dic;
-        }
-        byte[] buffer = DecompressBytes(File.ReadAllBytes(path));
-        ByteArray array = new ByteArray(buffer);
-        string passwd = array.ReadString();
-        int fileCount = array.ReadInt();
-        Debug.Log("passwd: " + passwd);
-        Debug.Log("files count: " + fileCount);
-        for (int i = 0; i < fileCount; i++)
-        {
-            string fileName = array.ReadString();
-            byte[] content = array.ReadBytes();
-            //Debug.Log(fileName + " " + content.Length);
-            dic.Add(fileName, content);
-            string savePath = @"C:\Users\Public\Desktop\LuaCode\" + fileName;
-            string dirName = Path.GetDirectoryName(savePath);
-            if (!Directory.Exists(dirName)) Directory.CreateDirectory(dirName);
-            File.WriteAllBytes(savePath, content);
-            if (progress != null) progress((int)(((float)i / fileCount) * 100));
-        }
-        if (complete != null) complete();
-        return dic;
     }
 }
