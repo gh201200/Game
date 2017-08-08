@@ -152,10 +152,17 @@ function OnGUI()
 	
 	GUI.Label(476, 120-16, 184, 30, cfg_item.name, GUIStyleLabel.Center_30_LightBlue_Art,Color.Black)
 	
+	local ScrollHight = 288
+	local DownTipY = 446
+	if mCouldUse then
+	   ScrollHight = 260
+	   DownTipY = 430-16
+	end
+	
 	local spacingX = 315
 	local spacingY = 115
 	local count = #mAwardList
-	_,mScrollPositionY = GUI.BeginScrollView(262, 186-32, 640, 260, 0, mScrollPositionY, 0-16, 0-16, 600, 50+spacingY * math.ceil(count/2)-10)
+	_,mScrollPositionY = GUI.BeginScrollView(262, 186-32, 640, ScrollHight, 0, mScrollPositionY, 0-16, 0-16, 600, 50+spacingY * math.ceil(count/2)-10)
 		for k,award in pairs(mAwardList) do
 			local x = (k - 1) % 2 * spacingX
 			local y = math.floor((k - 1) / 2) * spacingY
@@ -164,11 +171,11 @@ function OnGUI()
 	GUI.EndScrollView()
 	
 	local image = mAssetManager.GetAsset("Texture/Gui/Button/btn19_1")
-	GUI.DrawTexture(525+16,430-16,59,16,image)
+	GUI.DrawTexture(540,DownTipY,59,16,image)
 	
 	
 	if mCouldUse then
-		if GUI.Button(650, 450-16, 223, 78,"使用", GUIStyleButton.OrangeBtn) then
+		if GUI.Button(446+16, 450-16, 223, 78,"使用", GUIStyleButton.OrangeBtn) then
 			local item = mItemManager.GetItemById(TargetId)
 			mItemManager.UseItem(item)
 			mPanelManager.Hide(OnGUI)
@@ -176,13 +183,10 @@ function OnGUI()
 			   mPanelManager.Show(require "LuaScript.View.Panel.SeekTreasure.SeekTreasurePanel")
 			end
 		end
-		if GUI.Button(570-290, 450-16, 223, 78,"确定", GUIStyleButton.OrangeBtn) then
-			mPanelManager.Hide(OnGUI)
-		end
 	else
-		if GUI.Button(446+16, 450-16, 223, 78,"确定", GUIStyleButton.OrangeBtn) then
-			mPanelManager.Hide(OnGUI)
-		end
+		-- if GUI.Button(446+16, 450-16, 223, 78,"确定", GUIStyleButton.OrangeBtn) then
+			-- mPanelManager.Hide(OnGUI)
+		-- end
 	end
 	
 	if GUI.Button(911+16, 58-16, 77, 63,nil, GUIStyleButton.CloseBtn) then

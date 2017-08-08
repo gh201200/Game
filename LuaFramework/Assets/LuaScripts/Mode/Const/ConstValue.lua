@@ -100,22 +100,22 @@ ConstValue.GuiVipPath = {
 
 --VIPÃæ°åµÄVIPlevelÍ¼±ê
 ConstValue.vipGuiImagePath = {
-	[0] =  "Texture/Gui/Text/vp0",
-	[1] =  "Texture/Gui/Text/vp1",
-	[2] =  "Texture/Gui/Text/vp2",
-	[3] =  "Texture/Gui/Text/vp3",
-	[4] =  "Texture/Gui/Text/vp4",
-	[5] =  "Texture/Gui/Text/vp5",
-	[6] =  "Texture/Gui/Text/vp6",
-	[7] =  "Texture/Gui/Text/vp7",
-	[8] =  "Texture/Gui/Text/vp8",
-	[9] =  "Texture/Gui/Text/vp9",
-	[10] = "Texture/Gui/Text/vp10",
-	[11] = "Texture/Gui/Text/vp11",
-	[12] = "Texture/Gui/Text/vp12",
-	[13] = "Texture/Gui/Text/vp13",
-	[14] = "Texture/Gui/Text/vp14",
-	[15] = "Texture/Gui/Text/vp15",
+	[0] =  "Texture/Gui/Text/vip0",
+	[1] =  "Texture/Gui/Text/vip1",
+	[2] =  "Texture/Gui/Text/vip2",
+	[3] =  "Texture/Gui/Text/vip3",
+	[4] =  "Texture/Gui/Text/vip4",
+	[5] =  "Texture/Gui/Text/vip5",
+	[6] =  "Texture/Gui/Text/vip6",
+	[7] =  "Texture/Gui/Text/vip7",
+	[8] =  "Texture/Gui/Text/vip8",
+	[9] =  "Texture/Gui/Text/vip9",
+	[10] = "Texture/Gui/Text/vip10",
+	[11] = "Texture/Gui/Text/vip11",
+	[12] = "Texture/Gui/Text/vip12",
+	[13] = "Texture/Gui/Text/vip13",
+	[14] = "Texture/Gui/Text/vip14",
+	[15] = "Texture/Gui/Text/vip15",
 }
 
 ConstValue.StarQuality = {

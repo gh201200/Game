@@ -27,6 +27,7 @@ local mActivityList = nil
 local mLoginInfo = nil
 local timeTable = nil
 local mhero = nil
+local mHarborSignupPanel = nil
 
 local OngoingTaskGUIopen = false
 local OngoingTaskSwitch = true
@@ -37,7 +38,7 @@ module("LuaScript.View.Panel.Main.OngoingTask",package.seeall) -- 持续中的�
 
 local mSeekTreasure = nil -- 藏宝图寻宝界面
 
-local See1,See2,See3,See4,See5,See6 = true,true,true,true,true,true
+local See1,See2,See3,See4,See5,See6,See7 = true,true,true,true,true,true,true
 
 function Init()
 	mSystemTip = require "LuaScript.View.Tip.SystemTip"
@@ -56,6 +57,7 @@ function Init()
 	mLoginAwardPanel = require "LuaScript.View.Panel.Activity.LoginAward.LoginAwardPanel"
 	mActivityPanel = require "LuaScript.View.Panel.Activity.ActivityPanel"
 	mSeekTreasure = require "LuaScript.View.Panel.SeekTreasure.SeekTreasurePanel"
+	mHarborSignupPanel = require "LuaScript.View.Panel.Activity.HarborBattle.HarborSignupPanel"
 	mActivityList = mActivityManager.GetActivityList()
 	mLoginInfo = mHeroManager.GetLoginAward()
 	serverTime = mActivityManager.GetServerTime()
@@ -65,7 +67,6 @@ end
 
 function Display()
 	serverTime = mActivityManager.GetServerTime()
-	-- print(2)
 	mActivityList = mActivityManager.GetActivityList()
 	mLoginInfo = mHeroManager.GetLoginAward()
 end
@@ -77,10 +78,6 @@ end
 function OnGUI()
 	
 	if not Init then
-		return
-	end
-	
-	if not ActivityIconPath then
 		return
 	end
 
@@ -95,8 +92,7 @@ function OnGUI()
 
     if mHero.SceneType == SceneType.Harbor then -- 港口界面位置偏移
 	   skewY = 125
-	   
-	elseif mHero.protectState then
+	elseif mHero.protectState then -- 出现保护倒计时偏移
 	   skewY = 80
 	else
 	   skewY = 0 
@@ -124,10 +120,57 @@ function OnGUI()
 	
 	--活动
 	local count = #mActivityList
+	--鱼和风靡全球 前置
 	for index=1,count,1 do
 		local activity = mActivityList[index]
-		    if  activity.state and OngoingList < 8  then
-				 if activity.id == ActivityType.HarborBattle then -- 港口争霸
+		if activity.state then
+			if activity.id == ActivityType.GOODS then
+				local image = mAssetManager.GetAsset(ActivityIconPath[activity.id])
+				GUI.DrawTexture(maxWidth - (spacing * OngoingList ) - 35 , -18 + skewY,128,128,image)
+				if GUI.Button(1136 - (ButtonSpacing * OngoingList ) - 35 , 15 + skewY, 76, 76, nil, GUIStyleButton.Transparent) then
+					mActivityPanel.SetData(activity.id)
+					mPanelManager.Show(mActivityPanel)
+					mPanelManager.Hide(mMainPanel)
+					mSceneManager.SetMouseEvent(false)
+					Display()
+				end 
+				OngoingList = OngoingList + 1
+			elseif activity.id == ActivityType.Fish then
+				local image = mAssetManager.GetAsset(ActivityIconPath[activity.id])
+				GUI.DrawTexture(maxWidth - (spacing * OngoingList ) - 35 , -18 + skewY,128,128,image)
+				if GUI.Button(1136 - (ButtonSpacing * OngoingList ) - 35 , 15 + skewY, 76, 76, nil, GUIStyleButton.Transparent) then
+					mActivityPanel.SetData(activity.id)
+					mPanelManager.Show(mActivityPanel)
+					mPanelManager.Hide(mMainPanel)
+					mSceneManager.SetMouseEvent(false)
+					Display()
+				end 
+				OngoingList = OngoingList + 1
+			end
+		end
+	end
+	
+	
+	for index=1,count,1 do
+		local activity = mActivityList[index]
+		    if (activity.state) and OngoingList < 8  then
+				 if activity.id == ActivityType.GOODS then	
+				 elseif activity.id == ActivityType.Fish then
+				 elseif activity.id == ActivityType.LevelAward then
+					if See7 then
+						local image = mAssetManager.GetAsset(ActivityIconPath[activity.id])
+						GUI.DrawTexture(maxWidth - (spacing * OngoingList ) - 35 , -18 + skewY,128,128,image)
+						if GUI.Button(1136 - (ButtonSpacing * OngoingList ) - 35 , 15 + skewY, 76, 76, nil, GUIStyleButton.Transparent) then
+							mActivityPanel.SetData(activity.id)
+							mPanelManager.Show(mActivityPanel)
+							mPanelManager.Hide(mMainPanel)
+							mSceneManager.SetMouseEvent(false)
+							See7 = false
+							Display()
+						end 
+						OngoingList = OngoingList + 1
+					end
+				 elseif activity.id == ActivityType.HarborBattle then -- 港口争霸
 					local image = mAssetManager.GetAsset(ActivityIconPath[9])
 					if timeTable.hour >= 16 and timeTable.hour < 20	then
 						 image = mAssetManager.GetAsset(ActivityIconPath[17])
@@ -141,6 +184,7 @@ function OnGUI()
 						mActivityPanel.SetData(ActivityType.HarborBattle)
 						mPanelManager.Show(mActivityPanel)
 						mPanelManager.Hide(mMainPanel)
+						mPanelManager.Show(mHarborSignupPanel)
 						mSceneManager.SetMouseEvent(false)
 						-- See6 = false -- 是否点击后隐藏
 						Display()

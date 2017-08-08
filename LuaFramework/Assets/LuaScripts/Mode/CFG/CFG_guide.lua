@@ -1,7 +1,7 @@
 CFG_guide = {}
 CFG_guide[1] = {id = 1, type = -1, typeStr = "自动寻路中", x = 0, y = 0, width = 0, heigth = 0, dir = 0, desc = "自动寻路", force = 0, rect = 1, }
 CFG_guide[2] = {id = 2, type = -2, typeStr = "关闭战斗奖励界面", x = 767, y = 131, width = 73, heigth = 54, dir = 1, desc = "点击退出战场", force = 0, rect = 1, }
-CFG_guide[3] = {id = 3, type = -3, typeStr = "点击任务追踪", x = 892, y = 210, width = 240, heigth = 65, dir = 1, desc = "点击继续任务", force = 0, rect = 1, }
+CFG_guide[3] = {id = 3, type = -3, typeStr = "点击任务追踪", x = 892, y = 250, width = 240, heigth = 65, dir = 1, desc = "点击继续任务", force = 0, rect = 1, }
 CFG_guide[4] = {id = 4, type = 1, typeStr = "出售特产引导", x = 504, y = 10, width = 124, heigth = 118, dir = 0, desc = "点击进入交易所", force = 0, rect = 1, }
 CFG_guide[5] = {id = 5, type = 1, typeStr = "出售特产引导", x = 920, y = 435, width = 50, heigth = 95, dir = 3, desc = "点击出售特产", force = 0, rect = 1, }
 CFG_guide[6] = {id = 6, type = 2, typeStr = "购买特产引导", x = 1060, y = 37, width = 53, heigth = 58, dir = 3, desc = "点击退出界面", force = 0, rect = 1, }

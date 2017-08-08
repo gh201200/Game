@@ -42,6 +42,9 @@ GUIStyleButton = {
 	Quality_4_2 = {	normal={background="Texture/Gui/Button/quality_8"}, 
 					active={background="Texture/Gui/Button/quality_8"},
 					},
+	Btn_B = {	normal={background="Texture/Gui/Button/btn_d"}, 
+					active={background="Texture/Gui/Button/btn_d"},
+					},
 					
 	StarSkillListBtn = {	normal={background="Texture/Gui/Button/starSkillList_1"}, 
 					active={background="Texture/Gui/Button/starSkillList_2"},},
@@ -788,6 +791,10 @@ GUIStyleButton = {
 }
 
 GUIStyleLabel = {
+	Center_20_Yellow4 = { alignment=TextAnchor.UpperCenter,
+					fontSize=20,
+					richText=true,
+					normal={textColor=Color.Yellow4}},
 	Left_20_White_WordWrap = { alignment=TextAnchor.UpperLeft,
 					fontSize=20,
 					richText=true,
@@ -1287,6 +1294,9 @@ GUIStyleLabel = {
 	MLeft_18_White_WordWrap = {fontSize=18,
 					wordWrap=true,
 					alignment=TextAnchor.MiddleLeft,
+					normal={textColor=Color.White}},
+	Right_18_White = {fontSize=20,
+					alignment=TextAnchor.UpperRight,
 					normal={textColor=Color.White}},
 	Left_25_Brown_Art = { alignment=TextAnchor.UpperLeft,
 					fontSize=25,

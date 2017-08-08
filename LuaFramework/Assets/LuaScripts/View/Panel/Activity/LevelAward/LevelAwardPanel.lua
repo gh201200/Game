@@ -25,6 +25,7 @@ module("LuaScript.View.Panel.Activity.LevelAward.LevelAwardPanel")
 local mActivity = nil
 local table_levelAward = nil
 local AwardGotNum = 0
+local mCouldGetGold = nil
 
 function Init()
 	mPanelManager = require "LuaScript.Control.PanelManager"
@@ -42,6 +43,14 @@ function Init()
 	UpdateAwardTable()
 	
 	IsInit = true
+end
+
+function GetCouldGet()
+  -- for k,item in pairs(mActivity.award)do
+	-- if item.couldGet then
+	   -- mCouldGetGold = true 
+	-- end
+  -- end
 end
 
 function Display()

@@ -25,7 +25,7 @@ AssetPath = {
 	Gui_Bg_bg52_2 = "Texture/Gui/Bg/bg52_2",
 	Gui_Bg_bg52_3 = "Texture/Gui/Bg/bg52_3",
 	
-	Gui_Character_HeroHeader = "Texture/Character/HeroHeader/%s",
+	Gui_Character_HeroHeader = "Texture/Character/RoleHeader/%s",
 	
 	Gui_Text_menu = "Texture/Gui/Text/menu",
 	

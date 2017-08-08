@@ -20,6 +20,7 @@ local pivotPoint2 = nil
 local pivotPoint3 = nil
 local mAngle = 0
 function Init()
+	print("LoadPanel Init")
 	mMainPanel = require "LuaScript.View.Panel.Main.Main"
 	mPanelManager = require "LuaScript.Control.PanelManager"
 	mSceneManager = require "LuaScript.Control.Scene.SceneManager"

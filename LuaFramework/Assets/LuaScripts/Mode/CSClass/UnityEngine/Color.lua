@@ -65,6 +65,7 @@ Color.Naturals = Color.Init(254/255, 207/255, 20/255)
 Color.Earth = Color.Init(220/255, 167/255, 83/255)
 Color.Yellow2 = Color.Init(0xff/255, 0x99/255, 0x33/255)
 Color.Yellow3 = Color.Init(216/255, 240/255, 14/255)
+Color.Yellow4 = Color.Init(0xF8/255, 0xDC/255, 0x7B/255)
 
 Color.Light = Color.Init(0, 0.3, 0, 0.3)
 Color.Empty = Color.Init(1, 1, 1, 0)

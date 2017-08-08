@@ -252,6 +252,7 @@ public class GameUtil : MonoBehaviour
 
     public static byte[] CompressBytes(byte[] data)
     {
+        //方法一、
         //using (MemoryStream outs = new MemoryStream())
         //{
         //    using (GZipStream zipStream = new GZipStream(outs, CompressionMode.Compress))
@@ -260,20 +261,21 @@ public class GameUtil : MonoBehaviour
         //        return outs.GetBuffer();
         //    }
         //}
-
+        //方法二、
         using (MemoryStream ms = new MemoryStream())
         {
             using (BZip2OutputStream outStream = new BZip2OutputStream(ms))
             {
                 outStream.Write(data, 0, data.Length);
                 outStream.Close();
-                return ms.GetBuffer();
+                return ms.ToArray();
             }
         }
     }
 
     public static byte[] DecompressBytes(byte[] data)
     {
+        //方法一、
         //using (MemoryStream ins = new MemoryStream(data))
         //{
         //    using (MemoryStream outs = new MemoryStream())
@@ -292,7 +294,7 @@ public class GameUtil : MonoBehaviour
         //        }
         //    }
         //}
-
+        //方法二、
         using (MemoryStream ins = new MemoryStream(data))
         {
             using (MemoryStream outs = new MemoryStream())
@@ -308,7 +310,7 @@ public class GameUtil : MonoBehaviour
                         if (len <= 0) break;
                         outs.Write(buffer, 0, len);
                     }
-                    return outs.GetBuffer();
+                    return outs.ToArray();
                 }
             }
         }

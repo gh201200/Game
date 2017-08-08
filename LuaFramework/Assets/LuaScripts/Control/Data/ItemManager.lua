@@ -466,7 +466,7 @@ function SEND_BOSS_ROLL_AWARD(cs_ByteArray) -- boss 随机装备
 		local itemId = ByteArray.ReadInt(cs_ByteArray)
 		local itemType = ByteArray.ReadByte(cs_ByteArray)
 		local itemCount = ByteArray.ReadInt(cs_ByteArray)
-		table.insert(awardList, {id=itemId, type=itemType, count=itemCount, index=awardId, star=0,
+		table.insert(awardList, {id=itemId, type=itemType, count=itemCount, index=awardId,
 				notExist=true})
 	end
 	-- print(awardList)

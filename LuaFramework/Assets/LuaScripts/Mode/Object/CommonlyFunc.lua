@@ -325,7 +325,7 @@ end
 
 function CdToMoney(cd)
 	-- print(cd)
-	return math.ceil(cd/300)
+	return math.ceil(cd/60)
 end
 
 function UpdateTitle(char)

@@ -370,3 +370,11 @@ CFG_skillRequire[368] = {id = 368, skillId = 404, requireType = 0, requireId = 3
 CFG_skillRequire[369] = {id = 369, skillId = 405, requireType = 1, requireId = 9, }
 CFG_skillRequire[370] = {id = 370, skillId = 406, requireType = 1, requireId = 4, }
 CFG_skillRequire[371] = {id = 371, skillId = 407, requireType = 1, requireId = 133, }
+CFG_skillRequire[372] = {id = 372, skillId = 257, requireType = 1, requireId = 1, }
+CFG_skillRequire[373] = {id = 373, skillId = 257, requireType = 1, requireId = 2, }
+CFG_skillRequire[374] = {id = 374, skillId = 257, requireType = 1, requireId = 4, }
+CFG_skillRequire[375] = {id = 375, skillId = 257, requireType = 1, requireId = 5, }
+CFG_skillRequire[376] = {id = 376, skillId = 257, requireType = 1, requireId = 6, }
+CFG_skillRequire[377] = {id = 377, skillId = 257, requireType = 1, requireId = 7, }
+CFG_skillRequire[378] = {id = 378, skillId = 257, requireType = 1, requireId = 8, }
+CFG_skillRequire[379] = {id = 379, skillId = 257, requireType = 1, requireId = 9, }

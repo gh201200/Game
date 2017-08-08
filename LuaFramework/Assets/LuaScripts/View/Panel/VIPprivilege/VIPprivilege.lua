@@ -88,7 +88,7 @@ function OnGUI()
 				GUI.DrawTexture(0 + (w * (level - 1 )),0 + (h * (prerogative -1)), w-3, 501, bgImage_off )
 			end 
 			local image = mAssetManager.GetAsset(ConstValue.vipGuiImagePath[level])
-			GUI.DrawTexture(15 + (w * (level - 1 )),3 + (h * (prerogative -1)), 80, 30, image )--VIP显示
+			GUI.DrawTexture(15 + 18 + (w * (level - 1 )),3 + (h * (prerogative -1)), 64, 32, image )--VIP显示
 		   end
 		--显示的值
 		   vipIndex = level .. '_' .. prerogative

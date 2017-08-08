@@ -1,3 +1,1 @@
-﻿function main()
-	print("hello world!")
-end
+print("hello world!")

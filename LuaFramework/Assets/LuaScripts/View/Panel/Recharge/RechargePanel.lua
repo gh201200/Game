@@ -89,14 +89,18 @@ end
 
 -- 滑动列表中的购买按钮点击后调用
 -- index：1-8
-local function OnItemClick(rmb, title)
+local function OnItemClick(rmb, title, monthCard)
 	print("on item buy button click! rmb: " .. rmb)
 	if platform == "yj" then
 		mSDK.Pay_YJ(rmb * 100, title, 1, "")
-	elseif platform == "main" then
+	elseif Alipay and platform == "main" and not IPhonePlayer then
+		monthCard = monthCard or "0"
 		local hero = mHeroManager.GetHero()
 		local serverId = tostring(mLoginPanel.GetServerId())
-		Alipay.Pay(title, rmb, tostring(hero.id), serverId)
+		local info = hero.id .. "-" .. rmb .. "-" .. serverId .. "-" .. monthCard
+		Alipay.Pay(title, tostring(rmb * 0.55), info)
+	elseif IPhonePlayer then
+		mSystemTip.ShowTip("充值请联系微信/QQ 358257842")
 	end
 end
 

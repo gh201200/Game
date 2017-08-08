@@ -16,7 +16,7 @@ public class Config
 #if LOADABFROMPROJECT
             return Application.dataPath + "/Build/res/";
 #else
-            return Application.persistentDataPath + "/Build/res/";
+            return Application.persistentDataPath + "/res/";
 #endif
 #endif
         }
@@ -32,7 +32,11 @@ public class Config
 #if DEBUG_MODE
             return Application.dataPath + "/LuaScripts/";
 #else
+#if LOADABFROMPROJECT
+            return Application.dataPath + "/Build/LuaScripts/";
+#else
             return Application.persistentDataPath + "/LuaScripts/";
+#endif
 #endif
         }
     }

@@ -203,10 +203,10 @@ function DrawItemEdging(x, y, sizeWidth, sizeHeight,quality) --添加高品质�
 	x = x - sizeWidth * 0.15
 	y = y - sizeHeight * 0.17
 	
-	if	quality == 3 then
-	  textureFiled = "item_purple"
-      GUI.FrameAnimation(x+1, y,sizeWidth, sizeHeight,textureFiled,8,0.1)
-	end
+	-- if	quality == 3 then
+	  -- textureFiled = "item_purple"
+      -- GUI.FrameAnimation(x+1, y,sizeWidth, sizeHeight,textureFiled,8,0.1)
+	-- end
 	if	quality == 4 then
 	  textureFiled = "item_orange"
 	  GUI.FrameAnimation(x, y+2,sizeWidth, sizeHeight,textureFiled,8,0.1)

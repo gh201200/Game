@@ -88,7 +88,7 @@ public class EncryptUtil
                         if (len <= 0) break;
                         fout.Write(data, 0, len);
                     }
-                    return fout.GetBuffer();
+                    return fout.ToArray();
                 }
             }
         }
@@ -101,7 +101,7 @@ public class EncryptUtil
             using (CryptoStream cs = new CryptoStream(fout, GetEncryptoTransform(passwd), CryptoStreamMode.Write))
             {
                 cs.Write(data, 0, data.Length);
-                return fout.GetBuffer();
+                return fout.ToArray();
             }
         }
     }
@@ -122,7 +122,7 @@ public class EncryptUtil
                         if (len <= 0) break;
                         fout.Write(buffer, 0, len);
                     }
-                    return fout.GetBuffer();
+                    return fout.ToArray();
                 }
             }
         }

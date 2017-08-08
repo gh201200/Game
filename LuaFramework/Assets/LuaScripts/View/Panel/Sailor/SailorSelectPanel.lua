@@ -114,10 +114,10 @@ function DrawSailor(sailor, y)
 		mPanelManager.Show(mSailorViewPanel)
 	end
 	
-	if	sailor.quality == 3 then
-	textureFiled = "item_purple"
-	GUI.FrameAnimation(35-18, y-8,150, 150,textureFiled,8,0.1)
-	end
+	-- if	sailor.quality == 3 then
+	-- textureFiled = "item_purple"
+	-- GUI.FrameAnimation(35-18, y-8,150, 150,textureFiled,8,0.1)
+	-- end
 	if	sailor.quality == 4 then
 	textureFiled = "item_orange"
 	GUI.FrameAnimation(35-20, y-3,150, 150,textureFiled,8,0.1)

@@ -72,7 +72,7 @@ public class AssetLoader : MonoBehaviour
 #if LOADABFROMPROJECT
                 Application.dataPath + "/Build/Build".Replace('\\', '/');
 #else
-                Application.persistentDataPath + "/Build/Build".Replace('\\', '/');
+                Application.persistentDataPath + "/Build".Replace('\\', '/');
 #endif
                 if (!File.Exists(path))
                 {

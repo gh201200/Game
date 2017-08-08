@@ -221,8 +221,9 @@ function UploadError(info)
 		str = str .. "StartTime:" .. _G.startTime .. "\n"
 	end
 	str = str .. "CurrentTime:" .. os.date("%x %X").. "\n"
-	str = str .. "IsConnected:" .. tostring(mNetManager.IsConnected()).. "\n"
-	
+	if mNetManager then
+		str = str .. "IsConnected:" .. tostring(mNetManager.IsConnected()).. "\n"
+	end
 	str = str .. GetMachineInfo()
 	str = str .. info .. "\n\n\n"
 	

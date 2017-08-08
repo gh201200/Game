@@ -12,9 +12,29 @@ end
 
 
 function OnGUI()
-	drawMainTask(792, 184)
+
+	local image = mAssetManager.GetAsset("Texture/Gui/Bg/bg_p")
+	GUI.DrawTexture(900, 191, 256, 64, image)
+	
+	local mHero = mHeroManager.GetHero()
+	if mHero.harborId then
+		local cfg_harbor = CFG_harbor[mHero.harborId]
+		-- GUI.Label(62,91+44-5,91,0,cfg_harbor.name,GUIStyleLabel.Center_18_White, Color.Black)
+		GUI.Label(924, 208+4, 159, 30, cfg_harbor.name, GUIStyleLabel.Center_20_White)
+	else
+		if mHero.updatePositionTime ~= os.oldTime then -- 坐标
+			mHero.updatePositionTime = os.oldTime
+			mHero.positionStr = string.format("%d,%d",mHero.x,mHero.y)
+		end
+		-- GUI.Label(62,91+44-5,91,0, mHero.positionStr, GUIStyleLabel.Center_18_White, Color.Black)
+		GUI.Label(940, 208+4, 159, 30, mHero.positionStr, GUIStyleLabel.Center_20_White)
+	end
+	
+	
+	
+	drawMainTask(792, 184+42)
 	if mActionManager.GetActionOpen(ActionType.RandomTask) then
-		drawRandomTask(792, 266)
+		drawRandomTask(792+3, 266+42)
 	end
 end
 

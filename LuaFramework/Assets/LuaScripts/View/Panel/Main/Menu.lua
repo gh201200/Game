@@ -241,16 +241,15 @@ function OnGUI()
 
 	
 	-- 首冲元宝按钮
-	if mHero.firstRecharge == 0 and mHeroManager.GetFirstRecharge() then
-		GUI.FrameAnimation(-63,95+20,256,256,"firstRechange") -- 帧动画
-		GUI.FrameAnimation(-63,95+30,256,256,"top_tip",9,0.1)
-		if GUI.Button(17,177+20,88,88,nil,GUIStyleButton.Transparent_Art_30) then
-			mPanelManager.Show(mFirstRechange)
-		end
-		local image = mAssetManager.GetAsset("Texture/Gui/Button/firstCharge")
-		GUI.DrawTexture(-4,159+20,128,128,image)
-		-- DrawRedPoint(1038, 413, mChatPanel.GetNewCount())
-	end
+	-- if mHero.firstRecharge == 0 and mHeroManager.GetFirstRecharge() then
+		-- GUI.FrameAnimation(-63,95+20,256,256,"firstRechange") -- 帧动画
+		-- GUI.FrameAnimation(-63,95+30,256,256,"top_tip",9,0.1)
+		-- if GUI.Button(17,177+20,88,88,nil,GUIStyleButton.Transparent_Art_30) then
+			-- mPanelManager.Show(mFirstRechange)
+		-- end
+		-- local image = mAssetManager.GetAsset("Texture/Gui/Button/firstCharge")
+		-- GUI.DrawTexture(-4,159+20,128,128,image)
+	-- end
 	
 	if VersionCode > 1 then
 	local image = mAssetManager.GetAsset("Texture/Gui/Button/Menu_switch_1")

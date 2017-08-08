@@ -172,11 +172,10 @@ function DrawLab(bossInfo,boosID,y)
 	
 	for	k , item in pairs(mBossUpdataInfo) do
 		if item.BossId == bossInfo then
-			if item.BossTime ~= 0 then
+			if item.BossTime > 0 then
 				content = mCommonlyFunc.GetFormatTime(item.BossTime - serverTime)
-			end
-			if item.BossTime == 0 then
-			  content = "已经刷新"
+			else
+				content = "已经刷新"
 			end
 		end
 	end
