@@ -105,8 +105,9 @@ public class LuaManager : MonoBehaviour
 
     private byte[] Load(string fn)
     {
+        fn = fn.Replace(".lua", "").Replace('.', '/');
+        fn += ".lua";
         string fullPath = Config.LuaPath + fn;
-        if (!fullPath.EndsWith(".lua")) fullPath += ".lua";
         if (!File.Exists(fullPath))
         {
             Debug.LogError(fullPath + " is not found!");

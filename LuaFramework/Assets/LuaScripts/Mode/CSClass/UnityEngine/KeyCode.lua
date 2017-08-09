@@ -1,9 +1,0 @@
-KeyCode = {}
-local CSKeyCode = CsFindType("UnityEngine.KeyCode")
-KeyCode.Q = UnityEngine.KeyCode.Q
-KeyCode.E = UnityEngine.KeyCode.E
-KeyCode.W = UnityEngine.KeyCode.W
-KeyCode.A = UnityEngine.KeyCode.A
-KeyCode.S = UnityEngine.KeyCode.S
-KeyCode.D = UnityEngine.KeyCode.D
-KeyCode.Escape = UnityEngine.KeyCode.Escape

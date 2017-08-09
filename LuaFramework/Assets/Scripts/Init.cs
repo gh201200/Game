@@ -7,7 +7,10 @@ public class Init : MonoBehaviour
 {
     private void Start()
     {
-        LuaManager.Instance.Init(p => Debug.Log("lua init -> " + p + "%"), instance =>
+        LuaManager.Instance.Init(p =>
+        {
+            //Debug.Log("lua init -> " + p + "%");
+        }, instance =>
         {
             //instance.DoString(@"
             //                     print('hello world!')

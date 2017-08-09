@@ -1,1 +1,3 @@
-print("hello world!")
+import "UnityEngine"
+
+print(Application)
