@@ -11,9 +11,62 @@ namespace MySQL
     {
         static void Main(string[] args)
         {
-            string conStr = @"database=user;datasource=localhost;port=3306;userid=root;password=123456";
+            string conStr = @"database=mydb;datasource=localhost;port=3306;userid=root;password=123456";
             MySqlConnection con = new MySqlConnection(conStr);
             con.Open();
+
+            MySqlCommand cmd = new MySqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "select * from item";
+            MySqlDataReader reader = cmd.ExecuteReader();
+            HashSet<object[]> list = new HashSet<object[]>();
+            HashSet<int> deleteList = new HashSet<int>();
+            Dictionary<object, object[]> newList = new Dictionary<object, object[]>();
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    object[] res = new object[3];
+                    reader.GetValues(res);
+                    list.Add(res);
+                    //foreach (var obj in res)
+                    //{
+                    //    Console.Write(obj + "     ");
+                    //}
+                    //Console.WriteLine();
+                }
+                reader.Close();
+            }
+
+            foreach (var array1 in list)
+            {
+                foreach (var array2 in list)
+                {
+                    if (array1[0] == array2[0] && array1[1] == array2[1])
+                    {
+                        int sum = int.Parse(array1[2].ToString()) + int.Parse(array2[2].ToString());
+                        if (!deleteList.Contains(int.Parse(array1[0].ToString()))) deleteList.Add(int.Parse(array1[0].ToString()));
+                        object[] obj = { array1[0], array1[1], sum };
+                        if (!newList.ContainsKey(array1[0])) newList.Add(array1[0], obj);
+                    }
+                }
+            }
+
+            foreach (var id in deleteList)
+            {
+                MySqlCommand deleteCmd = new MySqlCommand("delete from item where heroid = @value;", con);
+                deleteCmd.Parameters.AddWithValue("value", id);
+                deleteCmd.ExecuteNonQuery();
+            }
+
+            foreach (var temp in newList)
+            {
+                MySqlCommand addCmd = new MySqlCommand("insert item values(@heroid, @itemid, @num);", con);
+                addCmd.Parameters.AddWithValue("heroid", temp.Value[0]);
+                addCmd.Parameters.AddWithValue("itemid", temp.Value[1]);
+                addCmd.Parameters.AddWithValue("num", temp.Value[2]);
+                addCmd.ExecuteNonQuery();
+            }
 
             #region 查询
 
@@ -113,35 +166,35 @@ namespace MySQL
 
             //new MySqlCommand("delete from user;", con).ExecuteNonQuery();
 
-            for (int i = 0; i < 10; i++)
-            {
-                string user = "user" + i;
-                if (!ContainsData(con, user))
-                {
-                    MySqlCommand c = new MySqlCommand("insert user set user = @user, password = '123456';", con);
-                    c.Parameters.AddWithValue("user", user);
-                    c.ExecuteNonQuery();
-                }
-            }
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    string user = "user" + i;
+            //    if (!ContainsData(con, user))
+            //    {
+            //        MySqlCommand c = new MySqlCommand("insert user set user = @user, password = '123456';", con);
+            //        c.Parameters.AddWithValue("user", user);
+            //        c.ExecuteNonQuery();
+            //    }
+            //}
 
-            MySqlCommand cmd = new MySqlCommand();
-            cmd.Connection = con;
-            cmd.CommandText = "select * from user;";
-            MySqlDataReader reader = cmd.ExecuteReader();
-            if (reader.HasRows)
-            {
-                while (reader.Read())
-                {
-                    object[] values = new object[3];
-                    reader.GetValues(values);
-                    foreach (object o in values)
-                    {
-                        Console.Write(o + "\t");
-                    }
-                    Console.WriteLine();
-                }
-            }
-            reader.Close();
+            //MySqlCommand cmd = new MySqlCommand();
+            //cmd.Connection = con;
+            //cmd.CommandText = "select * from user;";
+            //MySqlDataReader reader = cmd.ExecuteReader();
+            //if (reader.HasRows)
+            //{
+            //    while (reader.Read())
+            //    {
+            //        object[] values = new object[3];
+            //        reader.GetValues(values);
+            //        foreach (object o in values)
+            //        {
+            //            Console.Write(o + "\t");
+            //        }
+            //        Console.WriteLine();
+            //    }
+            //}
+            //reader.Close();
 
             con.Close();
             Console.ReadKey();
