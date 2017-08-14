@@ -1,5 +1,5 @@
 local _tostring = tostring
-local function dumpTable(t, tab)
+function table.tostring(t, tab)
     local str = str or ""
     if not t then
         print("table is nil")
@@ -17,21 +17,21 @@ local function dumpTable(t, tab)
                 str = str .. tab .. "[\"" .. k .. "\"]" .. " = "
             end
             if type(v) == "string" then
-                str = str .. "\"" .. v .. "\"" .. "\n"
+                str = str .. "\"" .. v .. "\"" .. ",\n"
             elseif type(v) == "number" then
-                str = str .. v .. "\n"
+                str = str .. v .. ",\n"
             elseif type(v) == "boolean" then
-                str = str .. _tostring(v) .. "\n"
+                str = str .. _tostring(v) .. ",\n"
             elseif type(v) == "function" then
-                str = str .. _tostring(v) .. "\n"
+                str = str .. _tostring(v) .. ",\n"
             elseif type(v) == "thread" then
-                str = str .. "thread : " .. _tostring(v) .. "\n"
+                str = str .. "thread : " .. _tostring(v) .. ",\n"
             elseif type(v) == "userdata" then
-                str = str .. "userdata : " .. _tostring(v) .. "\n"
+                str = str .. "userdata : " .. _tostring(v) .. ",\n"
             elseif type(v) == "table" then
-                str = str .. dumpTable(v, tab .. "        ") .. "\n"
+                str = str .. table.tostring(v, tab .. "        ") .. ",\n"
             else
-                str = str .. "unknow : " .. _tostring(v) .. "\n"
+                str = str .. "unknow : " .. _tostring(v) .. ",\n"
             end
         end
         str = str .. string.sub(tab, 1, #tab - 8) .. "}"
@@ -41,4 +41,4 @@ local function dumpTable(t, tab)
 
     return str
 end
-tostring = dumpTable
+tostring = table.tostring
