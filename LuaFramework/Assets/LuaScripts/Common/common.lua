@@ -6,16 +6,15 @@ local function dumpTable(t, tab)
         return str
     end
 
-    tab = tab or "\t"
-    tab = tab .. "\t"
+    tab = tab or "        "
     str = str .. "{\n"
 
     if type(t) == "table" then
         for k, v in pairs(t) do
             if type(k) == "number" then
-                str = str .. string.sub(tab, 2, string.len(tab)) .. "[" .. k .. "]" .. " = "
+                str = str .. tab .. "[" .. k .. "]" .. " = "
             else
-                str = str .. string.sub(tab, 2, string.len(tab)) .. "[\"" .. k .. "\"]" .. " = "
+                str = str .. tab .. "[\"" .. k .. "\"]" .. " = "
             end
             if type(v) == "string" then
                 str = str .. "\"" .. v .. "\"" .. "\n"
@@ -30,12 +29,12 @@ local function dumpTable(t, tab)
             elseif type(v) == "userdata" then
                 str = str .. "userdata : " .. _tostring(v) .. "\n"
             elseif type(v) == "table" then
-                str = str .. dumpTable(v, tab) .. "\n"
+                str = str .. dumpTable(v, tab .. "        ") .. "\n"
             else
                 str = str .. "unknow : " .. _tostring(v) .. "\n"
             end
         end
-        str = str .. string.sub(tab, 2, string.len(tab) - 1) .. "}"
+        str = str .. string.sub(tab, 1, #tab - 8) .. "}"
     else
         str = t
     end

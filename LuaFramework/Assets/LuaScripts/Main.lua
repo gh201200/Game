@@ -11,15 +11,9 @@ local mt = {
         print(str)
     end,
     language = {
-        "java",
-        "c#",
-        "c",
-        "c++",
-        "php",
-        "lua",
-        "objective-c",
-        "javascript",
-        "python",
+        "chinese",
+        "english",
+        "japanese",
         other = {
             key1 = "value1",
             key2 = "value2",
@@ -38,4 +32,4 @@ local mt = {
     }
 }
 
-print(222, mt)
+print(mt)
