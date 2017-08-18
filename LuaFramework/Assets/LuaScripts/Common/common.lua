@@ -97,6 +97,7 @@ end
 
 string.split = function(s, c)
     local t = { }
+	c = c or "%s"
     local pattern = "[^" .. c .. "]+"
     string.gsub(s, pattern, function(v)
         table.insert(t, string.trim(v, "%s"))
