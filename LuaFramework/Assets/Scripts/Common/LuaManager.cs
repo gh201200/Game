@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using SLua;
 
+[CustomLuaClass]
 public class LuaManager : MonoBehaviour
 {
     private static LuaManager _instance;
@@ -27,6 +28,10 @@ public class LuaManager : MonoBehaviour
 
     public LuaSvr luaSvr;
     public LuaState luaState;
+
+    public static Action OnUpdateEvent;
+    public static Action OnFixedUpdateEvent;
+    public static Action OnLateUpdateEvent;
 
     public object DoFile(string fileName)
     {
@@ -125,5 +130,23 @@ public class LuaManager : MonoBehaviour
         buffer = EncryptUtil.DecryptBytes(buffer, "19930822");
         return buffer;
 #endif
+    }
+
+    private void Update()
+    {
+        if (!ready) return;
+        if (OnUpdateEvent != null) OnUpdateEvent();
+    }
+
+    private void FixedUpdate()
+    {
+        if (!ready) return;
+        if (OnFixedUpdateEvent != null) OnFixedUpdateEvent();
+    }
+
+    private void LateUpdate()
+    {
+        if (!ready) return;
+        if (OnLateUpdateEvent != null) OnLateUpdateEvent();
     }
 }

@@ -53,7 +53,7 @@ class MyDoCreateScriptAsset : EndNameEditAction
         streamReader.Close();
         string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(pathName);
         text = Regex.Replace(text, "#NewLuaScript#", fileNameWithoutExtension);
-        bool encoderShouldEmitUTF8Identifier = true;
+        bool encoderShouldEmitUTF8Identifier = false;
         bool throwOnInvalidBytes = false;
         UTF8Encoding encoding = new UTF8Encoding(encoderShouldEmitUTF8Identifier, throwOnInvalidBytes);
         bool append = false;

@@ -1,35 +1,13 @@
+import "System"
 import "UnityEngine"
 
 require "common.common"
+require "common.globaldefine"
+local Stopwatch = require "common.stopwatch"
 
+Stopwatch:Start()
 
-local mt = {
-    name = "god",
-    age = 25,
-    sex = true,
-    display = function(str)
-        print(str)
-    end,
-    language = {
-        "chinese",
-        "english",
-        "japanese",
-        other = {
-            key1 = "value1",
-            key2 = "value2",
-            key3 = "value3",
-            other2 = {
-                key1 = "value1",
-                key2 = "value2",
-                key3 = "value3",
-                other3 = {
-                    key1 = "value1",
-                    key2 = "value2",
-                    key3 = "value3"
-                }
-            }
-        }
-    }
-}
-
-print(mt)
+AssetLoader.Instance:Load("prefabs/Canvas.prefab", AssetType.Prefab, function(obj)
+	local go = GameObject.Instantiate(obj)
+	print(go.name, Stopwatch:Stop())
+end)

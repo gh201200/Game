@@ -4,7 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using SLua;
 
+[CustomLuaClass]
 public enum AssetType
 {
     Sprite,
@@ -19,6 +21,7 @@ public enum AssetType
     None,
 }
 
+[CustomLuaClass]
 public class AssetLoader : MonoBehaviour
 {
     public float Progress

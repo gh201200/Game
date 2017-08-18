@@ -2,6 +2,7 @@
 using System.Collections;
 using System.IO;
 using SLua;
+using System.Diagnostics;
 
 public class Init : MonoBehaviour
 {
