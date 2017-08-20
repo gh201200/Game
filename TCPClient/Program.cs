@@ -185,6 +185,7 @@ namespace TCPClient
             string[] files = Directory.GetFiles(sendDir, "*", SearchOption.AllDirectories);
             foreach (string f in files)
             {
+                if (f.EndsWith(".meta")) continue;
                 uploadQue.Enqueue(f);
             }
 
