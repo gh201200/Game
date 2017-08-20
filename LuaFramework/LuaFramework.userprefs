@@ -1,8 +1,9 @@
-﻿<Properties StartupItem="LuaFramework.Plugins.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Editor\GameEditor.cs">
+﻿<Properties StartupItem="Assembly-CSharp.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Build\AssetsInfo.json">
     <Files>
-      <File FileName="Assets\Editor\GameEditor.cs" Line="205" Column="1" />
+      <File FileName="Assets\Build\AssetsInfo.json" Line="1" Column="20" />
+      <File FileName="Assets\Editor\GameEditor.cs" Line="206" Column="55" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
