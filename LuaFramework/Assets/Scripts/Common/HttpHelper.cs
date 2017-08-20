@@ -4,7 +4,9 @@ using System.IO;
 using System.Net;
 using System.Text;
 using UnityEngine;
+using SLua;
 
+[CustomLuaClass]
 public class HttpHelper : MonoBehaviour
 {
     private static HttpHelper _instance;

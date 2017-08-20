@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using SLua;
 
+[CustomLuaClass]
 public class Config
 {
     /// <summary>
