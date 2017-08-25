@@ -34,4 +34,4 @@ function CheckUpdate:Check(callback)
 	end)
 end
 
-return CheckUpdate:new()
+return CheckUpdate.new()
