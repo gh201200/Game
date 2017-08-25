@@ -73,6 +73,22 @@ public class HttpHelper : MonoBehaviour
     }
 
     /// <summary>
+    /// 异步下载
+    /// </summary>
+    /// <param name="url"></param>
+    /// <param name="fileName"></param>
+    /// <param name="progress"></param>
+    /// <param name="complete"></param>
+    public void DownLoadFileAsync(string url, string fileName, Action<float, float> progress, Action complete)
+    {
+        Action temp = () =>
+        {
+            DownLoadFile(url, fileName, progress, complete);
+        };
+        temp.BeginInvoke(null, null);
+    }
+
+    /// <summary>
     /// 上传文件
     /// </summary>
     /// <param name="url"></param>

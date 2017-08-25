@@ -15,4 +15,4 @@ function Stopwatch:Stop()
 	return self.sw.ElapsedMilliseconds .. "ms"
 end
 
-return Stopwatch:new()
+return Stopwatch

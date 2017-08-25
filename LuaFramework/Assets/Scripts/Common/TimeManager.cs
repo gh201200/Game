@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 
+[SLua.CustomLuaClass]
 public class TimeManager : MonoBehaviour
 {
     private int index = 0;

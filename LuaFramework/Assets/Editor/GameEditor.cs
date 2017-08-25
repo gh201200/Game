@@ -78,23 +78,25 @@ public class GameEditor
         //    AssetDatabase.Refresh();
         //});
 
-        try
-        {
-            ZipUtil.PackDirectory(Application.dataPath + "/Build/LuaScripts", Application.dataPath + "/LuaCode.zip",
-                (cur, total) =>
-                {
-                    EditorUtility.DisplayProgressBar("progress",
-                        "pack direcory..." + Mathf.Ceil((float)cur * 100 / total) + "%", (float)cur / total);
-                });
-        }
-        catch
-        {
-        }
-        finally
-        {
-            EditorUtility.ClearProgressBar();
-            AssetDatabase.Refresh();
-        }
+        //try
+        //{
+        //    ZipUtil.PackDirectory(Application.dataPath + "/Build/LuaScripts", Application.dataPath + "/LuaCode.zip",
+        //        (cur, total) =>
+        //        {
+        //            EditorUtility.DisplayProgressBar("progress",
+        //                "pack direcory..." + Mathf.Ceil((float)cur * 100 / total) + "%", (float)cur / total);
+        //        });
+        //}
+        //catch
+        //{
+        //}
+        //finally
+        //{
+        //    EditorUtility.ClearProgressBar();
+        //    AssetDatabase.Refresh();
+        //}
+
+        AssetDesc desc = new AssetDesc("Prefabs/Panel/LoginPanel.prefab", AssetType.Prefab);
     }
 
     [MenuItem("Tool/BuildSetting", false, 1)]
@@ -560,7 +562,7 @@ public class GameEditor
         string buildPath = Application.dataPath.Replace("/Assets", "/") + bs.buildPath;
         DirectoryInfo di = new DirectoryInfo(buildPath);
         if (!di.Exists) di.Create();
-        BuildPipeline.BuildAssetBundles(bs.buildPath, BuildAssetBundleOptions.ChunkBasedCompression | BuildAssetBundleOptions.DeterministicAssetBundle, bs.buildTarget);
+        BuildPipeline.BuildAssetBundles(bs.buildPath, BuildAssetBundleOptions.UncompressedAssetBundle | BuildAssetBundleOptions.DeterministicAssetBundle, bs.buildTarget);
         AssetDatabase.RemoveUnusedAssetBundleNames();
         AssetDatabase.Refresh();
         GenerateAssetInfoJson();

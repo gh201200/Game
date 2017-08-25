@@ -1,20 +1,15 @@
 import "System"
 import "UnityEngine"
 
+local Main = { }
+
 require "common.common"
 require "common.globaldefine"
 local mCheckUpdate = require "common.checkupdate"
--- local Stopwatch = require "common.stopwatch"
+local Stopwatch = require "common.stopwatch"
+local mGameInfo = require "common.gameinfo":new(Main)
 
--- Stopwatch:Start()
+function Main.Start()
+	print(mGameInfo.canvas)
+end
 
--- AssetLoader.Instance:Load("prefabs/Canvas.prefab", AssetType.Prefab, function(obj)
-	-- local go = GameObject.Instantiate(obj)
-	-- print(go.name, Stopwatch:Stop())
--- end)
-
--- print(Application.persistentDataPath)
-
-mCheckUpdate:Check(function()
-	print("update complete!")
-end)

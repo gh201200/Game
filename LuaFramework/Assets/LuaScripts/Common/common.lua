@@ -124,7 +124,14 @@ function class(className, super)
 
             create(cls, ...)
         end
-        setmetatable(obj, { __index = table.copy(cls) })
+		local mt = table.copy(cls)
+        setmetatable(obj, { __index = mt,
+			__newindex = function(t, k, v)
+				print("new index ", t, k, v)
+				t.k = v
+				obj.k = v
+			end
+		})
         return obj
     end
 

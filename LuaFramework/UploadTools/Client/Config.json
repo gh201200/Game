@@ -1,7 +1,7 @@
 {
-	"Ip" : "192.168.0.102",
+	"Ip" : "192.168.0.163",
 	"Port" : 88,
 	"SendLength_EachTime" : 2097152,
-	"WorkDirectory"	: "C:/Users/Administrator/Desktop/Game/LuaFramework/Assets/Build",
+	"WorkDirectory"	: "D:/SocketPrograming/SocketPrograming/LuaFramework/Assets/Build",
 	"SendDirectory" : ".",
 }

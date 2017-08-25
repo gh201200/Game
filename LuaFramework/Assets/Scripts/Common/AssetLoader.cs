@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using SLua;
 
 [CustomLuaClass]
@@ -43,13 +44,19 @@ public class AssetLoader : MonoBehaviour
 
     private AssetBundleManifest manifest;
 
+    private System.Collections.Generic.List<string> loadingListSync = new System.Collections.Generic.List<string>();
+
     private Dictionary<string, AssetDesc> loadingDict = new Dictionary<string, AssetDesc>();
 
-    private Dictionary<string, List<Action<object>>> callbackDict = new Dictionary<string, List<Action<object>>>();
+    private Dictionary<string, AssetBundleRequest> mainAssetLoadingDict = new Dictionary<string, AssetBundleRequest>();
+
+    private Dictionary<string, System.Collections.Generic.List<Action<object>>> callbackDict = new Dictionary<string, System.Collections.Generic.List<Action<object>>>();
 
     private Dictionary<string, object> cacheDict = new Dictionary<string, object>();
 
-    private Queue<string> callbackToRemoveQue = new Queue<string>();
+    private Dictionary<string, BundleDes> abTemp = new Dictionary<string, BundleDes>();
+
+    private Queue<string> abUnloadQue = new Queue<string>();
 
     private bool ready = true;
 
@@ -60,7 +67,11 @@ public class AssetLoader : MonoBehaviour
     {
         get
         {
-            if (_instance == null) _instance = Root.Instance.gameObject.AddComponent<AssetLoader>();
+            if (_instance == null)
+            {
+                _instance = Root.Instance.gameObject.AddComponent<AssetLoader>();
+                print(_instance.Manifest.name);
+            }
             return _instance;
         }
     }
@@ -83,8 +94,12 @@ public class AssetLoader : MonoBehaviour
                     return null;
                 }
                 byte[] buffer = File.ReadAllBytes(path);
-                AssetBundle ab = AssetBundle.LoadFromMemory(buffer);
-                manifest = ab.LoadAsset("AssetBundleManifest") as AssetBundleManifest;
+                if (manifest == null)
+                {
+                    AssetBundle ab = AssetBundle.LoadFromMemory(buffer);
+                    manifest = ab.LoadAsset("AssetBundleManifest") as AssetBundleManifest;
+                    ab.Unload(false);
+                }
             }
             return manifest;
         }
@@ -95,8 +110,10 @@ public class AssetLoader : MonoBehaviour
         cacheDict = new Dictionary<string, object>();
     }
 
-    public void Load(string file, AssetType at, Action<object> callback)
+    public void LoadAsync(string file, AssetType at, Action<object> callback, Action<double> progress = null)
     {
+        AssetDesc des = new AssetDesc(file, at);
+        des.OnProgress = progress;
         if (cacheDict.ContainsKey(file))
         {
             object obj = cacheDict[file];
@@ -108,9 +125,70 @@ public class AssetLoader : MonoBehaviour
         cacheDict.Add(file, temp);
         callback(temp);
 #else
-        if (!loadingDict.ContainsKey(file)) loadingDict.Add(file, new AssetDesc(file, at));
-        if (!callbackDict.ContainsKey(file)) callbackDict.Add(file, new List<Action<object>>());
+        if (!loadingDict.ContainsKey(file))
+        {
+            loadingDict.Add(file, des);
+            foreach (string str in des.Dependencies)
+            {
+                if (!abTemp.ContainsKey(str))
+                {
+                    string fullPath = Config.AssetPath + str.Substring(4);
+                    AssetBundleCreateRequest request = AssetBundle.LoadFromFileAsync(fullPath);
+                    abTemp.Add(str, new BundleDes(request, fullPath));
+                }
+            }
+        }
+        if (!callbackDict.ContainsKey(file)) callbackDict.Add(file, new System.Collections.Generic.List<Action<object>>());
         callbackDict[file].Add(callback);
+#endif
+    }
+
+    public object Load(string file, AssetType at)
+    {
+        AssetDesc des = new AssetDesc(file, at);
+        if (cacheDict.ContainsKey(des.RelativePath))
+        {
+            object obj = cacheDict[des.RelativePath];
+            return obj;
+        }
+#if DEBUG_MODE
+        object temp = UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Res/" + file, GameUtil.GetAssetType(at));
+        cacheDict.Add(des.RelativePath, temp);
+        return temp;
+#else
+        if (!loadingListSync.Contains(des.RelativePath)) loadingListSync.Add(des.RelativePath);
+        object temp = null;
+        //加载所有依赖
+        string[] dependencies = Manifest.GetDirectDependencies(des.AssetBundleTag);
+        AssetBundle[] array = new AssetBundle[dependencies.Length + 1];
+        int index = 0;
+        foreach (string str in dependencies)
+        {
+            string fullPath = Config.AssetPath + str.Substring(4);
+            AssetBundle ab = AssetBundle.LoadFromFile(fullPath);
+            array[index] = ab;
+            index++;
+        }
+        //加载目标AssetBundle
+        AssetBundle aa = AssetBundle.LoadFromFile(des.FullPath);
+        array[index] = aa;
+        //从目标AssetBundle中加载资源
+        temp = aa.LoadAsset(des.AssetName, GameUtil.GetAssetType(des.AssetType));
+        cacheDict.Add(des.RelativePath, temp);
+        foreach (AssetBundle t in array)
+        {
+            t.Unload(false);
+        }
+        if (loadingListSync.Contains(des.RelativePath)) loadingListSync.Remove(des.RelativePath);
+        if (callbackDict.ContainsKey(file))
+        {
+            foreach (var act in callbackDict[file])
+            {
+                act(temp);
+            }
+            callbackDict[file] = new List<Action<object>>();
+        }
+        return temp;
 #endif
     }
 
@@ -128,29 +206,29 @@ public class AssetLoader : MonoBehaviour
         {
             //异步加载所有依赖
             string[] dependencies = Manifest.GetDirectDependencies(des.AssetBundleTag);
-            AssetBundleCreateRequest[] array = new AssetBundleCreateRequest[dependencies.Length + 1];
+            Dictionary<string, AssetBundleCreateRequest> array = new Dictionary<string, AssetBundleCreateRequest>();
             int index = 0;
             foreach (string str in dependencies)
             {
                 string fullPath = Config.AssetPath + str.Substring(4);
                 AssetBundleCreateRequest request = AssetBundle.LoadFromFileAsync(fullPath);
-                array[index] = request;
+                array.Add(str, request);
                 index++;
             }
             //等待依赖加载完成
-            for (int i = 0; i < index; i++)
+            foreach (var obj in array.Values)
             {
-                while (!array[i].isDone) yield return null;
+                yield return obj;
                 curIndex++;
             }
             //异步加载目标AssetBundle
             AssetBundleCreateRequest re = AssetBundle.LoadFromFileAsync(des.FullPath);
-            array[index] = re;
-            while (!re.isDone) yield return null;
+            array.Add(des.RelativePath.ToLower(), re);
+            yield return re;
             curIndex++;
             //从目标AssetBundle中异步加载资源
             AssetBundleRequest abre = re.assetBundle.LoadAssetAsync(des.AssetName, GameUtil.GetAssetType(des.AssetType));
-            while (!abre.isDone) yield return null;
+            yield return abre;
             des.Asset = abre.asset;
             //添加资源到缓存
             if (!cacheDict.ContainsKey(des.RelativePath)) cacheDict.Add(des.RelativePath, des.Asset);
@@ -164,9 +242,10 @@ public class AssetLoader : MonoBehaviour
             {
                 callback(des.Asset);
             }
-            foreach (AssetBundleCreateRequest t in array)
+            callbackDict[des.RelativePath] = new System.Collections.Generic.List<Action<object>>();
+            foreach (var t in array)
             {
-                t.assetBundle.Unload(false);
+                t.Value.assetBundle.Unload(false);
             }
         }
         loadingDict = new Dictionary<string, AssetDesc>();
@@ -175,16 +254,223 @@ public class AssetLoader : MonoBehaviour
 
     private void Update()
     {
-        //if (Progress < 1) print(Progress);
-
+        //print(Progress + "    " + curIndex + "/" + totalIndex);
         //print(curIndex + "/" + totalIndex);
 
-        while (callbackToRemoveQue.Count > 0) callbackDict.Remove(callbackToRemoveQue.Dequeue());
+        //while (callbackToRemoveQue.Count > 0) callbackDict.Remove(callbackToRemoveQue.Dequeue());
 
-        if (!ready) return;
-        if (loadingDict.Count > 0)
+        //if (!ready) return;
+        //if (loadingDict.Count > 0)
+        //{
+        //    StartCoroutine(CoLoad());
+        //}
+
+        if (loadingDict.Count <= 0) return;
+
+#if PerFile
+        foreach (var p in loadingDict)
         {
-            StartCoroutine(CoLoad());
+            if (mainAssetLoadingDict.ContainsKey(p.Key)) continue;
+            foreach (var tag in p.Value.Dependencies)
+            {
+                if (p.Value.LoadedDependencies.Contains(tag)) continue;
+                if (abTemp.ContainsKey(tag))
+                {
+                    if (abTemp[tag].assetBundleReq.isDone)
+                    {
+                        p.Value.FinishNum++;
+                        p.Value.LoadedDependencies.Add(tag);
+                        abTemp[tag].AddRefrenceCount();
+                    }
+                }
+                else
+                {
+                    Debug.LogError("dependence assets must preloaded!");
+                }
+            }
+            if (abTemp.ContainsKey(p.Key) && abTemp[p.Key].assetBundleReq.isDone)
+            {
+                if (!mainAssetLoadingDict.ContainsKey(p.Key))
+                {
+                    p.Value.FinishNum++;
+                    var temp = abTemp[p.Key].assetBundleReq.assetBundle.LoadAssetAsync(p.Value.AssetName, GameUtil.GetAssetType(p.Value.AssetType));
+                    mainAssetLoadingDict.Add(p.Key, temp);
+                    abTemp[p.Key].AddRefrenceCount();
+                }
+            }
+            else
+            {
+                if (p.Value.FinishNum >= p.Value.Dependencies.Length && !abTemp.ContainsKey(p.Key))
+                {
+                    var req = AssetBundle.LoadFromFileAsync(p.Value.FullPath);
+                    abTemp.Add(p.Key, new BundleDes(req, p.Value.FullPath));
+                }
+            }
+            p.Value.Progress = (float)p.Value.FinishNum / (p.Value.Dependencies.Length + 1);
+        }
+
+        foreach (var p in mainAssetLoadingDict)
+        {
+            if (p.Value.isDone)
+            {
+                if (!cacheDict.ContainsKey(p.Key)) cacheDict.Add(p.Key, p.Value.asset);
+                if (callbackDict.ContainsKey(p.Key))
+                {
+                    foreach (var cb in callbackDict[p.Key])
+                    {
+                        cb(p.Value.asset);
+                    }
+                    callbackDict[p.Key] = new List<Action<object>>();
+                }
+                else
+                {
+                    Debug.LogError(p.Key + " -> callback is none!");
+                }
+                abTemp[p.Key].ReduceRefrenceCount();
+                if (abTemp[p.Key].refrenceCount <= 0) abUnloadQue.Enqueue(p.Key);
+                foreach (var key in loadingDict[p.Key].Dependencies)
+                {
+                    abTemp[key].ReduceRefrenceCount();
+                    if (abTemp[key].refrenceCount <= 0) abUnloadQue.Enqueue(key);
+                }
+            }
+        }
+
+        while (abUnloadQue.Count > 0)
+        {
+            var str = abUnloadQue.Dequeue();
+            if (abTemp.ContainsKey(str))
+            {
+                abTemp[str].assetBundleReq.assetBundle.Unload(false);
+                abTemp.Remove(str);
+                //Debug.Log("remove from abTemp -> " + str);
+            }
+            if (loadingDict.ContainsKey(str))
+            {
+                loadingDict.Remove(str);
+                //Debug.Log("remove from loadingDict -> " + str);
+            }
+            if (mainAssetLoadingDict.ContainsKey(str))
+            {
+                mainAssetLoadingDict.Remove(str);
+                //Debug.Log("remove from mainAssetLoadingDict -> " + str);
+            }
+        }
+#else
+        foreach (var p in loadingDict)
+        {
+            if (mainAssetLoadingDict.ContainsKey(p.Key)) continue;
+            foreach (var tag in p.Value.Dependencies)
+            {
+                if (p.Value.LoadedDependencies.Contains(tag)) continue;
+                if (abTemp.ContainsKey(tag))
+                {
+                    if (abTemp[tag].assetBundleReq.isDone)
+                    {
+                        p.Value.FinishNum++;
+                        p.Value.LoadedDependencies.Add(tag);
+                        abTemp[tag].AddRefrenceCount();
+                    }
+                }
+                else
+                {
+                    Debug.LogError("dependence assets must preloaded!");
+                }
+            }
+            if (abTemp.ContainsKey(p.Value.AssetBundleTag) && abTemp[p.Value.AssetBundleTag].assetBundleReq.isDone)
+            {
+                if (!mainAssetLoadingDict.ContainsKey(p.Key))
+                {
+                    p.Value.FinishNum++;
+                    var temp = abTemp[p.Value.AssetBundleTag].assetBundleReq.assetBundle.LoadAssetAsync(p.Value.AssetName, GameUtil.GetAssetType(p.Value.AssetType));
+                    mainAssetLoadingDict.Add(p.Key, temp);
+                    abTemp[p.Value.AssetBundleTag].AddRefrenceCount();
+                }
+            }
+            else
+            {
+                if (p.Value.FinishNum >= p.Value.Dependencies.Length && !abTemp.ContainsKey(p.Value.AssetBundleTag))
+                {
+                    var req = AssetBundle.LoadFromFileAsync(p.Value.FullPath);
+                    abTemp.Add(p.Value.AssetBundleTag, new BundleDes(req, p.Value.FullPath));
+                }
+            }
+            p.Value.Progress = (float)p.Value.FinishNum / (p.Value.Dependencies.Length + 1);
+        }
+
+        foreach (var p in mainAssetLoadingDict)
+        {
+            if (p.Value.isDone)
+            {
+                if (!cacheDict.ContainsKey(p.Key)) cacheDict.Add(p.Key, p.Value.asset);
+                if (callbackDict.ContainsKey(p.Key))
+                {
+                    foreach (var cb in callbackDict[p.Key])
+                    {
+                        cb(p.Value.asset);
+                    }
+                    callbackDict[p.Key] = new List<Action<object>>();
+                }
+                else
+                {
+                    Debug.LogError(p.Key + " -> callback is none!");
+                }
+                abUnloadQue.Enqueue(p.Key);
+                string tag = GameUtil.GetAssetBundleTag("Assets/Res/" + p.Key);
+                abTemp[tag].ReduceRefrenceCount();
+                if (abTemp[tag].refrenceCount <= 0) abUnloadQue.Enqueue(tag);
+                foreach (var key in loadingDict[p.Key].Dependencies)
+                {
+                    abTemp[key].ReduceRefrenceCount();
+                    if (abTemp[key].refrenceCount <= 0) abUnloadQue.Enqueue(key);
+                }
+            }
+        }
+
+        while (abUnloadQue.Count > 0)
+        {
+            var str = abUnloadQue.Dequeue();
+            if (abTemp.ContainsKey(str))
+            {
+                abTemp[str].assetBundleReq.assetBundle.Unload(false);
+                abTemp.Remove(str);
+                //Debug.Log("remove from abTemp -> " + str);
+            }
+            if (loadingDict.ContainsKey(str))
+            {
+                loadingDict.Remove(str);
+                //Debug.Log("remove from loadingDict -> " + str);
+            }
+            if (mainAssetLoadingDict.ContainsKey(str))
+            {
+                mainAssetLoadingDict.Remove(str);
+                //Debug.Log("remove from mainAssetLoadingDict -> " + str);
+            }
+        }
+#endif
+    }
+
+    private class BundleDes
+    {
+        public string fullName;
+        public AssetBundleCreateRequest assetBundleReq;
+        public int refrenceCount;
+
+        public void AddRefrenceCount()
+        {
+            refrenceCount++;
+        }
+
+        public void ReduceRefrenceCount()
+        {
+            refrenceCount--;
+        }
+
+        public BundleDes(AssetBundleCreateRequest req, string fullName)
+        {
+            this.assetBundleReq = req;
+            this.fullName = fullName;
+            refrenceCount = 0;
         }
     }
 }
