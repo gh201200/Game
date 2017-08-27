@@ -425,7 +425,7 @@ public class GameEditor
             path = path.Replace('/', '\\');
             string[] files = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
             Dictionary<string, object> dic = new Dictionary<string, object>();
-            List<object> list = new List<object>();
+            Dictionary<string, object> filesDic = new Dictionary<string, object>();
             int fileCount = 0;
             long totalSize = 0;
             foreach (string file in files)
@@ -450,7 +450,7 @@ public class GameEditor
                 item.Add("path", filePath);
                 item.Add("md5", md5);
                 item.Add("size", size);
-                list.Add(item);
+                filesDic.Add(filePath, item);
 
                 EditorUtility.DisplayProgressBar("generate AssetsInfo.json", filePath, (float)fileCount / files.Length * 2);
             }
@@ -460,7 +460,7 @@ public class GameEditor
             infoDict.Add("resVertion", bs.resVersion.ToString());
             infoDict.Add("generateTime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
             dic.Add("info", infoDict);
-            dic.Add("files", list);
+            dic.Add("files", filesDic);
             File.WriteAllText(path + "AssetsInfo.json", Json.Serialize(dic));
         }
         catch (System.Exception ex)

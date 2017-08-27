@@ -16,3 +16,7 @@ AnimationType = {
 	T2B			=		"T2B",
 	B2T			=		"B2T",
 }
+
+EventType = {
+	Test = 1,
+}

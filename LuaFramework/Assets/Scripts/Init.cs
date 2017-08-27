@@ -7,6 +7,7 @@ public class Init : MonoBehaviour
 {
     private int index = 10;
     public float angle = 10;
+    private Sprite image = null;
 
     private void Start()
     {
@@ -17,15 +18,15 @@ public class Init : MonoBehaviour
         {
             instance.DoFile("Main");
         });
+
+        AssetLoader.Instance.LoadAsync("Textures/Loading2.png", AssetType.Sprite, arg =>
+        {
+            image = arg as Sprite;
+        });
     }
 
     private void OnGUI()
     {
-        Sprite image = null;
-        AssetLoader.Instance.LoadAsync("Textures/Loading.png", AssetType.Sprite, arg =>
-        {
-            image = arg as Sprite;
-        });
         if (image == null) return;
         GUIUtility.RotateAroundPivot(Time.time * angle, new Vector2(Screen.width / 2f, Screen.height / 2f));
         GUI.DrawTexture(new Rect(new Vector2(Screen.width / 2f - 50, Screen.height / 2f - 50), new Vector2(100, 100)), image.texture);

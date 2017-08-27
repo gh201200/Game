@@ -25,14 +25,14 @@ public enum AssetType
 [CustomLuaClass]
 public class AssetLoader : MonoBehaviour
 {
-    public float Progress
+    public double Progress
     {
         get
         {
             if (totalIndex > 0)
             {
                 double p = (double)curIndex / totalIndex;
-                return (float)Math.Round(p, 2);
+                return Math.Round(p, 2);
             }
             return 0f;
         }
@@ -60,8 +60,8 @@ public class AssetLoader : MonoBehaviour
 
     private bool ready = true;
 
-    private int curIndex = 0;
-    private int totalIndex = 0;
+    private long curIndex = 0;
+    private long totalIndex = 0;
 
     public static AssetLoader Instance
     {
@@ -70,7 +70,7 @@ public class AssetLoader : MonoBehaviour
             if (_instance == null)
             {
                 _instance = Root.Instance.gameObject.AddComponent<AssetLoader>();
-                print(_instance.Manifest.name);
+                //print(_instance.Manifest.name);
             }
             return _instance;
         }
@@ -113,6 +113,11 @@ public class AssetLoader : MonoBehaviour
     public void LoadAsync(string file, AssetType at, Action<object> callback, Action<double> progress = null)
     {
         AssetDesc des = new AssetDesc(file, at);
+        if (!File.Exists(des.ProjectPath))
+        {
+            Debug.LogError(des.ProjectPath + " is not exists!");
+            return;
+        }
         des.OnProgress = progress;
         if (cacheDict.ContainsKey(file))
         {
@@ -128,6 +133,7 @@ public class AssetLoader : MonoBehaviour
         if (!loadingDict.ContainsKey(file))
         {
             loadingDict.Add(file, des);
+            totalIndex++;
             foreach (string str in des.Dependencies)
             {
                 if (!abTemp.ContainsKey(str))
@@ -136,6 +142,8 @@ public class AssetLoader : MonoBehaviour
                     AssetBundleCreateRequest request = AssetBundle.LoadFromFileAsync(fullPath);
                     abTemp.Add(str, new BundleDes(request, fullPath));
                 }
+                abTemp[str].AddRefrenceCount();
+                totalIndex++;
             }
         }
         if (!callbackDict.ContainsKey(file)) callbackDict.Add(file, new System.Collections.Generic.List<Action<object>>());
@@ -265,6 +273,16 @@ public class AssetLoader : MonoBehaviour
         //    StartCoroutine(CoLoad());
         //}
 
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            Debug.Log("--------------------------------");
+            if (abTemp.Count != 0) foreach (var k in abTemp.Keys) Debug.Log(k);
+            else Debug.Log("abTemp's count is 0");
+            Debug.Log("--------------------------------");
+        }
+
+        if (Input.GetKey(KeyCode.W)) print(Progress * 100 + "%" + "\t" + curIndex + "/" + totalIndex);
+
         if (loadingDict.Count <= 0) return;
 
 #if PerFile
@@ -280,12 +298,12 @@ public class AssetLoader : MonoBehaviour
                     {
                         p.Value.FinishNum++;
                         p.Value.LoadedDependencies.Add(tag);
-                        abTemp[tag].AddRefrenceCount();
+                        curIndex++;
                     }
                 }
                 else
                 {
-                    Debug.LogError("dependence assets must preloaded!");
+                    Debug.LogError("dependence assets must preload!" + " assets: \n" + p.Value.RelativePath + "\ndependecies: \n" + tag);
                 }
             }
             if (abTemp.ContainsKey(p.Key) && abTemp[p.Key].assetBundleReq.isDone)
@@ -296,6 +314,7 @@ public class AssetLoader : MonoBehaviour
                     var temp = abTemp[p.Key].assetBundleReq.assetBundle.LoadAssetAsync(p.Value.AssetName, GameUtil.GetAssetType(p.Value.AssetType));
                     mainAssetLoadingDict.Add(p.Key, temp);
                     abTemp[p.Key].AddRefrenceCount();
+                    curIndex++;
                 }
             }
             else
@@ -369,12 +388,12 @@ public class AssetLoader : MonoBehaviour
                     {
                         p.Value.FinishNum++;
                         p.Value.LoadedDependencies.Add(tag);
-                        abTemp[tag].AddRefrenceCount();
+                        curIndex++;
                     }
                 }
                 else
                 {
-                    Debug.LogError("dependence assets must preloaded!");
+                    Debug.LogError("dependence assets must preload!" + " assets: \n" + p.Value.RelativePath + "\ndependecies: \n" + tag);
                 }
             }
             if (abTemp.ContainsKey(p.Value.AssetBundleTag) && abTemp[p.Value.AssetBundleTag].assetBundleReq.isDone)
@@ -385,6 +404,7 @@ public class AssetLoader : MonoBehaviour
                     var temp = abTemp[p.Value.AssetBundleTag].assetBundleReq.assetBundle.LoadAssetAsync(p.Value.AssetName, GameUtil.GetAssetType(p.Value.AssetType));
                     mainAssetLoadingDict.Add(p.Key, temp);
                     abTemp[p.Value.AssetBundleTag].AddRefrenceCount();
+                    curIndex++;
                 }
             }
             else
@@ -416,7 +436,7 @@ public class AssetLoader : MonoBehaviour
                     Debug.LogError(p.Key + " -> callback is none!");
                 }
                 abUnloadQue.Enqueue(p.Key);
-                string tag = GameUtil.GetAssetBundleTag("Assets/Res/" + p.Key);
+                string tag = AssetDesc.GetAssetBundleTag(p.Key);
                 abTemp[tag].ReduceRefrenceCount();
                 if (abTemp[tag].refrenceCount <= 0) abUnloadQue.Enqueue(tag);
                 foreach (var key in loadingDict[p.Key].Dependencies)

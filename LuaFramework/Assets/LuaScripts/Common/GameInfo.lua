@@ -7,7 +7,10 @@ function GameInfo:ctor(callback)
 			self.canvas = GameObject.Instantiate(obj)
 			self.canvas.name = "Canvas"
 			callback.Start()
-		end, nil)
+		end,
+		function(p)
+			print("canvas load: " .. p * 100 .. "%")
+		end)
 	end
 end
 

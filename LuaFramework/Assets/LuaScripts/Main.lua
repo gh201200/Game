@@ -6,14 +6,14 @@ local Main = { }
 require "common.common"
 require "common.globaldefine"
 local mCheckUpdate = require "common.checkupdate"
-local Stopwatch = require "common.stopwatch"
-local mGameInfo = require "common.gameinfo".new(Main)
+local mStopwatch = require "common.stopwatch"
+local mEventManager = require "Common.EventManager"
+-- local mGameInfo = require "common.gameinfo".new(Main)
 
-local sw = Stopwatch.new()
-sw:Start()
+-- function Main.Start()
 
-function Main.Start()
-	print(mGameInfo.canvas)
-	print(sw:Stop())
-end
+-- end
 
+mCheckUpdate:Check(function()
+	print("check update complete!")
+end)

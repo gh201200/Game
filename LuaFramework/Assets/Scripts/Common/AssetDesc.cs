@@ -41,6 +41,11 @@ public class AssetDesc
     public string FullPath { get; private set; }
 
     /// <summary>
+    /// 文件在工程中的绝对路径
+    /// </summary>
+    public string ProjectPath { get; private set; }
+
+    /// <summary>
     /// 资源类型
     /// </summary>
     public AssetType AssetType { get; private set; }
@@ -87,17 +92,38 @@ public class AssetDesc
     /// </summary>
     public string[] Dependencies { get; private set; }
 
+    public static string GetEditorPath(string path)
+    {
+        return "Assets/Res/" + path; ;
+    }
+
+    public static string GetProjectPath(string path)
+    {
+        return Application.dataPath + "/Res/" + path;
+    }
+
+    public static string GetAssetBundleTag(string path)
+    {
+        return GameUtil.GetAssetBundleTag(GetEditorPath(path));
+    }
+
+    public static string GetFullPath(string path)
+    {
+        return Config.AssetPath + GetAssetBundleTag(path).Substring(4);
+    }
+
     public AssetDesc(string path, AssetType at)
     {
         Progress = 0f;
         Success = false;
-        EditorPath = "Assets/Res/" + path;
+        EditorPath = GetEditorPath(path);
+        ProjectPath = GetProjectPath(path);
         AssetName = Path.GetFileName(path);
-        AssetBundleTag = GameUtil.GetAssetBundleTag(EditorPath);
+        AssetBundleTag = GetAssetBundleTag(path);
         RelativePath = path;
         int index = RelativePath.LastIndexOf('.');
         RelativePathWithoutSuffix = "res/" + RelativePath.Substring(0, index).ToLower() + ".bytes";
-        FullPath = Config.AssetPath + AssetBundleTag.Substring(4);
+        FullPath = GetFullPath(path);
         AssetType = at;
         Dependencies = AssetLoader.Instance.Manifest.GetDirectDependencies(AssetBundleTag);
         LoadedDependencies = new HashSet<string>();

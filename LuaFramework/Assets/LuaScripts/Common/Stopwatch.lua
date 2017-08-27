@@ -1,4 +1,4 @@
-local Stopwatch = class("Stopwatch")
+local Stopwatch = class("Common.Stopwatch")
 
 function Stopwatch:ctor()
 	print("Stopwatch ctor")
@@ -15,4 +15,4 @@ function Stopwatch:Stop()
 	return self.sw.ElapsedMilliseconds .. "ms"
 end
 
-return Stopwatch
+return Stopwatch.new()

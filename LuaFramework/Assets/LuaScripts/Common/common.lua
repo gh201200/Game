@@ -34,6 +34,15 @@ function table.containsKey(t, key)
     return false;
 end
 
+function table.containsValue(t, v)
+	for _, va in pairs(t) do
+		if va == v then
+			return true
+		end
+	end
+	return false
+end
+
 do
     local _tostring = tostring
     function table.tostring(t, tab)
