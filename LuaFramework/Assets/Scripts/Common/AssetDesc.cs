@@ -109,7 +109,7 @@ public class AssetDesc
 
     public static string GetFullPath(string path)
     {
-        return Config.AssetPath + GetAssetBundleTag(path).Substring(4);
+        return Config.AssetPath + GetAssetBundleTag(path);
     }
 
     public AssetDesc(string path, AssetType at)

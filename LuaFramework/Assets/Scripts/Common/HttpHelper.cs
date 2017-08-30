@@ -7,6 +7,18 @@ using UnityEngine;
 using SLua;
 
 [CustomLuaClass]
+public class AsyncArgs
+{
+    public AsyncArgs() { }
+
+    public long cur = 0;
+    public long total = 0;
+    public double progress = 0;
+    public bool isDone = false;
+    public object arg = null;
+}
+
+[CustomLuaClass]
 public class HttpHelper : MonoBehaviour
 {
     private static HttpHelper _instance;
@@ -28,26 +40,27 @@ public class HttpHelper : MonoBehaviour
     /// <param name="fileName"></param>
     /// <param name="progress"></param>
     /// <param name="complete"></param>
-    public void DownLoadFile(string url, string fileName, Action<float, float> progress, Action complete)
+    public void DownLoadFile(string url, string fileName, Action<long, long> progress, Action complete)
     {
         try
         {
-            print("start download");
+            //print("start download");
+            GameUtil.CreateDirectory(fileName);
             download = true;
             WebClient wc = new WebClient();
             FileStream fs = new FileStream(fileName, FileMode.Append);
             Stream s = wc.OpenRead(url);
             int length = 0;
-            float curSize = 0f;
-            float totalSize = GetRemoteHTTPFileSize(url) / 1024f / 1024f;
-            print("total size: " + totalSize + "M");
+            long curSize = 0;
+            long totalSize = GetRemoteHTTPFileSize(url);
+            //print("total size: " + totalSize + "M");
             byte[] buffer = new byte[1024 * 1024];
             while (true)
             {
                 length = s.Read(buffer, 0, buffer.Length);
                 if (length <= 0) break;
                 fs.Write(buffer, 0, length);
-                curSize += length / 1024f / 1024f;
+                curSize += length;
                 if (progress != null)
                 {
                     progress(curSize, totalSize);
@@ -58,6 +71,7 @@ public class HttpHelper : MonoBehaviour
                     s.Close();
                     wc.Dispose();
                     UnityEngine.Debug.LogError("意外中止！");
+                    File.Delete(fileName);
                     return;
                 }
             }
@@ -68,7 +82,7 @@ public class HttpHelper : MonoBehaviour
         }
         catch (Exception e)
         {
-            UnityEngine.Debug.LogError(e);
+            UnityEngine.Debug.LogError(e + "\n" + url);
         }
     }
 
@@ -77,15 +91,21 @@ public class HttpHelper : MonoBehaviour
     /// </summary>
     /// <param name="url"></param>
     /// <param name="fileName"></param>
-    /// <param name="progress"></param>
-    /// <param name="complete"></param>
-    public void DownLoadFileAsync(string url, string fileName, Action<float, float> progress, Action complete)
+    public AsyncArgs DownLoadFileAsync(string url, string fileName)
     {
+        AsyncArgs arg = new AsyncArgs();
         Action temp = () =>
         {
-            DownLoadFile(url, fileName, progress, complete);
+            DownLoadFile(url, fileName, (cur, total) =>
+            {
+                arg.cur = cur;
+                arg.total = total;
+                arg.progress = Math.Round((double)cur / total, 2);
+                arg.isDone = false;
+            }, () => arg.isDone = true);
         };
         temp.BeginInvoke(null, null);
+        return arg;
     }
 
     /// <summary>

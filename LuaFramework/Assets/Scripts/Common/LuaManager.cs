@@ -17,7 +17,6 @@ public class LuaManager : MonoBehaviour
             if (_instance == null)
             {
                 _instance = Root.Instance.gameObject.AddComponent<LuaManager>();
-                LuaState.loaderDelegate += _instance.Load;
                 _instance.ready = false;
             }
             return _instance;
@@ -32,6 +31,7 @@ public class LuaManager : MonoBehaviour
     public static Action OnUpdateEvent;
     public static Action OnFixedUpdateEvent;
     public static Action OnLateUpdateEvent;
+    public static Action OnDestroyEvent;
 
     public object DoFile(string fileName)
     {
@@ -103,7 +103,8 @@ public class LuaManager : MonoBehaviour
         luaSvr.init(progress, () =>
         {
             ready = true;
-            luaState = luaSvr.luaState;
+            luaState = LuaSvr.mainState;
+            luaState.loaderDelegate += Load;
             if (complete != null) complete(this);
         });
     }
@@ -135,18 +136,28 @@ public class LuaManager : MonoBehaviour
     private void Update()
     {
         if (!ready) return;
-        if (OnUpdateEvent != null) OnUpdateEvent();
+        if (OnUpdateEvent != null)
+            OnUpdateEvent();
     }
 
     private void FixedUpdate()
     {
         if (!ready) return;
-        if (OnFixedUpdateEvent != null) OnFixedUpdateEvent();
+        if (OnFixedUpdateEvent != null)
+            OnFixedUpdateEvent();
     }
 
     private void LateUpdate()
     {
         if (!ready) return;
-        if (OnLateUpdateEvent != null) OnLateUpdateEvent();
+        if (OnLateUpdateEvent != null)
+            OnLateUpdateEvent();
+    }
+
+    private void OnDestroy()
+    {
+        if (!ready) return;
+        if (OnDestroyEvent != null)
+            OnDestroyEvent();
     }
 }

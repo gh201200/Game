@@ -5,6 +5,7 @@ using SLua;
 [CustomLuaClass]
 public class Config
 {
+    public static bool test = false;
     /// <summary>
     /// 资源加载路径根目录
     /// </summary>
@@ -13,12 +14,12 @@ public class Config
         get
         {
 #if DEBUG_MODE
-            return Application.dataPath + "/Res/";
+            return Application.dataPath + "/";
 #else
 #if LOADABFROMPROJECT
-            return Application.dataPath + "/Build/res/";
+            return Application.dataPath + "/Build/";
 #else
-            return Application.persistentDataPath + "/res/";
+            return Application.persistentDataPath + "/";
 #endif
 #endif
         }

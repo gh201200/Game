@@ -10,6 +10,7 @@ using System.IO.Compression;
 using Common;
 using ICSharpCode.SharpZipLib.BZip2;
 
+[SLua.CustomLuaClass]
 public class GameUtil : MonoBehaviour
 {
     #region MD5

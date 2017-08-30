@@ -47,11 +47,7 @@ do
     local _tostring = tostring
     function table.tostring(t, tab)
         local str = str or ""
-        if not t then
-            print("nil")
-            return str
-        end
-
+		
         tab = tab or "        "
         str = str .. "{\n"
 
@@ -114,35 +110,35 @@ string.split = function(s, c)
     return t
 end
 
-function class(className, super)
-    local cls = { }
-    cls.name = className
-    cls.super = super
-    cls.new = function(...)
-        local obj = { }
-        do
-            local create
-            create = function(c, ...)
-                if c.super then
-                    create(c.super, ...)
-                end
-                if c.ctor then
-                    c.ctor(...)
-                end
-            end
+-- function class(className, super)
+    -- local cls = { }
+    -- cls.name = className
+    -- cls.super = super
+    -- cls.new = function(...)
+        -- local obj = { }
+        -- do
+            -- local create
+            -- create = function(c, ...)
+                -- if c.super then
+                    -- create(c.super, ...)
+                -- end
+                -- if c.ctor then
+                    -- c.ctor(...)
+                -- end
+            -- end
 
-            create(cls, ...)
-        end
-        setmetatable(obj, { __index = table.copy(cls) })
-        return obj
-    end
+            -- create(cls, ...)
+        -- end
+        -- setmetatable(obj, { __index = table.copy(cls) })
+        -- return obj
+    -- end
 
-    if super then
-        setmetatable(cls, { __index = table.copy(super) })
-    end
+    -- if super then
+        -- setmetatable(cls, { __index = table.copy(super) })
+    -- end
 
-    return cls
-end
+    -- return cls
+-- end
 
 
 local _class = { }

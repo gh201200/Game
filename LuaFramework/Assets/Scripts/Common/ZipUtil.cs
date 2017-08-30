@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using ICSharpCode.SharpZipLib.Zip;
 
+[SLua.CustomLuaClass]
 public class ZipUtil
 {
     /// <summary>
@@ -15,14 +16,23 @@ public class ZipUtil
     /// <param name="zipFile">创建压缩包的路径</param>
     /// <param name="packLevel">压缩级别(1-9)</param>
     /// <param name="passwd">密码</param>
-    public static void PackFileAsync(string file, string zipFile, Action<long, long> progress = null, Action complete = null, int packLevel = 6, string passwd = null)
+    public static AsyncArgs PackFileAsync(string file, string zipFile, int packLevel = 6, string passwd = null)
     {
+        AsyncArgs args = new AsyncArgs();
         Action temp = () =>
         {
-            PackFile(file, zipFile, progress, complete, packLevel, passwd);
+            PackFile(file, zipFile, (cur, total) =>
+            {
+                args.cur = cur;
+                args.total = total;
+                args.progress = Math.Round((double)cur / total, 2);
+                args.isDone = false;
+            }, () => args.isDone = true, packLevel, passwd);
         };
         temp.BeginInvoke(null, null);
+        return args;
     }
+
     /// <summary>
     /// 压缩单个文件
     /// </summary>
@@ -83,13 +93,21 @@ public class ZipUtil
     /// <param name="complete"></param>
     /// <param name="packLevel"></param>
     /// <param name="passwd"></param>
-    public static void PackDirectoryAsync(string dir, string zipFile, Action<long, long> progress = null, Action complete = null, int packLevel = 6, string passwd = null)
+    public static AsyncArgs PackDirectoryAsync(string dir, string zipFile, int packLevel = 6, string passwd = null)
     {
+        AsyncArgs args = new AsyncArgs();
         Action temp = () =>
         {
-            PackDirectory(dir, zipFile, progress, complete, packLevel, passwd);
+            PackDirectory(dir, zipFile, (cur, total) =>
+            {
+                args.cur = cur;
+                args.total = total;
+                args.progress = Math.Round((double)cur / total, 2);
+                args.isDone = false;
+            }, () => args.isDone = true, packLevel, passwd);
         };
         temp.BeginInvoke(null, null);
+        return args;
     }
 
     /// <summary>
@@ -172,13 +190,21 @@ public class ZipUtil
     /// <param name="progress"></param>
     /// <param name="complete"></param>
     /// <param name="passwd"></param>
-    public static void UnpackFileAsync(string dir, string zipFile, Action<long, long> progress = null, Action complete = null, string passwd = null)
+    public static AsyncArgs UnpackFileAsync(string dir, string zipFile, string passwd = null)
     {
+        AsyncArgs args = new AsyncArgs();
         Action temp = () =>
         {
-            UnpackFile(dir, zipFile, progress, complete, passwd);
+            UnpackFile(dir, zipFile, (cur, total) =>
+            {
+                args.cur = cur;
+                args.total = total;
+                args.progress = Math.Round((double)cur / total, 2);
+                args.isDone = false;
+            }, () => args.isDone = true, passwd);
         };
         temp.BeginInvoke(null, null);
+        return args;
     }
 
     /// <summary>

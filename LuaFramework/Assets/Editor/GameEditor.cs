@@ -96,7 +96,7 @@ public class GameEditor
         //    AssetDatabase.Refresh();
         //}
 
-        AssetDesc desc = new AssetDesc("Prefabs/Panel/LoginPanel.prefab", AssetType.Prefab);
+        AssetDesc desc = new AssetDesc("Mats/Mat.mat", AssetType.Prefab);
     }
 
     [MenuItem("Tool/BuildSetting", false, 1)]

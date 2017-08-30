@@ -1,7 +1,6 @@
 local Stopwatch = class("Common.Stopwatch")
 
 function Stopwatch:ctor()
-	print("Stopwatch ctor")
 	self.sw = Diagnostics.Stopwatch()
 end
 
