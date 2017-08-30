@@ -111,10 +111,12 @@ function CheckUpdate:Compare()
 	else
 		this.updateList = t_server.files
 	end
-	print("update:", this.updateList)
+	print("更新列表:", this.updateList)
 	if table.size(this.updateList) == 0 then
-		print("no update file!")
+		print("已是最新版本!")
+		compareFinish = true
 		this.needUpdate = false
+		compareFinish = true
 		File.Delete(this.json_server)
 		return
 	end
