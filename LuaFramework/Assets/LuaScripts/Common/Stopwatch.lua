@@ -1,7 +1,7 @@
 local Stopwatch = class("Common.Stopwatch")
 
 function Stopwatch:ctor()
-	self.sw = Diagnostics.Stopwatch()
+	self.sw = System.Diagnostics.Stopwatch()
 end
 
 function Stopwatch:Start()

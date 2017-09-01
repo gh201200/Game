@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using System.IO;
 using System.Text;
 
+[SLua.CustomLuaClass]
 public class EncryptUtil
 {
     public static byte[] rgbIV = { 0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF };
@@ -96,36 +97,40 @@ public class EncryptUtil
 
     public static byte[] EncryptBytes(byte[] data, string passwd)
     {
-        using (MemoryStream fout = new MemoryStream())
+        var ins = new MemoryStream(data);
+        var outs = new MemoryStream();
+        var cs = new CryptoStream(outs, GetEncryptoTransform(passwd), CryptoStreamMode.Write);
+        var len = 0;
+        var buffer = new byte[1024 * 512];
+        while (true)
         {
-            using (CryptoStream cs = new CryptoStream(fout, GetEncryptoTransform(passwd), CryptoStreamMode.Write))
-            {
-                cs.Write(data, 0, data.Length);
-                return fout.ToArray();
-            }
+            len = ins.Read(buffer, 0, buffer.Length);
+            if (len <= 0) break;
+            cs.Write(buffer, 0, len);
         }
+        cs.Close();
+        outs.Close();
+        ins.Close();
+        return outs.ToArray();
     }
 
     public static byte[] DecryptBytes(byte[] data, string passwd)
     {
-        using (MemoryStream fin = new MemoryStream(data))
+        var ins = new MemoryStream(data);
+        var outs = new MemoryStream();
+        var cs = new CryptoStream(outs, GetDecryptoTransform(passwd), CryptoStreamMode.Write);
+        var len = 0;
+        var buffer = new byte[1024 * 512];
+        while (true)
         {
-            using (MemoryStream fout = new MemoryStream())
-            {
-                using (CryptoStream cs = new CryptoStream(fin, GetDecryptoTransform(passwd), CryptoStreamMode.Read))
-                {
-                    byte[] buffer = new byte[1024 * 1024];
-                    int len = 0;
-                    while (true)
-                    {
-                        len = cs.Read(buffer, 0, buffer.Length);
-                        if (len <= 0) break;
-                        fout.Write(buffer, 0, len);
-                    }
-                    return fout.ToArray();
-                }
-            }
+            len = ins.Read(buffer, 0, buffer.Length);
+            if (len <= 0) break;
+            cs.Write(buffer, 0, len);
         }
+        cs.Close();
+        outs.Close();
+        ins.Close();
+        return outs.ToArray();
     }
 
     private static ICryptoTransform GetEncryptoTransform(string passwd)

@@ -1,22 +1,14 @@
-import "System"
 import "UnityEngine"
-
-local Main = { }
 
 require "common.common"
 require "common.globaldefine"
-local mCheckUpdate = require "common.checkupdate"
 local mStopwatch = require "common.stopwatch"
 local mEventManager = require "Common.EventManager"
--- local mGameInfo = require "common.gameinfo".new(Main)
+local mCheckUpdate = require "common.checkupdate"
+local mPlayerData = require "common.playerdata"
 
--- function Main.Start()
-	
--- end
+-- System.IO.Directory.Delete(Application.persistentDataPath, true)
+-- local info = mPlayerData:Load()
+-- print(info)
 
-mCheckUpdate:Check(function()
-	print("check update complete!!!")
-	AssetLoader.Instance:LoadAsync("mat_test.mat", AssetType.Material, function(obj)
-		print(obj)
-	end,nil)
-end)
+mCheckUpdate:Check()

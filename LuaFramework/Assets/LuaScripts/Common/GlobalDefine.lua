@@ -19,4 +19,8 @@ AnimationType = {
 
 EventType = {
 	Test = 1,
+	OnStartCheckUpdate = 2,				-- 开始检查更新
+	OnUpdating = 3,						-- 正在更新
+	OnCheckUpdateComplete = 4,			-- 检查更新完成
+	QueryUpdate = 5,					-- 询问是否更新
 }

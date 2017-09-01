@@ -2,6 +2,7 @@ local CheckUpdate = class("Common.CheckUpdate")
 
 local mStopwatch = require "common.stopwatch"
 local Json = require "Common.Json"
+local mEventManager = require "Common.EventManager"
 
 local this = nil
 local File = System.IO.File
@@ -23,9 +24,8 @@ local function Update()
 	if not compareFinish then return end
 	if not this.needUpdate then
 		LuaManager.OnUpdateEvent = {"-=", Update}
-		if this.callback then
-			this.callback()
-		end
+		mEventManager:Dispatch(EventType.OnCheckUpdateComplete)
+		return
 	end
 	if ready and table.size(this.waitToDownloadList) > 0 then
 		for k, v in pairs(this.waitToDownloadList) do
@@ -59,15 +59,14 @@ local function Update()
 		end
 	end
 	print("downloading... " .. tonumber(string.format("%.2f", this.curSize / this.totalSize)) * 100 .. "%", this.curSize, this.totalSize)
+	mEventManager:Dispatch(EventType.OnUpdating, downloadingFile, this.curSize, this.totalSize)
 	if table.size(this.completeList) == this.updateCount then
 		LuaManager.OnUpdateEvent = {"-=", Update}
 		if File.Exists(this.json_local) then
 			File.Delete(this.json_local)
 		end
 		File.Move(this.json_server, this.json_local)
-		if this.callback then
-			this.callback()
-		end
+		mEventManager:Dispatch(EventType.OnCheckUpdateComplete)
 	end
 end
 
@@ -87,9 +86,9 @@ function CheckUpdate:ctor()
 	this.completeList = {}
 end
 
-function CheckUpdate:Check(callback)
+function CheckUpdate:Check()
+	mEventManager:Dispatch(EventType.OnStartCheckUpdate)
 	os.remove(this.json_server)
-	this.callback = callback
 	this.op = HttpHelper.Instance:DownLoadFileAsync(this.remoteUrl .. "AssetsInfo.json", this.json_server)
 	LuaManager.OnUpdateEvent = {"+=", Update}
 	LuaManager.OnDestroyEvent = {"+=", OnDestroy}
@@ -116,17 +115,22 @@ function CheckUpdate:Compare()
 		print("已是最新版本!")
 		compareFinish = true
 		this.needUpdate = false
-		compareFinish = true
 		File.Delete(this.json_server)
 		return
 	end
 	this.needUpdate = true
 	this.updateCount = 0
+	this.totalSize = 0
 	for k, v in pairs(this.updateList) do
 		this.updateCount = this.updateCount + 1
 		this.waitToDownloadList[k] = v
+		this.totalSize = this.totalSize + v.size
 	end
-	compareFinish = true
+	mEventManager:Dispatch(EventType.QueryUpdate, this.totalSize, "更新", "退出游戏", function()		
+		compareFinish = true
+	end,function()
+		Application.Quit()
+	end)
 end
 
 return CheckUpdate.new()

@@ -269,7 +269,7 @@ public class GameEditor
                 //File.WriteAllBytes(outName, decompressedBytes);
                 EncryptUtil.DecryptFile(files[i], outName, "19930822");
                 //GameUtil.CreateDirectory(outName);
-                //File.WriteAllBytes(outName, Encrypt.DecryptFileToBytes(files[i], "19930822"));
+                //File.WriteAllBytes(outName, EncryptUtil.DecryptBytes(File.ReadAllBytes(files[i]), "19930822"));
                 EditorUtility.DisplayProgressBar("decrypt lua code...", name, (float)i / files.Length);
             }
             EditorUtility.ClearProgressBar();

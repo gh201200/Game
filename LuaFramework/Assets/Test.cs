@@ -1,81 +1,103 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Diagnostics;
+using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 using Debug = UnityEngine.Debug;
 
 public class Test : MonoBehaviour
 {
+    private static byte[] desIv = new byte[] { 0xF, 0x56, 0x52, 0xCD, 0xFF, 0x3F, 0x5D, 0x4 };
+
     void Start()
     {
-        Stopwatch sw = new Stopwatch();
-        sw.Start();
-        AssetLoader.Instance.LoadAsync("prefabs/giftpanel.prefab", AssetType.Prefab, obj =>
-        {
-            GameObject go = Instantiate((UnityEngine.Object)obj) as GameObject;
-            go.transform.SetParent(this.transform);
-            go.transform.localPosition = Vector3.zero;
-            go.transform.localScale = Vector3.one;
-            go.transform.localEulerAngles = Vector3.zero;
-            RectTransform rt = go.GetComponent<RectTransform>();
-            rt.anchorMin = Vector3.zero;
-            rt.anchorMax = Vector3.one;
-            rt.offsetMin = Vector3.zero;
-            rt.offsetMax = Vector3.zero;
-            Debug.Log("load AssetBundle: " + sw.ElapsedMilliseconds + "ms");
-        });
+        string str = "hello world!";
+        var passwd = "1993";
 
-        Stopwatch sw2 = new Stopwatch();
-        sw2.Start();
-        AssetLoader.Instance.LoadAsync("prefabs/tip.prefab", AssetType.Prefab, obj =>
-        {
-            GameObject go = Instantiate((UnityEngine.Object)obj) as GameObject;
-            go.transform.SetParent(this.transform);
-            go.transform.localPosition = Vector3.zero;
-            go.transform.localScale = Vector3.one;
-            go.transform.localEulerAngles = Vector3.zero;
-            //RectTransform rt = go.GetComponent<RectTransform>();
-            //rt.anchorMin = Vector3.zero;
-            //rt.anchorMax = Vector3.one;
-            //rt.offsetMin = Vector3.zero;
-            //rt.offsetMax = Vector3.zero;
-            Debug.Log("load AssetBundle: " + sw2.ElapsedMilliseconds + "ms");
-        });
+        var bytes = Api.GetBytes(str);
+        var res = Api.GetString(bytes);
+        var ebytes = EncryptUtil.EncryptBytes(bytes, passwd);
+        var dbytes = EncryptUtil.DecryptBytes(ebytes, passwd);
 
-        Stopwatch sw3 = new Stopwatch();
-        sw3.Start();
-        AssetLoader.Instance.LoadAsync("prefabs/test.prefab", AssetType.Prefab, obj =>
-        {
-            GameObject go = Instantiate((UnityEngine.Object)obj) as GameObject;
-            go.transform.SetParent(this.transform);
-            go.transform.localPosition = Vector3.zero;
-            go.transform.localScale = Vector3.one;
-            go.transform.localEulerAngles = Vector3.zero;
-            //RectTransform rt = go.GetComponent<RectTransform>();
-            //rt.anchorMin = Vector3.zero;
-            //rt.anchorMax = Vector3.one;
-            //rt.offsetMin = Vector3.zero;
-            //rt.offsetMax = Vector3.zero;
-            Debug.Log("load AssetBundle: " + sw3.ElapsedMilliseconds + "ms");
-        });
-
-        //Queue<int> que = new Queue<int>();
-        //for (int i = 0; i < 10; i++)
-        //{
-        //    que.Enqueue(i);
-        //}
-        //foreach (int i in que)
-        //{
-        //    Debug.Log(i);
-        //}
+        str = Api.GetString(dbytes);
     }
 
-    void Update()
+    /// <summary>  
+    /// 对字节数组进行加密  
+    /// </summary>  
+    /// <param name="srcBs">需要加密的字节数组对象</param>  
+    /// <param name="key"></param>  
+    /// <returns>返回加密过的字节数组</returns>  
+    public static byte[] EncryptBytes(byte[] srcBs, string key)
     {
-        //if (Input.GetKeyDown(KeyCode.E)) TimeManager.Instance.DeleteAll();
-        //if (Input.GetKeyDown(KeyCode.Q))
-        //{
-        //    TimeManager.Instance.Add(1000, () => print("test delay 1000"));
-        //    TimeManager.Instance.AddCycle(500, 100, () => print("test cycle delay 100 -> " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss fff")));
-        //    TimeManager.Instance.AddCycle(0, 200, () => print("frame count -> " + Time.time / Time.frameCount));
-        //}
+        string desKeyStr = key;
+        while (desKeyStr.Length < 8) desKeyStr += "-";
+        byte[] desKey = System.Text.Encoding.UTF8.GetBytes(desKeyStr.Substring(0, 8));
+
+        MemoryStream ins = new MemoryStream(srcBs);
+        MemoryStream outs = new MemoryStream();
+        outs.SetLength(0);
+
+        byte[] buffer = new byte[1024 * 512];
+        long readLen = 0;
+        long totlen = ins.Length;
+        int len;
+
+        DES des = new DESCryptoServiceProvider();
+        CryptoStream encStream = new CryptoStream(outs, des.CreateEncryptor(desKey, desIv), CryptoStreamMode.Write);
+
+        while (readLen < totlen)
+        {
+            len = ins.Read(buffer, 0, buffer.Length);
+            encStream.Write(buffer, 0, len);
+            readLen += len;
+        }
+        encStream.Close();
+        outs.Close();
+        ins.Close();
+
+        return outs.ToArray();
+
+    }
+
+    /// <summary>  
+    /// 解密字节数组  
+    /// </summary>  
+    /// <param name="srcBs"></param>  
+    /// <param name="key"></param>  
+    /// <returns></returns>  
+    public static byte[] DecryptBytes(byte[] srcBs, string key)
+    {
+        string desKeyStr = key;
+        while (desKeyStr.Length < 8) desKeyStr += "-";
+        byte[] desKey = System.Text.Encoding.UTF8.GetBytes(desKeyStr.Substring(0, 8));
+
+        MemoryStream ins = new MemoryStream(srcBs);
+        MemoryStream outs = new MemoryStream();
+        outs.SetLength(0);
+
+        byte[] buffer = new byte[1024 * 512];
+        long readLen = 0;
+        long totlen = ins.Length;
+        int len;
+
+
+        DES des = new DESCryptoServiceProvider();
+        CryptoStream encStream = new CryptoStream(outs, des.CreateDecryptor(desKey, desIv), CryptoStreamMode.Write);
+
+        while (readLen < totlen)
+        {
+            len = ins.Read(buffer, 0, buffer.Length);
+            encStream.Write(buffer, 0, len);
+            readLen += len;
+        }
+        encStream.Close();
+        outs.Close();
+        ins.Close();
+
+
+        return outs.ToArray();
+
     }
 }
