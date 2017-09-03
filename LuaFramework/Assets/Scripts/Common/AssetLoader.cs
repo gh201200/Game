@@ -110,7 +110,7 @@ public class AssetLoader : MonoBehaviour
         cacheDict = new Dictionary<string, object>();
     }
 
-    public void LoadAsync(string file, AssetType at, Action<object> callback, Action<double> progress = null)
+    public void LoadAsync(string file, AssetType at, Action<object> callback, Action<double> progress)
     {
         AssetDesc des = new AssetDesc(file, at);
         if (!File.Exists(des.ProjectPath))
@@ -138,7 +138,7 @@ public class AssetLoader : MonoBehaviour
             {
                 if (!abTemp.ContainsKey(str))
                 {
-                    string fullPath = Config.AssetPath + str.Substring(4);
+                    string fullPath = Config.AssetPath + "res/" + str.Substring(4);
                     AssetBundleCreateRequest request = AssetBundle.LoadFromFileAsync(fullPath);
                     abTemp.Add(str, new BundleDes(request, fullPath));
                 }
@@ -149,6 +149,11 @@ public class AssetLoader : MonoBehaviour
         if (!callbackDict.ContainsKey(file)) callbackDict.Add(file, new System.Collections.Generic.List<Action<object>>());
         callbackDict[file].Add(callback);
 #endif
+    }
+
+    public void LoadAsync(string file, AssetType at, Action<object> callback)
+    {
+        LoadAsync(file, at, callback, null);
     }
 
     public object Load(string file, AssetType at)

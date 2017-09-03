@@ -1,9 +1,21 @@
 -- UI层级
 UILayer = {
-	Normal		=		"Normal",
-	Middle		=		"Middle",
-	High		=		"High",
-	Top			=		"Top",
+	Normal = {
+		name =  "Normal",
+		index =	0,
+	},
+	Middle = {
+		name =  "Middle",
+		index =	1,
+	},
+	High = {
+		name =  "High",
+		index =	2,
+	},
+	Top = {
+		name =  "Top",
+		index =	3,
+	},
 }
 
 -- UI动画类型
@@ -17,10 +29,29 @@ AnimationType = {
 	B2T			=		"B2T",
 }
 
+UIConfig = {
+	LoadingPanel = {
+		name = "LoadingPanel",
+		prefabPath = "Prefabs/UI/LoadingPanel/LoadingPanel.prefab",
+		luaPath = "UI.Common.LoadingPanel",
+		layer = UILayer.High,
+		AnimationType = AnimationType.None,
+	},
+	LoginPanel = {
+		name = "LoginPanel",
+		prefabPath = "Prefabs/UI/LoginPanel/LoginPanel.prefab",
+		luaPath = "UI.LoginPanel.LoginPanel",
+		layer = UILayer.Normal,
+		AnimationType = AnimationType.None,
+	}
+}
+
 EventType = {
 	Test = 1,
 	OnStartCheckUpdate = 2,				-- 开始检查更新
 	OnUpdating = 3,						-- 正在更新
 	OnCheckUpdateComplete = 4,			-- 检查更新完成
 	QueryUpdate = 5,					-- 询问是否更新
+	OnPanelOpen = 6,					-- 打开UI界面
+	OnPanelClose = 7,					-- 关闭UI界面
 }

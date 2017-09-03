@@ -97,6 +97,7 @@ public class GameEditor
         //}
 
         AssetDesc desc = new AssetDesc("Mats/Mat.mat", AssetType.Prefab);
+        AssetDesc desc2 = new AssetDesc("textures/ui/common/bg.png", AssetType.Sprite);
     }
 
     [MenuItem("Tool/BuildSetting", false, 1)]
@@ -292,6 +293,48 @@ public class GameEditor
         DirectoryInfo di = new DirectoryInfo(path + "LuaScripts");
         if (di.Exists) di.Delete(true);
         AssetDatabase.Refresh();
+    }
+
+    [MenuItem("Tool/Export Textures", false, 110)]
+    static void ExportSprites()
+    {
+        UnityEngine.Object obj = Selection.activeObject;
+        if (obj == null)
+        {
+            EditorUtility.DisplayDialog("提示", "请选择一张图片进行导出！", "确定");
+            return;
+        }
+        var objPath = AssetDatabase.GetAssetPath(obj);
+        if (!objPath.StartsWith("Assets/Resources"))
+        {
+            EditorUtility.DisplayDialog("提示", "请将需要导出的图片放到Assets/Resources路径下！", "确定");
+            return;
+        }
+        try
+        {
+            var savePath = EditorUtility.SaveFolderPanel("保存", Application.dataPath, "");
+            if (savePath.Length == 0) return;
+            savePath = savePath.Replace('\\', '/');
+            var realPath = objPath.Replace("Assets/Resources/", "");
+            var index = 0;
+            var textures = Resources.LoadAll<Sprite>(Path.GetFileNameWithoutExtension(realPath));
+            foreach (var s in textures)
+            {
+                var t = new Texture2D((int)s.rect.width, (int)s.rect.height, s.texture.format, false);
+                t.SetPixels(s.texture.GetPixels((int)s.rect.xMin, (int)s.rect.yMin, (int)s.rect.width, (int)s.rect.height));
+                t.Apply();
+                File.WriteAllBytes(savePath + "/" + s.name + ".png", t.EncodeToPNG());
+                index++;
+                EditorUtility.DisplayProgressBar("正在切割图片", s.name, (float)index / textures.Length);
+            }
+            EditorUtility.ClearProgressBar();
+            EditorUtility.OpenWithDefaultApp(savePath);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e.Message);
+            EditorUtility.ClearProgressBar();
+        }
     }
 
     [MenuItem("Tool/Push Assets To Remote", false, 150)]

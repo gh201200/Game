@@ -158,14 +158,16 @@ function class(className, super)
                     c.ctor(obj, ...)
                 end
             end
-
+			setmetatable(obj, { __index = _class[class_type] })
             create(class_type, ...)
         end
-        setmetatable(obj, { __index = _class[class_type] })
         return obj
     end
     local vtbl = { }
 	vtbl.name = className
+	if super then
+		vtbl.super = super.new()
+	end
     _class[class_type] = vtbl
 
     setmetatable(class_type, {

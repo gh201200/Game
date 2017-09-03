@@ -2,13 +2,20 @@ import "UnityEngine"
 
 require "common.common"
 require "common.globaldefine"
-local mStopwatch = require "common.stopwatch"
-local mEventManager = require "Common.EventManager"
+
+mStopwatch = require "common.stopwatch"
+UIBase = require "UI.Common.UIBase"
+mEventManager = require "Common.EventManager"
+mPlayerData = require "common.playerdata"
+mUIManager = require "ui.uimanager"
+
 local mCheckUpdate = require "common.checkupdate"
-local mPlayerData = require "common.playerdata"
+local mLoadingPanel = require "ui.common.loadingpanel"
 
 -- System.IO.Directory.Delete(Application.persistentDataPath, true)
 -- local info = mPlayerData:Load()
 -- print(info)
 
-mCheckUpdate:Check()
+-- mCheckUpdate:Check()
+
+mUIManager:Open("LoginPanel")
