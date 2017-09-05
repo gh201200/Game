@@ -44,6 +44,7 @@ function UIManager:CreateLayers()
 			local go = GameObject(v.name)
 			go.transform:SetParent(this.canvas.transform)
 			go.transform:SetSiblingIndex(v.index)
+			go.layer = LayerMask.NameToLayer("UI")
 			local rt = go:AddComponent(RectTransform)
 			rt.localPosition = Vector3.zero
 			rt.localScale = Vector3.one
@@ -136,7 +137,7 @@ function UIManager.Update()
 						code = code,
 						isOpen = true,
 					}
-					mEventManager:Dispatch(EventType.OnPanelOpen, name)
+					EventManager:Dispatch(EventType.OnPanelOpen, name)
 				end, function(progress)
 					local temp = require "UI.Common.LoadingPanel"
 					temp.progress = progress
@@ -148,7 +149,7 @@ function UIManager.Update()
 				info.go:SetActive(true)
 				info.go.transform:SetAsLastSibling()
 				info.code:OnOpen(args)
-				mEventManager:Dispatch(EventType.OnPanelOpen, name)
+				EventManager:Dispatch(EventType.OnPanelOpen, name)
 			end
 			this.WaitOpenQue[name] = nil
 		end
@@ -162,7 +163,7 @@ function UIManager.Update()
 				info.code.isOpen = false
 				info.code:OnClose()
 				this.CloseQue[k] = nil
-				mEventManager:Dispatch(EventType.OnPanelClose, k)
+				EventManager:Dispatch(EventType.OnPanelClose, k)
 			end
 		end
 	end

@@ -280,10 +280,14 @@ public class AssetLoader : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            Debug.Log("--------------------------------");
+            Debug.Log("---------------abTemp-----------------");
             if (abTemp.Count != 0) foreach (var k in abTemp.Keys) Debug.Log(k);
             else Debug.Log("abTemp's count is 0");
-            Debug.Log("--------------------------------");
+            Debug.Log("----------------abTemp----------------");
+            Debug.Log("----------------Cached----------------");
+            if (cacheDict.Count != 0) foreach (var k in cacheDict.Keys) Debug.Log(k);
+            else Debug.Log("abTemp's count is 0");
+            Debug.Log("----------------Cached----------------");
         }
 
         if (Input.GetKey(KeyCode.W)) print(Progress * 100 + "%" + "\t" + curIndex + "/" + totalIndex);

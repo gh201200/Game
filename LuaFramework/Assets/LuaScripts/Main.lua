@@ -3,19 +3,23 @@ import "UnityEngine"
 require "common.common"
 require "common.globaldefine"
 
-mStopwatch = require "common.stopwatch"
+Json = require "Common.Json"
+Stopwatch = require "common.stopwatch"
 UIBase = require "UI.Common.UIBase"
-mEventManager = require "Common.EventManager"
-mPlayerData = require "common.playerdata"
-mUIManager = require "ui.uimanager"
+EventManager = require "Common.EventManager"
+UIManager = require "ui.uimanager"
+CheckUpdate = require "common.checkupdate"
 
-local mCheckUpdate = require "common.checkupdate"
-local mLoadingPanel = require "ui.common.loadingpanel"
+local PlayerData = require "common.playerdata"
+
+Data = PlayerData:Load()
+print("PlayerData", Data)
 
 -- System.IO.Directory.Delete(Application.persistentDataPath, true)
--- local info = mPlayerData:Load()
--- print(info)
 
--- mCheckUpdate:Check()
-
-mUIManager:Open("LoginPanel")
+EventManager:Add(EventType.OnPanelOpen, function(panelName)
+	if panelName == "LoginPanel" then
+		CheckUpdate:Check()
+	end
+end)
+UIManager:Open("LoginPanel")

@@ -11,12 +11,11 @@ function LoadingPanel:OnOpen(...)
 	this.ro = this.go.transform:Find("Loading")
 	this.label = this.go.transform:Find("ProgressText"):GetComponent(UI.Text)
 	LuaManager.OnUpdateEvent = {"+=", self.Update}
-	print(...)
 end
 
 function LoadingPanel:OnClose()
 	LuaManager.OnUpdateEvent = {"-=", self.Update}
-	print("LoadingPanel OnClose")
+	-- print("LoadingPanel Close")
 end
 
 function LoadingPanel:Update()

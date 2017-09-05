@@ -96,8 +96,9 @@ public class GameEditor
         //    AssetDatabase.Refresh();
         //}
 
-        AssetDesc desc = new AssetDesc("Mats/Mat.mat", AssetType.Prefab);
-        AssetDesc desc2 = new AssetDesc("textures/ui/common/bg.png", AssetType.Sprite);
+        EncryptUtil.DecryptFile(
+            @"D:\SocketPrograming\SocketPrograming\ShareFolder\Version\LuaScripts\UI\LoadingPanel.lua",
+            @"C:\Users\Administrator\Desktop\test.lua", "19930822");
     }
 
     [MenuItem("Tool/BuildSetting", false, 1)]
@@ -295,6 +296,18 @@ public class GameEditor
         AssetDatabase.Refresh();
     }
 
+    [MenuItem("Tool/Generate Assets Info/Json", false, 104)]
+    static void GenerateAssetsInfo()
+    {
+        GenerateAssetInfoJson();
+    }
+
+    [MenuItem("Tool/Generate Assets Info/XML", false, 105)]
+    static void GenerateAssetsInfo2()
+    {
+        GenerateAssetInfoXml();
+    }
+
     [MenuItem("Tool/Export Textures", false, 110)]
     static void ExportSprites()
     {
@@ -312,21 +325,26 @@ public class GameEditor
         }
         try
         {
-            var savePath = EditorUtility.SaveFolderPanel("保存", Application.dataPath, "");
+            var lastSavePath = PlayerPrefs.GetString("Editor_Last_Save_Path");
+            if (string.IsNullOrEmpty(lastSavePath)) lastSavePath = Application.dataPath;
+            var savePath = EditorUtility.SaveFolderPanel("保存", lastSavePath, "");
             if (savePath.Length == 0) return;
             savePath = savePath.Replace('\\', '/');
             var realPath = objPath.Replace("Assets/Resources/", "");
             var index = 0;
-            var textures = Resources.LoadAll<Sprite>(Path.GetFileNameWithoutExtension(realPath));
+            var path = realPath.Substring(0, realPath.LastIndexOf('.'));
+            var textures = Resources.LoadAll<Sprite>(path);
             foreach (var s in textures)
             {
                 var t = new Texture2D((int)s.rect.width, (int)s.rect.height, s.texture.format, false);
-                t.SetPixels(s.texture.GetPixels((int)s.rect.xMin, (int)s.rect.yMin, (int)s.rect.width, (int)s.rect.height));
+                t.SetPixels(s.texture.GetPixels((int)s.rect.xMin, (int)s.rect.yMin, (int)s.rect.width,
+                    (int)s.rect.height));
                 t.Apply();
                 File.WriteAllBytes(savePath + "/" + s.name + ".png", t.EncodeToPNG());
                 index++;
                 EditorUtility.DisplayProgressBar("正在切割图片", s.name, (float)index / textures.Length);
             }
+            PlayerPrefs.SetString("Editor_Last_Save_Path", savePath);
             EditorUtility.ClearProgressBar();
             EditorUtility.OpenWithDefaultApp(savePath);
         }
@@ -340,6 +358,8 @@ public class GameEditor
     [MenuItem("Tool/Push Assets To Remote", false, 150)]
     static void PushAssetsToRemote()
     {
+        EncryptLuaCode();
+        GenerateAssetInfoJson();
         try
         {
             string path = Application.dataPath;
@@ -608,7 +628,6 @@ public class GameEditor
         BuildPipeline.BuildAssetBundles(bs.buildPath, BuildAssetBundleOptions.UncompressedAssetBundle | BuildAssetBundleOptions.DeterministicAssetBundle, bs.buildTarget);
         AssetDatabase.RemoveUnusedAssetBundleNames();
         AssetDatabase.Refresh();
-        GenerateAssetInfoJson();
     }
 
     /// <summary>

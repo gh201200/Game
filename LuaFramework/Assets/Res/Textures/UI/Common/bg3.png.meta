@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 2864eede705b7644594d8bf24b72d25a
-timeCreated: 1504329583
+timeCreated: 1504498122
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName: {}
@@ -43,7 +43,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteBorder: {x: 200, y: 200, z: 200, w: 200}
   spritePixelsToUnits: 100
   alphaIsTransparency: 1
   textureType: 8
@@ -53,5 +53,5 @@ TextureImporter:
     outline: []
   spritePackingTag: 
   userData: 
-  assetBundleName: res/textures/ui/common.bytes
+  assetBundleName: res/textures/ui/common/bg3.bytes
   assetBundleVariant: 

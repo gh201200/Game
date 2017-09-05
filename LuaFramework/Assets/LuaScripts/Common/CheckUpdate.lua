@@ -1,9 +1,5 @@
 local CheckUpdate = class("Common.CheckUpdate")
 
-local mStopwatch = require "common.stopwatch"
-local Json = require "Common.Json"
-local mEventManager = require "Common.EventManager"
-
 local this = nil
 local File = System.IO.File
 local checked = false
@@ -24,7 +20,7 @@ local function Update()
 	if not compareFinish then return end
 	if not this.needUpdate then
 		LuaManager.OnUpdateEvent = {"-=", Update}
-		mEventManager:Dispatch(EventType.OnCheckUpdateComplete)
+		EventManager:Dispatch(EventType.OnCheckUpdateComplete)
 		return
 	end
 	if ready and table.size(this.waitToDownloadList) > 0 then
@@ -48,7 +44,7 @@ local function Update()
 		File.Move(this.rootPath .. downloadingFile.path .. this.tempFileSuffix, this.rootPath .. downloadingFile.path)
 		this.completeList[downloadingFile.path] = downloadingFile
 		ready = true
-		downloadingFile = nil
+		-- downloadingFile = nil
 	end
 	this.curSize = 0
 	this.totalSize = 0
@@ -58,15 +54,15 @@ local function Update()
 			this.curSize = this.curSize + v.size
 		end
 	end
-	print("downloading... " .. tonumber(string.format("%.2f", this.curSize / this.totalSize)) * 100 .. "%", this.curSize, this.totalSize)
-	mEventManager:Dispatch(EventType.OnUpdating, downloadingFile, this.curSize, this.totalSize)
+	-- print("downloading... " .. tonumber(string.format("%.2f", this.curSize / this.totalSize)) * 100 .. "%", this.curSize, this.totalSize)
+	EventManager:Dispatch(EventType.OnUpdating, downloadingFile, this.curSize, this.totalSize)
 	if table.size(this.completeList) == this.updateCount then
 		LuaManager.OnUpdateEvent = {"-=", Update}
 		if File.Exists(this.json_local) then
 			File.Delete(this.json_local)
 		end
 		File.Move(this.json_server, this.json_local)
-		mEventManager:Dispatch(EventType.OnCheckUpdateComplete)
+		EventManager:Dispatch(EventType.OnCheckUpdateComplete)
 	end
 end
 
@@ -87,8 +83,12 @@ function CheckUpdate:ctor()
 end
 
 function CheckUpdate:Check()
-	mEventManager:Dispatch(EventType.OnStartCheckUpdate)
-	os.remove(this.json_server)
+	if DEBUG_MODE then
+		EventManager:Dispatch(EventType.OnCheckUpdateComplete)
+		return
+	end
+	EventManager:Dispatch(EventType.OnStartCheckUpdate)
+	if File.Exists(this.json_server) then File.Delete(this.json_server) end
 	this.op = HttpHelper.Instance:DownLoadFileAsync(this.remoteUrl .. "AssetsInfo.json", this.json_server)
 	LuaManager.OnUpdateEvent = {"+=", Update}
 	LuaManager.OnDestroyEvent = {"+=", OnDestroy}
@@ -103,7 +103,7 @@ function CheckUpdate:Compare()
 	if File.Exists(this.json_local) then
 		local t_local = Json.decode(File.ReadAllText(this.json_local))
 		for k, v in pairs(t_server.files) do
-			if not t_local.files[k] or (t_local.files[k] and t_local.files[k].md5 ~= v.md5) then
+			if not t_local.files[k] or (t_local.files[k] and string.lower(t_local.files[k].md5) ~= string.lower(v.md5)) then
 				this.updateList[k] = v
 			end
 		end
@@ -126,11 +126,9 @@ function CheckUpdate:Compare()
 		this.waitToDownloadList[k] = v
 		this.totalSize = this.totalSize + v.size
 	end
-	mEventManager:Dispatch(EventType.QueryUpdate, this.totalSize, "更新", "退出游戏", function()		
+	EventManager:Dispatch(EventType.QueryUpdate, this.totalSize, "更新", "退出游戏", function()		
 		compareFinish = true
-	end,function()
-		Application.Quit()
-	end)
+	end, Api.Quit)
 end
 
 return CheckUpdate.new()

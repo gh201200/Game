@@ -125,7 +125,9 @@ public class AssetDesc
         RelativePathWithoutSuffix = "res/" + RelativePath.Substring(0, index).ToLower() + ".bytes";
         FullPath = GetFullPath(path);
         AssetType = at;
+#if !DEBUG_MODE
         Dependencies = AssetLoader.Instance.Manifest.GetDirectDependencies(AssetBundleTag);
+#endif
         LoadedDependencies = new HashSet<string>();
         FinishNum = 0;
     }

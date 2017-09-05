@@ -33,17 +33,24 @@ UIConfig = {
 	LoadingPanel = {
 		name = "LoadingPanel",
 		prefabPath = "Prefabs/UI/LoadingPanel/LoadingPanel.prefab",
-		luaPath = "UI.Common.LoadingPanel",
+		luaPath = "UI.LoadingPanel",
 		layer = UILayer.High,
 		AnimationType = AnimationType.None,
 	},
 	LoginPanel = {
 		name = "LoginPanel",
 		prefabPath = "Prefabs/UI/LoginPanel/LoginPanel.prefab",
-		luaPath = "UI.LoginPanel.LoginPanel",
+		luaPath = "UI.LoginPanel",
 		layer = UILayer.Normal,
 		AnimationType = AnimationType.None,
-	}
+	},
+	NormalDialog = {
+		name = "NormalDialog",
+		prefabPath = "Prefabs/UI/NormalDialog/NormalDialog.prefab",
+		luaPath = "UI.NormalDialog",
+		layer = UILayer.Middle,
+		AnimationType = AnimationType.None,
+	},
 }
 
 EventType = {

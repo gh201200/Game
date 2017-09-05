@@ -54,9 +54,9 @@ do
         if type(t) == "table" then
             for k, v in pairs(t) do
                 if type(k) == "number" then
-                    str = str .. tab .. "[" .. k .. "]" .. " = "
+                    str = str .. tab .. "[" .. _tostring(k) .. "]" .. " = "
                 else
-                    str = str .. tab .. "[\"" .. k .. "\"]" .. " = "
+                    str = str .. tab .. "[\"" .. _tostring(k) .. "\"]" .. " = "
                 end
                 if type(v) == "string" then
                     str = str .. "\"" .. v .. "\"" .. ",\n"

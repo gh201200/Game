@@ -226,10 +226,22 @@ public class ZipUtil
             Debug.LogError("unpack failed!" + "\n" + zipFile + " is not found!");
             return;
         }
-        ZipInputStream reader = new ZipInputStream(File.Open(zipFile, FileMode.Open));
-        ZipEntry entry = null;
-        long totalSize = info.Length;
+        long totalSize = 0;
         long readSize = 0;
+        ZipInputStream reader = new ZipInputStream(File.Open(zipFile, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite));
+        reader.Password = passwd;
+        ZipEntry entry = null;
+
+        while ((entry = reader.GetNextEntry()) != null)
+        {
+            totalSize += entry.Size;
+        }
+
+        reader.Close();
+        reader.Dispose();
+        reader = new ZipInputStream(File.Open(zipFile, FileMode.Open));
+        reader.Password = passwd;
+
         try
         {
             while ((entry = reader.GetNextEntry()) != null)
@@ -240,7 +252,7 @@ public class ZipUtil
 
                 string dir_part = Path.GetDirectoryName(entry.Name);
                 dir_part = dir_part.Replace('/', '\\');
-                if (!dir_part.EndsWith("\\")) dir_part += "\\";
+                if (!string.IsNullOrEmpty(dir_part) && !dir_part.EndsWith("\\")) dir_part += "\\";
 
                 string fullDir = dir + dir_part;
 
@@ -250,7 +262,7 @@ public class ZipUtil
 
                 if (File.Exists(filePath)) File.Delete(filePath);
 
-                FileStream fs = new FileStream(filePath, FileMode.CreateNew);
+                FileStream fs = new FileStream(filePath, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.ReadWrite);
 
                 byte[] buffer = new byte[1024 * 1024];
                 int length = 0;
@@ -259,9 +271,9 @@ public class ZipUtil
                     length = reader.Read(buffer, 0, buffer.Length);
                     if (length <= 0) break;
                     fs.Write(buffer, 0, length);
+                    readSize += length;
                     if (progress != null) progress(readSize, totalSize);
                 }
-                readSize += entry.CompressedSize;
                 fs.Close();
                 fs.Dispose();
             }

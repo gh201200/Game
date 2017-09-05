@@ -19,38 +19,30 @@ public class GameUtil : MonoBehaviour
     /// </summary>
     public static string MD5(string source)
     {
-        MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
-        byte[] data = System.Text.Encoding.UTF8.GetBytes(source);
-        byte[] md5Data = md5.ComputeHash(data, 0, data.Length);
-        md5.Clear();
-
-        string destString = "";
-        for (int i = 0; i < md5Data.Length; i++)
+        string str = "";
+        byte[] data = Encoding.GetEncoding("utf-8").GetBytes(str);
+        MD5 md5 = new MD5CryptoServiceProvider();
+        byte[] bytes = md5.ComputeHash(data);
+        for (int i = 0; i < bytes.Length; i++)
         {
-            destString += System.Convert.ToString(md5Data[i], 16).PadLeft(2, '0');
+            str += bytes[i].ToString("x2");
         }
-        destString = destString.PadLeft(32, '0');
-        return destString;
+        return str.ToLower();
     }
 
     /// <summary>
     /// 计算文件的MD5值
     /// </summary>
-    public static string MD5File(string file)
+    public static string MD5File(string filePath)
     {
         try
         {
-            FileStream fs = new FileStream(file, FileMode.Open);
-            System.Security.Cryptography.MD5 md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
-            byte[] retVal = md5.ComputeHash(fs);
-            fs.Close();
-
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < retVal.Length; i++)
-            {
-                sb.Append(retVal[i].ToString("x2"));
-            }
-            return sb.ToString();
+            FileStream file = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+            MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
+            byte[] hash_byte = md5.ComputeHash(file);
+            string str = System.BitConverter.ToString(hash_byte);
+            str = str.Replace("-", "");
+            return str.ToLower();
         }
         catch (Exception ex)
         {
