@@ -221,6 +221,13 @@ public class GameEditor
 
     }
 
+    [MenuItem("Tool/Analyse Excel", false, 80)]
+    static void AnalyseExcel()
+    {
+        var win = EditorWindow.GetWindow<AnalyseExcelWindow>();
+        win.Show();
+    }
+
     [MenuItem("Tool/Encrypt Lua Code", false, 100)]
     static void EncryptLuaCode()
     {
@@ -252,7 +259,7 @@ public class GameEditor
         }
     }
 
-    [MenuItem("Tool/Decrypt Lua Code", false, 101)]
+    //[MenuItem("Tool/Decrypt Lua Code", false, 101)]
     static void DecryptLuaCode()
     {
         try
@@ -285,7 +292,7 @@ public class GameEditor
         }
     }
 
-    [MenuItem("Tool/Clear Encrypt Lua Code", false, 103)]
+    [MenuItem("Tool/Clear Encrypt Lua Code", false, 110)]
     static void ClearLuaBytecode()
     {
         BuildSetting bs = GetBuildSettingAsset();
@@ -296,19 +303,19 @@ public class GameEditor
         AssetDatabase.Refresh();
     }
 
-    [MenuItem("Tool/Generate Assets Info/Json", false, 104)]
+    [MenuItem("Tool/Generate Assets Info/Json", false, 170)]
     static void GenerateAssetsInfo()
     {
         GenerateAssetInfoJson();
     }
 
-    [MenuItem("Tool/Generate Assets Info/XML", false, 105)]
+    [MenuItem("Tool/Generate Assets Info/XML", false, 180)]
     static void GenerateAssetsInfo2()
     {
         GenerateAssetInfoXml();
     }
 
-    [MenuItem("Tool/Export Textures", false, 110)]
+    [MenuItem("Tool/Export Textures", false, 200)]
     static void ExportSprites()
     {
         UnityEngine.Object obj = Selection.activeObject;
@@ -355,7 +362,7 @@ public class GameEditor
         }
     }
 
-    [MenuItem("Tool/Push Assets To Remote", false, 150)]
+    [MenuItem("Tool/Push Assets To Remote", false, 240)]
     static void PushAssetsToRemote()
     {
         EncryptLuaCode();
@@ -377,7 +384,7 @@ public class GameEditor
         }
     }
 
-    [MenuItem("Tool/Pack Assets", false, 200)]
+    [MenuItem("Tool/Pack Assets", false, 280)]
     static void PackAssets()
     {
         Debug.Log("begin pack");
@@ -414,7 +421,7 @@ public class GameEditor
         }
     }
 
-    [MenuItem("Assets/Reimport UI Assemblies", false, 100)]
+    //[MenuItem("Assets/Reimport UI Assemblies", false, 100)]
     public static void ReimportUI()
     {
 #if UNITY_4_6
@@ -430,7 +437,7 @@ public class GameEditor
         ReimportDll(editorDll);
     }
 
-    [MenuItem("Tool/Compress Lua Code", false, 1001)]
+    //[MenuItem("Tool/Compress Lua Code", false, 1001)]
     public static void CompressLuaCode()
     {
         string[] files = Directory.GetFiles(Application.dataPath + "/LuaScripts", "*.lua", SearchOption.AllDirectories);
@@ -450,7 +457,7 @@ public class GameEditor
         AssetDatabase.Refresh();
     }
 
-    [MenuItem("Tool/Decompress Lua Code", false, 1002)]
+    //[MenuItem("Tool/Decompress Lua Code", false, 1002)]
     public static void DecompressLuaCode()
     {
         string[] files = Directory.GetFiles(Application.dataPath + "/Build/LuaScripts", "*.lua", SearchOption.AllDirectories);
