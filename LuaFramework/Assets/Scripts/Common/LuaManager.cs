@@ -109,16 +109,19 @@ public class LuaManager : MonoBehaviour
         });
     }
 
+    public void Clear()
+    {
+        OnUpdateEvent = null;
+        OnFixedUpdateEvent = null;
+        OnLateUpdateEvent = null;
+        OnDestroyEvent = null;
+    }
+
     private byte[] Load(string fn)
     {
         fn = fn.Replace(".lua", "").Replace('.', '/');
         fn += ".lua";
         string fullPath = Config.LuaPath + fn;
-        if (!File.Exists(fullPath))
-        {
-            Debug.LogError(fullPath + " is not found!");
-            return null;
-        }
         if (!File.Exists(fullPath))
         {
             Debug.LogError(fullPath + " is not found!");

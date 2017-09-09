@@ -10,7 +10,16 @@ function EventManager:Add(et, callback)
 	if not self.EventList[et] then
 		self.EventList[et] = {}
 	end
-	table.insert(self.EventList[et], callback)
+	local canInsert = true
+	for _, v in pairs(self.EventList[et]) do
+		if v == callback then
+			canInsert = false
+			break
+		end
+	end
+	if canInsert then
+		table.insert(self.EventList[et], callback)
+	end
 end
 
 function EventManager:Remove(et, callback)
@@ -45,8 +54,10 @@ function EventManager:Resume(et)
 	self.StopList[et] = nil
 end
 
-function EventManager:ClearAll()
+function EventManager:Clear()
 	self.EventList = {}
+	self.StopList = {}
+	self.stopAll = false
 end
 
 return EventManager.new()

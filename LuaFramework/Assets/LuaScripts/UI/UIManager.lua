@@ -96,7 +96,18 @@ function UIManager:IsOpen(name)
 	end
 end
 
+function UIManager:Clear()
+	for k, v in pairs(this.CacheQue) do
+		v.code:OnClose()
+		GameObject.Destroy(v.go)
+		this.CacheQue[k] = nil
+	end
+end
+
 function UIManager.Update()
+	if Input.GetKeyDown(KeyCode.Q) then
+		GameManager:ReturnLoginPanel()
+	end
 	if table.size(this.WaitOpenQue) > 0 then
 		if not this:IsOpen("LoadingPanel") then
 			this:Open("LoadingPanel")
@@ -139,7 +150,7 @@ function UIManager.Update()
 					}
 					EventManager:Dispatch(EventType.OnPanelOpen, name)
 				end, function(progress)
-					local temp = require "UI.Common.LoadingPanel"
+					local temp = require "UI.LoadingPanel"
 					temp.progress = progress
 				end)
 			else

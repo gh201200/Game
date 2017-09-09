@@ -105,9 +105,20 @@ public class AssetLoader : MonoBehaviour
         }
     }
 
-    public void ClearCache()
+    public void Clear()
     {
+        manifest = null;
+        loadingListSync = new List<string>();
+        loadingDict = new Dictionary<string, AssetDesc>();
+        mainAssetLoadingDict = new Dictionary<string, AssetBundleRequest>();
+        callbackDict = new Dictionary<string, List<Action<object>>>();
         cacheDict = new Dictionary<string, object>();
+        foreach (var o in abTemp)
+        {
+            if (o.Value.assetBundleReq.assetBundle != null) o.Value.assetBundleReq.assetBundle.Unload(false);
+        }
+        abTemp = new Dictionary<string, BundleDes>();
+        abUnloadQue = new Queue<string>();
     }
 
     public void LoadAsync(string file, AssetType at, Action<object> callback, Action<double> progress)
