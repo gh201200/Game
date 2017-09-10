@@ -51,6 +51,13 @@ UIConfig = {
 		layer = UILayer.Middle,
 		AnimationType = AnimationType.None,
 	},
+	TestPanel = {
+		name = "TestPanel",
+		prefabPath = "Prefabs/UI/Test/TestPanel.prefab",
+		luaPath = "UI.TestPanel",
+		layer = UILayer.Normal,
+		AnimationType = AnimationType.None,
+	},
 }
 
 EventType = {

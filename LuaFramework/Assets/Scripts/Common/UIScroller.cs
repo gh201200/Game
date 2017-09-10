@@ -52,7 +52,6 @@ public class UIScroller : MonoBehaviour
     private Queue<GameObject> hideQue;
     private int index = 0;
     private int lastRefreshFrameCount = 0;
-    private Vector2 viewPortPos;
 
     private void Awake()
     {

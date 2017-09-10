@@ -21,3 +21,4 @@ EventManager:Add(EventType.OnPanelOpen, function(panelName)
 end)
 
 UIManager:Open("LoginPanel")
+UIManager:Open("TestPanel")
