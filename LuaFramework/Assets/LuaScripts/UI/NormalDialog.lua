@@ -2,6 +2,10 @@ local NormalDialog = class("NormalDialog", UIBase)
 
 local this = nil
 
+local function Close()
+	UIManager:Close("NormalDialog")
+end
+
 function NormalDialog:ctor(...)
 	this = self
 	local t = this.go.transform
@@ -12,10 +16,8 @@ function NormalDialog:ctor(...)
 	this.button2 = t:Find("Button2"):GetComponent(UI.Button)
 	this.button2Label = t:Find("Button2/Text"):GetComponent(UI.Text)
 	this.sr = t:Find("View"):GetComponent(UI.ScrollRect)
-end
-
-local function Close()
-	UIManager:Close("NormalDialog")
+	this.button1.onClick:AddListener(Close)
+	this.button2.onClick:AddListener(Close)
 end
 
 function NormalDialog:OnOpen(args)
@@ -51,8 +53,6 @@ function NormalDialog:OnOpen(args)
 	
 	if cb1 then
 		this.button1.onClick:AddListener(cb1)
-	else
-		this.button1.onClick:AddListener(Close)
 	end
 	
 	if button2Str then
@@ -63,8 +63,6 @@ function NormalDialog:OnOpen(args)
 	
 	if cb2 then
 		this.button2.onClick:AddListener(cb2)
-	else
-		this.button2.onClick:AddListener(Close)
 	end
 end
 

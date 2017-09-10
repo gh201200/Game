@@ -20,7 +20,7 @@ local function Update()
 	if not compareFinish then return end
 	if not this.needUpdate then
 		LuaManager.OnUpdateEvent = {"-=", Update}
-		EventManager:Dispatch(EventType.OnCheckUpdateComplete)
+		EventManager:Dispatch(EventType.OnCheckUpdateComplete, this.needUpdate)
 		return
 	end
 	if ready and table.size(this.waitToDownloadList) > 0 then
@@ -62,7 +62,7 @@ local function Update()
 			File.Delete(this.json_local)
 		end
 		File.Move(this.json_server, this.json_local)
-		EventManager:Dispatch(EventType.OnCheckUpdateComplete)
+		EventManager:Dispatch(EventType.OnCheckUpdateComplete, this.needUpdate)
 	end
 end
 
@@ -95,9 +95,7 @@ function CheckUpdate:Check()
 end
 
 function CheckUpdate:Compare()
-	local file = io.open(this.json_server, "r")
-	local str = file:read("*a")
-	file:close()
+	local str = File.ReadAllText(this.json_server)
 	local t_server = Json.decode(str)
 	-- File.WriteAllText("C:/Users/Administrator/Desktop/test.lua", tostring(t_server))
 	if File.Exists(this.json_local) then
