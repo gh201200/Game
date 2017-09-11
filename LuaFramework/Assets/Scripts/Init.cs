@@ -6,12 +6,16 @@ using SLua;
 
 public class Init : MonoBehaviour
 {
-    public float labelWidth = 200f;
-    public float labelHeight = 80f;
-    public int fontSize = 25;
+    [Header("显示调试按钮")]
+    public bool showDebugButton = false;
+
+    private float labelWidth = 200f;
+    private float labelHeight = 80f;
+    private int fontSize = 20;
     private bool complete = false;
     private string str = "初始化...0%";
     private GUIStyle style;
+    private GUIStyle style2;
 
     private Action act;
 
@@ -45,16 +49,35 @@ public class Init : MonoBehaviour
         labelHeight = Screen.height * h;
         var f = fontSize / 1024f;
         fontSize = (int)(Screen.width * f);
+
         style = new GUIStyle();
         style.fontSize = fontSize; ;
         style.normal.textColor = Color.white;
         style.alignment = TextAnchor.MiddleCenter;
+
+        style2 = new GUIStyle();
+        style2.fontSize = fontSize;
+        style2.normal.textColor = Color.red;
+        style2.alignment = TextAnchor.MiddleCenter;
+        AssetLoader.Instance.LoadAsync("Textures/UI/Common/UIatlas4_18.png", AssetType.Sprite,
+            obj =>
+            {
+                style2.normal.background = (obj as Sprite).texture;
+            });
 
         CheckEnv();
     }
 
     private void OnGUI()
     {
+        if (showDebugButton)
+        {
+            GUI.backgroundColor = new Color(1f, 1f, 1f, 0.5f);
+            if (GUI.Button(new Rect(0f, 0f, labelWidth * 0.5f, labelHeight * 0.5f), "调试", style2))
+            {
+                OnDebugButtonClick();
+            }
+        }
         if (complete) return;
         if (args != null)
         {
@@ -116,6 +139,20 @@ public class Init : MonoBehaviour
             str = "正在解压资源...0%";
 
             args = ZipUtil.UnpackFileAsync(Application.persistentDataPath, zipPath);
+        }
+    }
+
+    private void OnDebugButtonClick()
+    {
+        if (LuaManager.Instance.ready)
+        {
+            LuaTable em = LuaManager.Instance["EventManager"] as LuaTable;
+            if (em == null)
+            {
+                Debug.LogError("get lua table 'EventManager' failed!");
+                return;
+            }
+            em.invoke("Dispatch", em, 9);
         }
     }
 }

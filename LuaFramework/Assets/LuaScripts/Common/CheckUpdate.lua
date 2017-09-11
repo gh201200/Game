@@ -46,16 +46,11 @@ local function Update()
 		ready = true
 		-- downloadingFile = nil
 	end
-	this.curSize = 0
-	this.totalSize = 0
-	for k, v in pairs(this.updateList) do
-		this.totalSize = this.totalSize + v.size
-		if this.completeList[k] then
-			this.curSize = this.curSize + v.size
-		end
-	end
+	
+	this.progress = (table.size(this.completeList) + curAsyncArgs.progress) / table.size(this.updateList)
+	
 	-- print("downloading... " .. tonumber(string.format("%.2f", this.curSize / this.totalSize)) * 100 .. "%", this.curSize, this.totalSize)
-	EventManager:Dispatch(EventType.OnUpdating, downloadingFile, this.curSize, this.totalSize)
+	EventManager:Dispatch(EventType.OnUpdating, downloadingFile, this.totalSize, this.progress)
 	if table.size(this.completeList) == this.updateCount then
 		LuaManager.OnUpdateEvent = {"-=", Update}
 		if File.Exists(this.json_local) then
@@ -97,9 +92,12 @@ end
 function CheckUpdate:Compare()
 	local str = File.ReadAllText(this.json_server)
 	local t_server = Json.decode(str)
+	this.serverVersionInfo = t_server.info
 	-- File.WriteAllText("C:/Users/Administrator/Desktop/test.lua", tostring(t_server))
 	if File.Exists(this.json_local) then
 		local t_local = Json.decode(File.ReadAllText(this.json_local))
+		this.localVersionInfo = t_local.info
+		EventManager:Dispatch(EventType.ShowVersion, this.localVersionInfo, this.serverVersionInfo)
 		for k, v in pairs(t_server.files) do
 			if not t_local.files[k] or (t_local.files[k] and string.lower(t_local.files[k].md5) ~= string.lower(v.md5)) then
 				this.updateList[k] = v

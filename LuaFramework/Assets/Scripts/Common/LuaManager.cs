@@ -23,8 +23,7 @@ public class LuaManager : MonoBehaviour
         }
     }
 
-    private bool ready = false;
-
+    public bool ready = false;
     public LuaSvr luaSvr;
     public LuaState luaState;
 

@@ -95,10 +95,8 @@ public class GameEditor
         //    EditorUtility.ClearProgressBar();
         //    AssetDatabase.Refresh();
         //}
-
-        EncryptUtil.DecryptFile(
-            @"D:\SocketPrograming\SocketPrograming\ShareFolder\Version\LuaScripts\UI\LoadingPanel.lua",
-            @"C:\Users\Administrator\Desktop\test.lua", "19930822");
+        var res = HttpHelper.Instance.Load("http://localhost/Version/AssetsInfo.json");
+        Debug.Log(Api.GetString(res));
     }
 
     [MenuItem("Tool/BuildSetting", false, 1)]
@@ -112,7 +110,6 @@ public class GameEditor
     //[MenuItem("Tool/AssetBundle/Build Single", false, 10)]
     static void BuildSingle()
     {
-        AddResVersion();
         BuildSetting bs = GetBuildSettingAsset();
         RemoveAllAssetBundleName();
         UnityEngine.Object[] objs = Selection.objects;
@@ -145,7 +142,6 @@ public class GameEditor
     {
         BuildSetting bs = GetBuildSettingAsset();
         HashSet<string> files = GetAllAssets();
-        AddResVersion();
 
 #if PerFile
         //每个文件是一个AssetBundle
@@ -488,6 +484,7 @@ public class GameEditor
 
     static void GenerateAssetInfoJson()
     {
+        AddResVersion();
         try
         {
             BuildSetting bs = GetBuildSettingAsset();
@@ -546,6 +543,7 @@ public class GameEditor
 
     static void GenerateAssetInfoXml()
     {
+        AddResVersion();
         try
         {
             BuildSetting bs = GetBuildSettingAsset();

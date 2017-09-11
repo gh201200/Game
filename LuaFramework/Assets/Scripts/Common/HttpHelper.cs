@@ -86,6 +86,39 @@ public class HttpHelper : MonoBehaviour
         }
     }
 
+    public byte[] Load(string url)
+    {
+        WebClient wc = null;
+        MemoryStream ms = null;
+        Stream s = null;
+
+        try
+        {
+            wc = new WebClient();
+            ms = new MemoryStream();
+            s = wc.OpenRead(url);
+            int length = 0;
+            byte[] buffer = new byte[1024 * 1024];
+            while (true)
+            {
+                length = s.Read(buffer, 0, buffer.Length);
+                if (length <= 0) break;
+                ms.Write(buffer, 0, length);
+            }
+            return ms.ToArray();
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+        finally
+        {
+            if (wc != null) wc.Dispose();
+            if (ms != null) ms.Close();
+            if (s != null) s.Close();
+        }
+    }
+
     /// <summary>
     /// 异步下载
     /// </summary>

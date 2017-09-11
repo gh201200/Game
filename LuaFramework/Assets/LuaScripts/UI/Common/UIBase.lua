@@ -31,4 +31,8 @@ function UIBase:OnClose()
 	
 end
 
+function UIBase:OnDestroy()
+
+end
+
 return UIBase

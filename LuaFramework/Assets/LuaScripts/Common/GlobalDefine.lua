@@ -68,4 +68,6 @@ EventType = {
 	QueryUpdate = 5,					-- 询问是否更新
 	OnPanelOpen = 6,					-- 打开UI界面
 	OnPanelClose = 7,					-- 关闭UI界面
+	ShowVersion = 8,					-- 显示登录界面版本号
+	OpenDebugPanel = 9,					-- 打开调试界面
 }

@@ -15,6 +15,7 @@ function UIManager:ctor(...)
 	this.eventSystemPath = "Prefabs/UI/Common/EventSystem.prefab"
 	this.canvas = GameObject.Find("Canvas")
 	this.eventSystem = GameObject.Find("EventSystem")
+	this.openIndex = 0
 	
 	if not this.eventSystem then
 		AssetLoader.Instance:LoadAsync(this.eventSystemPath, AssetType.Prefab, function(obj)
@@ -70,9 +71,11 @@ function UIManager:Open(name, ...)
 	local args = {...}
 	this.WaitOpenQue[name] = {
 		name = name,
+		openIndex = this.openIndex,
 		args = args,
 	}
 	this.CloseQue[name] = false
+	this.openIndex = this.openIndex + 1
 end
 
 function UIManager:Close(name)
@@ -99,6 +102,7 @@ end
 function UIManager:Clear()
 	for k, v in pairs(this.CacheQue) do
 		v.code:OnClose()
+		v.code:OnDestroy()
 		GameObject.Destroy(v.go)
 		this.CacheQue[k] = nil
 	end
@@ -120,7 +124,7 @@ function UIManager.Update()
 	if not this.ready then return end
 	if table.size(this.WaitOpenQue) > 0 then
 		for k, v in pairs(this.WaitOpenQue) do
-			local name, args = k, v.args
+			local name, args, openIndex = k, v.args, v.openIndex
 			if not this.CacheQue[name] then
 				local info = UIConfig[name]
 				AssetLoader.Instance:LoadAsync(info.prefabPath, AssetType.Prefab, function(obj)
@@ -135,7 +139,7 @@ function UIManager.Update()
 					go.transform.localPosition = Vector3.zero
 					go.transform.localScale = Vector3.one
 					go.transform.localEulerAngles = Vector3.zero
-					go.transform:SetAsLastSibling()
+					go.transform:SetSiblingIndex(openIndex)
 					go:SetActive(true)
 					local code = require(info.luaPath)
 					code.panelName = name

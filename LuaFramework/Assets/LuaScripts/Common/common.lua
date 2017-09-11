@@ -102,11 +102,17 @@ end
 
 string.split = function(s, c)
     local t = { }
-    c = c or "%s"
-    local pattern = "[^" .. c .. "]+"
-    string.gsub(s, pattern, function(v)
-        table.insert(t, string.trim(v, "%s"))
-    end )
+    if c then
+		local pattern = "[^" .. c .. "]+"
+		string.gsub(s, pattern, function(v)
+			table.insert(t, string.trim(v, "%s"))
+		end )
+	else
+		for i = 1, string.len(s) do
+			local res = string.sub(s, i, i)
+			table.insert(t, res)
+		end
+	end
     return t
 end
 

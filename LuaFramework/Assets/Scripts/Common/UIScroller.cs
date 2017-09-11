@@ -65,6 +65,16 @@ public class UIScroller : MonoBehaviour
         }
     }
 
+    private IEnumerator Start()
+    {
+        if (!Application.isPlaying) yield break;
+        for (int i = 0; i < 500; i++)
+        {
+            Add(UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Res/Prefabs/UI/Common/Item.prefab"), index);
+            yield return null;
+        }
+    }
+
     private void OnValueChange(Vector2 pos)
     {
         if ((Time.frameCount - lastRefreshFrameCount) >= refreshInterval || startIndex != GetIndex())
@@ -189,7 +199,7 @@ public class UIScroller : MonoBehaviour
             if (table == null) continue;
             var obj = table["go"];
             var posIndex = (int)table["index"];
-            var active = posIndex >= startIndex && posIndex <= startIndex + maxShowCount;
+            var active = posIndex >= startIndex && posIndex < startIndex + maxShowCount;
             if (active)
             {
                 GameObject go = null;
@@ -208,11 +218,11 @@ public class UIScroller : MonoBehaviour
                         go = Instantiate(prefab);
                         go.transform.SetParent(content);
                         go.transform.localScale = Vector3.one;
-                        var rt = go.GetComponent<RectTransform>();
-                        InitRectTransform(rt);
-                        rt.sizeDelta = new Vector2(cellWidth, cellHeight);
                     }
                 }
+                var rt = go.GetComponent<RectTransform>();
+                InitRectTransform(rt);
+                rt.sizeDelta = new Vector2(cellWidth, cellHeight);
                 go.transform.SetSiblingIndex(i);
                 go.SetActive(true);
                 go.transform.localPosition = GetPos((int)table["index"]);
@@ -241,12 +251,16 @@ public class UIScroller : MonoBehaviour
         switch (layoutType)
         {
             case LayoutType.Vertical:
-                size = new Vector2(cellWidth, data.Count * cellHeight + (data.Count - 1) * cellSpacing);
+                size = new Vector2(cellWidth, count * cellHeight + (count - 1) * cellSpacing);
                 break;
             case LayoutType.Horizontal:
-                size = new Vector2(data.Count * cellWidth + (data.Count - 1) * cellSpacing, cellHeight);
+                size = new Vector2(count * cellWidth + (count - 1) * cellSpacing, cellHeight);
+                // count * width + count * spacing - spacing = size
+                // count = size / (width + spacing) - spacing
                 break;
         }
+        size.x = Mathf.Max(size.x, 10);
+        size.y = Mathf.Max(size.y, 10);
         return size;
     }
 
@@ -273,9 +287,9 @@ public class UIScroller : MonoBehaviour
         switch (layoutType)
         {
             case LayoutType.Vertical:
-                return Mathf.CeilToInt(viewPort.sizeDelta.y / (cellHeight + cellSpacing));
+                return Mathf.CeilToInt((viewPort.sizeDelta.y + cellSpacing) / (cellHeight + cellSpacing)) + 1;
             case LayoutType.Horizontal:
-                return Mathf.CeilToInt(viewPort.sizeDelta.x / (cellWidth + cellSpacing));
+                return Mathf.CeilToInt((viewPort.sizeDelta.x + cellSpacing) / (cellWidth + cellSpacing)) + 1;
         }
         return 0;
     }
@@ -319,6 +333,17 @@ public class UIScroller : MonoBehaviour
         viewPort = sr.viewport;
         if (content != null) InitRectTransform(content);
         if (viewPort != null) InitRectTransform(viewPort);
+
+        if (content == null || viewPort == null || Application.isPlaying) return;
+        count = content.childCount;
+        content.sizeDelta = GetContentSize();
+        for (int i = 0; i < content.childCount; i++)
+        {
+            var rt = content.GetChild(i).GetComponent<RectTransform>();
+            InitRectTransform(rt);
+            rt.sizeDelta = new Vector2(cellWidth, cellHeight);
+            rt.localPosition = GetPos(i);
+        }
     }
 
     private void Update()
