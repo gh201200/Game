@@ -6,65 +6,79 @@ using SLua;
 using UnityEngine.UI;
 using System.Linq;
 
-public enum LayoutType
-{
-    Vertical,
-    Horizontal
-}
-
+[CustomLuaClass]
+[ExecuteInEditMode]
+[RequireComponent(typeof(ScrollRect))]
 public class UIScroller : MonoBehaviour
 {
+    /// <summary>
+    /// 布局类型
+    /// </summary>
+    public enum LayoutType
+    {
+        Vertical,
+        Horizontal
+    }
+
+    /// <summary>
+    /// item激活回调
+    /// </summary>
+    public Action<int, GameObject, object> OnShowEvent;
+
+    /// <summary>
+    /// item隐藏回调
+    /// </summary>
+    public Action<int> OnHideEvent;
+
+    [Header("已插入总数据长度")]
     public int count = 0;
+
+    public int refreshInterval = 15;
     public LayoutType layoutType = LayoutType.Vertical;
-    public ScrollRect sr;
-    public RectTransform viewPort;
-    public RectTransform content;
-    public GameObject prefab;
     public float cellWidth = 500f;
     public float cellHeight = 100f;
     public float cellSpacing = 15f;
 
-    private Dictionary<int, Hashtable> data;
-    private int index = 0;
+    private int maxShowCount = 0;
+    private int startIndex = 0;
+    private int hideCount = 0;
 
-    private Vector2 viewPortPos;
+    private ScrollRect sr;
+    private RectTransform viewPort;
+    private RectTransform content;
+    private GameObject prefab;
+
+    private Dictionary<int, Hashtable> data;
+    private Queue<GameObject> hideQue;
+    private int index = 0;
+    private int lastRefreshFrameCount = 0;
 
     private void Awake()
     {
-        //viewPortPos = viewPort.position;
-        data = new Dictionary<int, Hashtable>();
-        InitRectTransform(viewPort);
-        InitRectTransform(content);
-        sr.onValueChanged.AddListener(OnValueChange);
-        //viewPort.position = viewPortPos;
+        if (Application.isPlaying)
+        {
+            Init();
+            data = new Dictionary<int, Hashtable>();
+            hideQue = new Queue<GameObject>();
+            sr.onValueChanged.AddListener(OnValueChange);
+            maxShowCount = GetShowCount();
+        }
     }
 
     private void OnValueChange(Vector2 pos)
     {
-        foreach (var t in data.Values)
+        if ((Time.frameCount - lastRefreshFrameCount) >= refreshInterval || startIndex != GetIndex())
         {
-            var go = t["go"] as GameObject;
-            var label = go.transform.Find("Text").GetComponent<Text>();
-            var pos1 = viewPort.InverseTransformPoint(go.transform.position);
-            label.text = pos1 + " index:" + GetIndex(pos1);
+            Refresh();
+            //print("refresh interval: "+(Time.frameCount - lastRefreshFrameCount));
+            lastRefreshFrameCount = Time.frameCount;
         }
     }
 
     public int Add(GameObject go, object info)
     {
-        go.name = index.ToString();
-        go.transform.SetParent(content);
-        go.transform.localScale = Vector3.one;
-        var rt = go.GetComponent<RectTransform>();
-        InitRectTransform(rt);
-        rt.sizeDelta = new Vector2(cellWidth, cellHeight);
-        var table = new Hashtable();
-        table.Add("index", index);
-        table.Add("go", go);
-        table.Add("info", info);
-        data.Add(index, table);
-        Refresh();
-        return index++;
+        Insert(index, go, info);
+        return index;
     }
 
     public int AddFirst(GameObject go, object info)
@@ -81,34 +95,7 @@ public class UIScroller : MonoBehaviour
 
     public void Insert(int index, GameObject go, object info)
     {
-        if (data.ContainsKey(index))
-        {
-            Dictionary<int, Hashtable> dic = new Dictionary<int, Hashtable>();
-            foreach (var p in data)
-            {
-                if (p.Key >= index) dic.Add(p.Key, p.Value);
-            }
-            foreach (var p in dic)
-            {
-                data.Remove(p.Key);
-            }
-            foreach (var p in dic)
-            {
-                data.Add(p.Key + 1, p.Value);
-            }
-        }
-        go.name = index.ToString();
-        go.transform.SetParent(content);
-        go.transform.localScale = Vector3.one;
-        var rt = go.GetComponent<RectTransform>();
-        InitRectTransform(rt);
-        rt.sizeDelta = new Vector2(cellWidth, cellHeight);
-        var table = new Hashtable();
-        table.Add("index", index);
-        table.Add("go", go);
-        table.Add("info", info);
-        data.Add(index, table);
-        Refresh();
+        StartCoroutine(CoInsert(index, go, info));
     }
 
     public void Delete(int index)
@@ -118,10 +105,15 @@ public class UIScroller : MonoBehaviour
             Debug.LogError("the key you want to remove is not exists! index:" + index);
             return;
         }
+
         var table = data[index];
-        var go = table["go"] as GameObject;
-        Destroy(go);
+        if (table["go"] != null)
+        {
+            var go = table["go"] as GameObject;
+            Destroy(go);
+        }
         data.Remove(index);
+
         Refresh();
     }
 
@@ -145,22 +137,101 @@ public class UIScroller : MonoBehaviour
         if (data.ContainsKey(deleteIndex)) Delete(deleteIndex);
     }
 
+    private IEnumerator CoInsert(int index, GameObject go, object info)
+    {
+        if (data.ContainsKey(index))
+        {
+            Dictionary<int, Hashtable> dic = new Dictionary<int, Hashtable>();
+            foreach (var p in data)
+            {
+                if (p.Key >= index) dic.Add(p.Key, p.Value);
+            }
+            foreach (var p in dic)
+            {
+                data.Remove(p.Key);
+            }
+            foreach (var p in dic)
+            {
+                data.Add(p.Key + 1, p.Value);
+            }
+        }
+        var table = new Hashtable();
+        table.Add("id", index);
+        table.Add("info", info);
+        data.Add(index, table);
+        prefab = go;
+        this.index++;
+        yield return null;
+        Refresh();
+    }
+
     private void Refresh()
     {
+        CoRefresh();
+    }
+
+    private void CoRefresh()
+    {
         data = data.OrderBy(o => o.Key).ToDictionary(o => o.Key, o => o.Value);
-        content.sizeDelta = GetContentSize();
         int num = 0;
         foreach (var p in data)
         {
-            var go = p.Value["go"] as GameObject;
-            if (go == null)
-            {
-                Debug.LogError("go is null");
-                return;
-            }
-            go.transform.localPosition = GetPos(num);
+            p.Value["index"] = num;
             num++;
         }
+        startIndex = GetIndex();
+        hideCount = hideQue.Count;
+        //for (int i = startIndex - maxShowCount - hideQue.Count; i < startIndex + maxShowCount * 2; i++)
+        for (int i = 0; i < index; i++)
+        {
+            Hashtable table = null;
+            data.TryGetValue(i, out table);
+            if (table == null) continue;
+            var obj = table["go"];
+            var posIndex = (int)table["index"];
+            var active = posIndex >= startIndex && posIndex <= startIndex + maxShowCount;
+            if (active)
+            {
+                GameObject go = null;
+                if (obj != null)
+                {
+                    go = obj as GameObject;
+                }
+                else
+                {
+                    if (hideQue.Count > 0)
+                    {
+                        go = hideQue.Dequeue();
+                    }
+                    else
+                    {
+                        go = Instantiate(prefab);
+                        go.transform.SetParent(content);
+                        go.transform.localScale = Vector3.one;
+                        var rt = go.GetComponent<RectTransform>();
+                        InitRectTransform(rt);
+                        rt.sizeDelta = new Vector2(cellWidth, cellHeight);
+                    }
+                }
+                go.transform.SetSiblingIndex(i);
+                go.SetActive(true);
+                go.transform.localPosition = GetPos((int)table["index"]);
+                table["go"] = go;
+                if (OnShowEvent != null) OnShowEvent((int)table["id"], go, table["info"]);
+            }
+            else
+            {
+                if (obj != null)
+                {
+                    var go = obj as GameObject;
+                    hideQue.Enqueue(go as GameObject);
+                    go.SetActive(false);
+                    table.Remove("go");
+                }
+                if (OnHideEvent != null) OnHideEvent((int)table["id"]);
+            }
+        }
+        content.sizeDelta = GetContentSize();
         count = data.Count;
     }
 
@@ -197,19 +268,28 @@ public class UIScroller : MonoBehaviour
         return pos;
     }
 
-    private int GetIndex(Vector2 pos)
+    private int GetShowCount()
     {
-        int res = 0;
-        var offset = 0f;
         switch (layoutType)
         {
             case LayoutType.Vertical:
-                offset = -pos.y;
-                res = Mathf.CeilToInt(offset / (cellHeight + cellSpacing));
+                return Mathf.CeilToInt(viewPort.sizeDelta.y / (cellHeight + cellSpacing));
+            case LayoutType.Horizontal:
+                return Mathf.CeilToInt(viewPort.sizeDelta.x / (cellWidth + cellSpacing));
+        }
+        return 0;
+    }
+
+    private int GetIndex()
+    {
+        int res = 0;
+        switch (layoutType)
+        {
+            case LayoutType.Vertical:
+                res = (int)(content.localPosition.y / (cellHeight + cellSpacing));
                 break;
             case LayoutType.Horizontal:
-                offset = pos.x;
-                res = Mathf.CeilToInt(offset / (cellWidth + cellSpacing));
+                res = -(int)(content.localPosition.x / (cellWidth + cellSpacing));
                 break;
         }
         return res;
@@ -232,19 +312,20 @@ public class UIScroller : MonoBehaviour
         }
     }
 
+    private void Init()
+    {
+        sr = this.GetComponent<ScrollRect>();
+        content = sr.content;
+        viewPort = sr.viewport;
+        if (content != null) InitRectTransform(content);
+        if (viewPort != null) InitRectTransform(viewPort);
+    }
+
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (!Application.isPlaying)
         {
-            var go = Instantiate(prefab);
-            go.transform.localScale = Vector3.one;
-            go.transform.localEulerAngles = Vector3.zero;
-            var res = Add(go, null);
-            go.transform.Find("Text").GetComponent<Text>().text = "index:" + res;
-        }
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            DeleteFirst();
+            Init();
         }
     }
 }
