@@ -12,6 +12,15 @@ using System.Linq;
 public class UIGridScroller : MonoBehaviour
 {
     /// <summary>
+    /// 布局类型
+    /// </summary>
+    public enum LayoutType
+    {
+        Vertical,
+        Horizontal
+    }
+
+    /// <summary>
     /// item激活回调
     /// </summary>
     public Action<int, GameObject, object> OnShowEvent;
@@ -21,13 +30,29 @@ public class UIGridScroller : MonoBehaviour
     /// </summary>
     public Action<int> OnHideEvent;
 
+    [Header("布局方向")]
+    public LayoutType layoutType = LayoutType.Vertical;
+
     [Header("已插入总数据长度")]
     public int count = 0;
 
+    [Header("滑动过程中每隔多少帧刷新一次")]
     public int refreshInterval = 15;
+
+    [Header("单个元素宽度")]
     public float cellWidth = 500f;
+
+    [Header("单个元素高度")]
     public float cellHeight = 100f;
+
+    [Header("元素间隔")]
     public float cellSpacing = 15f;
+
+    [Header("水平位置偏移")]
+    public float xOffset = 0f;
+
+    [Header("垂直位置偏移")]
+    public float yOffset = 0f;
 
     private int xNum = 0;
     private int yNum = 0;
@@ -58,13 +83,13 @@ public class UIGridScroller : MonoBehaviour
             maxShowCount = GetShowCount();
             sr.onValueChanged.AddListener(OnValueChange);
         }
-        OnShowEvent += (num, obj, info) =>
-        {
-            GameObject go = obj as GameObject;
-            go.transform.SetSiblingIndex(num);
-            go.name = info.ToString();
-            go.transform.Find("Text").GetComponent<Text>().text = go.name;
-        };
+        //OnShowEvent += (num, obj, info) =>
+        //{
+        //    GameObject go = obj as GameObject;
+        //    go.transform.SetSiblingIndex(num);
+        //    go.name = info.ToString();
+        //    go.transform.Find("Text").GetComponent<Text>().text = go.name;
+        //};
     }
 
     //private IEnumerator Start()
@@ -252,13 +277,13 @@ public class UIGridScroller : MonoBehaviour
     {
         ComputeNum();
         Vector2 size = Vector2.zero;
-        if (sr.vertical)
+        if (layoutType == LayoutType.Vertical)
         {
             ySize = yNum * (cellHeight + cellSpacing) - cellSpacing;
             size.x = content.sizeDelta.x;
             size.y = ySize;
         }
-        else if (sr.horizontal)
+        else if (layoutType == LayoutType.Horizontal)
         {
             xSize = xNum * (cellWidth + cellSpacing) - cellSpacing;
             size.x = xSize;
@@ -272,7 +297,7 @@ public class UIGridScroller : MonoBehaviour
     private Vector2 GetPos(int index)
     {
         Vector2 pos = Vector2.zero;
-        if (sr.vertical)
+        if (layoutType == LayoutType.Vertical)
         {
             var xpos = (index % xNum) * (cellWidth + cellSpacing);
             var ypos = 0f;
@@ -281,7 +306,7 @@ public class UIGridScroller : MonoBehaviour
             pos.x = xpos;
             pos.y = -ypos;
         }
-        else if (sr.horizontal)
+        else if (layoutType == LayoutType.Horizontal)
         {
             var ypos = (index % yNum) * (cellHeight + cellSpacing);
             var xpos = 0f;
@@ -290,18 +315,20 @@ public class UIGridScroller : MonoBehaviour
             pos.x = xpos;
             pos.y = -ypos;
         }
+        pos.x += xOffset;
+        pos.y += yOffset;
         return pos;
     }
 
     private int GetShowCount()
     {
         ComputeNum();
-        if (sr.vertical)
+        if (layoutType == LayoutType.Vertical)
         {
             var num = Mathf.CeilToInt((viewPort.sizeDelta.y + cellSpacing) / (cellHeight + cellSpacing));
             return ++num * xNum;
         }
-        if (sr.horizontal)
+        if (layoutType == LayoutType.Horizontal)
         {
             var num = Mathf.CeilToInt((viewPort.sizeDelta.x + cellSpacing) / (cellWidth + cellSpacing));
             return ++num * yNum;
@@ -311,14 +338,14 @@ public class UIGridScroller : MonoBehaviour
 
     private void ComputeNum()
     {
-        if (sr.vertical)
+        if (layoutType == LayoutType.Vertical)
         {
             xNum = Mathf.FloorToInt((viewPort.sizeDelta.x + cellSpacing) / (cellWidth + cellSpacing));
             yNum = Mathf.CeilToInt(count / (float)xNum);
             xNum = Mathf.Max(xNum, 1);
             yNum = Mathf.Max(yNum, 1);
         }
-        else if (sr.horizontal)
+        else if (layoutType == LayoutType.Horizontal)
         {
             yNum = Mathf.FloorToInt((viewPort.sizeDelta.y + cellSpacing) / (cellHeight + cellSpacing));
             xNum = Mathf.CeilToInt(count / (float)yNum);
@@ -330,13 +357,13 @@ public class UIGridScroller : MonoBehaviour
     private int GetIndex()
     {
         int res = 0;
-        if (sr.vertical)
+        if (layoutType == LayoutType.Vertical)
         {
-            res = Mathf.FloorToInt(content.localPosition.y / (cellHeight + cellSpacing)) * xNum;
+            res = Mathf.FloorToInt((content.localPosition.y + cellSpacing) / (cellHeight + cellSpacing)) * xNum;
         }
-        else if (sr.horizontal)
+        else if (layoutType == LayoutType.Horizontal)
         {
-            res = Mathf.FloorToInt(-content.localPosition.x / (cellWidth + cellSpacing)) * yNum;
+            res = Mathf.FloorToInt(-(content.localPosition.x + cellSpacing) / (cellWidth + cellSpacing)) * yNum;
         }
         return res;
     }
@@ -359,6 +386,16 @@ public class UIGridScroller : MonoBehaviour
         if (viewPort != null) InitRectTransform(viewPort);
 
         if (content == null || viewPort == null || Application.isPlaying) return;
+        if (layoutType == LayoutType.Vertical)
+        {
+            sr.vertical = true;
+            sr.horizontal = false;
+        }
+        else if (layoutType == LayoutType.Horizontal)
+        {
+            sr.vertical = false;
+            sr.horizontal = true;
+        }
         count = content.childCount;
         content.sizeDelta = GetContentSize();
         for (int i = 0; i < content.childCount; i++)

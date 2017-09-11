@@ -30,14 +30,29 @@ public class UIScroller : MonoBehaviour
     /// </summary>
     public Action<int> OnHideEvent;
 
+    [Header("布局方向")]
+    public LayoutType layoutType = LayoutType.Vertical;
+
     [Header("已插入总数据长度")]
     public int count = 0;
 
+    [Header("滑动过程中每隔多少帧刷新一次")]
     public int refreshInterval = 15;
-    public LayoutType layoutType = LayoutType.Vertical;
+
+    [Header("单个元素宽度")]
     public float cellWidth = 500f;
+
+    [Header("单个元素高度")]
     public float cellHeight = 100f;
+
+    [Header("元素间隔")]
     public float cellSpacing = 15f;
+
+    [Header("水平位置偏移")]
+    public float xOffset = 0f;
+
+    [Header("垂直位置偏移")]
+    public float yOffset = 0f;
 
     private int maxShowCount = 0;
     private int startIndex = 0;
@@ -65,15 +80,15 @@ public class UIScroller : MonoBehaviour
         }
     }
 
-    private IEnumerator Start()
-    {
-        if (!Application.isPlaying) yield break;
-        for (int i = 0; i < 500; i++)
-        {
-            Add(UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Res/Prefabs/UI/Common/Item.prefab"), index);
-            yield return null;
-        }
-    }
+    //private IEnumerator Start()
+    //{
+    //    if (!Application.isPlaying) yield break;
+    //    for (int i = 0; i < 500; i++)
+    //    {
+    //        Add(UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Res/Prefabs/UI/Common/Item.prefab"), index);
+    //        yield return null;
+    //    }
+    //}
 
     private void OnValueChange(Vector2 pos)
     {
@@ -279,6 +294,8 @@ public class UIScroller : MonoBehaviour
                 pos = new Vector2(offset, 0);
                 break;
         }
+        pos.x += xOffset;
+        pos.y += yOffset;
         return pos;
     }
 
@@ -300,10 +317,10 @@ public class UIScroller : MonoBehaviour
         switch (layoutType)
         {
             case LayoutType.Vertical:
-                res = (int)(content.localPosition.y / (cellHeight + cellSpacing));
+                res = Mathf.FloorToInt((content.localPosition.y + cellSpacing) / (cellHeight + cellSpacing));
                 break;
             case LayoutType.Horizontal:
-                res = -(int)(content.localPosition.x / (cellWidth + cellSpacing));
+                res = Mathf.FloorToInt(-(content.localPosition.x + cellSpacing) / (cellWidth + cellSpacing));
                 break;
         }
         return res;
@@ -335,6 +352,16 @@ public class UIScroller : MonoBehaviour
         if (viewPort != null) InitRectTransform(viewPort);
 
         if (content == null || viewPort == null || Application.isPlaying) return;
+        if (layoutType == LayoutType.Vertical)
+        {
+            sr.vertical = true;
+            sr.horizontal = false;
+        }
+        else if (layoutType == LayoutType.Horizontal)
+        {
+            sr.vertical = false;
+            sr.horizontal = true;
+        }
         count = content.childCount;
         content.sizeDelta = GetContentSize();
         for (int i = 0; i < content.childCount; i++)
