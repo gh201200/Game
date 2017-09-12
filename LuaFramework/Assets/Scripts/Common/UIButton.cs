@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
-using System.Collections;
 using SLua;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using System;
 
 [CustomLuaClass]
 public class UIButton : Selectable, IPointerClickHandler, IDropHandler

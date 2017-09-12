@@ -113,7 +113,14 @@ function UIManager.Update()
 		GameManager:ReturnLoginPanel()
 	end
 	if table.size(this.WaitOpenQue) > 0 then
-		if not this:IsOpen("LoadingPanel") then
+		local needOpenLoading = false
+		for k, _ in pairs(this.WaitOpenQue) do
+			if not this.CacheQue[k] then
+				needOpenLoading = true
+				break
+			end
+		end
+		if needOpenLoading and not this:IsOpen("LoadingPanel") then
 			this:Open("LoadingPanel")
 		end
 	else

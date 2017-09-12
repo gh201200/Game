@@ -51,6 +51,13 @@ UIConfig = {
 		layer = UILayer.Middle,
 		AnimationType = AnimationType.None,
 	},
+	HotfixPanel = {
+		name = "HotfixPanel",
+		prefabPath = "Prefabs/UI/HotfixPanel/HotfixPanel.prefab",
+		luaPath = "UI.HotfixPanel",
+		layer = UILayer.Middle,
+		AnimationType = AnimationType.None,
+	},
 	TestPanel = {
 		name = "TestPanel",
 		prefabPath = "Prefabs/UI/Test/TestPanel.prefab",
@@ -69,5 +76,5 @@ EventType = {
 	OnPanelOpen = 6,					-- 打开UI界面
 	OnPanelClose = 7,					-- 关闭UI界面
 	ShowVersion = 8,					-- 显示登录界面版本号
-	OpenDebugPanel = 9,					-- 打开调试界面
+	OpenHotfixPanel = 9,				-- 打开调试界面
 }

@@ -57,7 +57,7 @@ public class Init : MonoBehaviour
 
         style2 = new GUIStyle();
         style2.fontSize = fontSize;
-        style2.normal.textColor = Color.red;
+        style2.normal.textColor = Color.green;
         style2.alignment = TextAnchor.MiddleCenter;
         AssetLoader.Instance.LoadAsync("Textures/UI/Common/UIatlas4_18.png", AssetType.Sprite,
             obj =>

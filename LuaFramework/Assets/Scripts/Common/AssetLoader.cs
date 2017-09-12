@@ -289,19 +289,19 @@ public class AssetLoader : MonoBehaviour
         //    StartCoroutine(CoLoad());
         //}
 
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            Debug.Log("---------------abTemp-----------------");
-            if (abTemp.Count != 0) foreach (var k in abTemp.Keys) Debug.Log(k);
-            else Debug.Log("abTemp's count is 0");
-            Debug.Log("----------------abTemp----------------");
-            Debug.Log("----------------Cached----------------");
-            if (cacheDict.Count != 0) foreach (var k in cacheDict.Keys) Debug.Log(k);
-            else Debug.Log("abTemp's count is 0");
-            Debug.Log("----------------Cached----------------");
-        }
+        //if (Input.GetKeyDown(KeyCode.Q))
+        //{
+        //    Debug.Log("---------------abTemp-----------------");
+        //    if (abTemp.Count != 0) foreach (var k in abTemp.Keys) Debug.Log(k);
+        //    else Debug.Log("abTemp's count is 0");
+        //    Debug.Log("----------------abTemp----------------");
+        //    Debug.Log("----------------Cached----------------");
+        //    if (cacheDict.Count != 0) foreach (var k in cacheDict.Keys) Debug.Log(k);
+        //    else Debug.Log("abTemp's count is 0");
+        //    Debug.Log("----------------Cached----------------");
+        //}
 
-        if (Input.GetKey(KeyCode.W)) print(Progress * 100 + "%" + "\t" + curIndex + "/" + totalIndex);
+        //if (Input.GetKey(KeyCode.W)) print(Progress * 100 + "%" + "\t" + curIndex + "/" + totalIndex);
 
         if (loadingDict.Count <= 0) return;
 

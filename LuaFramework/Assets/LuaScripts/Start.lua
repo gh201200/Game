@@ -20,5 +20,8 @@ EventManager:Add(EventType.OnPanelOpen, function(panelName)
 	end
 end)
 
+EventManager:Add(EventType.OpenHotfixPanel, function()
+	UIManager:Open("HotfixPanel")
+end)
+
 UIManager:Open("LoginPanel")
---UIManager:Open("TestPanel")

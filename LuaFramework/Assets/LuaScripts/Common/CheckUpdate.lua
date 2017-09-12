@@ -67,7 +67,7 @@ end
 
 function CheckUpdate:ctor()
 	this = self
-	this.remoteUrl = "http://localhost/Version/"
+	this.remoteUrl = "http://192.168.0.232:5555/Version/Assets/"
 	this.rootPath = Application.persistentDataPath .. "/"
 	this.tempFileSuffix = ".tempfile"
 	this.json_server = this.rootPath .. "AssetsInfo_Server.json"

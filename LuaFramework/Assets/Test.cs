@@ -5,6 +5,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using Debug = UnityEngine.Debug;
+using DG.Tweening;
 
 public class Test : MonoBehaviour
 {
@@ -24,6 +25,7 @@ public class Test : MonoBehaviour
                 print(button.name + " on down");
                 if (data.pointerCurrentRaycast.gameObject != null) print(data.pointerCurrentRaycast.gameObject.name);
             });
+            transform.DOScale(1f, 1f).SetEase(Ease.OutBack);
         }
     }
 }

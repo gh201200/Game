@@ -27,15 +27,20 @@ namespace SLua
 
     public class CustomExport
     {
-        public static void OnGetAssemblyToGenerateExtensionMethod(out List<string> list) {
+        public static void OnGetAssemblyToGenerateExtensionMethod(out List<string> list)
+        {
             list = new List<string> {
                 "Assembly-CSharp",
+                "DOTween",
+                "DOTween43",
+                "DOTween46",
+                "DOTween50",
             };
         }
 
         public static void OnAddCustomClass(LuaCodeGen.ExportGenericDelegate add)
         {
-			// below lines only used for demostrate how to add custom class to export, can be delete on your app
+            // below lines only used for demostrate how to add custom class to export, can be delete on your app
 
             add(typeof(System.Func<int>), null);
             add(typeof(System.Action<int, string>), null);
@@ -43,11 +48,28 @@ namespace SLua
             add(typeof(List<int>), "ListInt");
             add(typeof(Dictionary<int, string>), "DictIntStr");
             add(typeof(string), "String");
-            add(typeof (System.Diagnostics.Stopwatch), null);
-            add(typeof (System.IO.File), null);
+            add(typeof(System.Diagnostics.Stopwatch), null);
+            add(typeof(System.IO.File), null);
             add(typeof(System.IO.FileInfo), null);
             add(typeof(System.IO.Directory), null);
             add(typeof(System.IO.DirectoryInfo), null);
+            //add(typeof(DG.Tweening.DOTween), null);
+            //add(typeof(DG.Tweening.DOTweenUtils46), null);
+            //add(typeof(DG.Tweening.DOVirtual), null);
+            //add(typeof(DG.Tweening.Sequence), null);
+            //add(typeof(DG.Tweening.Tweener), null);
+            //add(typeof(DG.Tweening.Tween), null);
+            //add(typeof(DG.Tweening.AutoPlay), null);
+            //add(typeof(DG.Tweening.AxisConstraint), null);
+            //add(typeof(DG.Tweening.Ease), null);
+            //add(typeof(DG.Tweening.LogBehaviour), null);
+            //add(typeof(DG.Tweening.LoopType), null);
+            //add(typeof(DG.Tweening.PathMode), null);
+            //add(typeof(DG.Tweening.PathType), null);
+            //add(typeof(DG.Tweening.RotateMode), null);
+            //add(typeof(DG.Tweening.ScrambleMode), null);
+            //add(typeof(DG.Tweening.TweenType), null);
+            //add(typeof(DG.Tweening.UpdateType), null);
             // add your custom class here
             // add( type, typename)
             // type is what you want to export
@@ -61,6 +83,10 @@ namespace SLua
             // add its name into list, slua will generate all exported interface automatically for you
 
             //list.Add("NGUI");
+            list.Add("DOTween");
+            list.Add("DOTween43");
+            list.Add("DOTween46");
+            list.Add("DOTween50");
         }
 
         public static HashSet<string> OnAddCustomNamespace()
@@ -104,7 +130,7 @@ namespace SLua
         public static void OnGetNoUseList(out List<string> list)
         {
             list = new List<string>
-            {      
+            {
                 "HideInInspector",
                 "ExecuteInEditMode",
                 "AddComponentMenu",
@@ -113,7 +139,7 @@ namespace SLua
                 "DisallowMultipleComponent",
                 "SerializeField",
                 "AssemblyIsEditorAssembly",
-                "Attribute", 
+                "Attribute",
                 "Types",
                 "UnitySurrogateSelector",
                 "TrackedReference",
@@ -136,7 +162,7 @@ namespace SLua
                 "TextClipping",
                 "Gizmos",
                 "ADBannerView",
-                "ADInterstitialAd",            
+                "ADInterstitialAd",
                 "Android",
                 "Tizen",
                 "jvalue",
@@ -152,7 +178,7 @@ namespace SLua
                 "Handheld",
                 "LocalNotification",
                 "NotificationServices",
-                "RemoteNotificationType",      
+                "RemoteNotificationType",
                 "RemoteNotification",
                 "SamsungTV",
                 "TextureCompressionQuality",
@@ -160,7 +186,7 @@ namespace SLua
                 "TouchScreenKeyboard",
                 "MovieTexture",
                 "UnityEngineInternal",
-                "Terrain",                            
+                "Terrain",
                 "Tree",
                 "SplatPrototype",
                 "DetailPrototype",
@@ -168,8 +194,8 @@ namespace SLua
                 "MeshSubsetCombineUtility",
                 "AOT",
                 "Social",
-                "Enumerator",       
-                "SendMouseEvents",               
+                "Enumerator",
+                "SendMouseEvents",
                 "Cursor",
                 "Flash",
                 "ActionScript",
@@ -181,15 +207,15 @@ namespace SLua
                 "GraphicRebuildTracker",
                 "Advertisements",
                 "UnityEditor",
-			    "WSA",
-			    "EventProvider",
-			    "Apple",
-			    "ClusterInput",
-				"Motion",
+                "WSA",
+                "EventProvider",
+                "Apple",
+                "ClusterInput",
+                "Motion",
                 "UnityEngine.UI.ReflectionMethodsCache",
-				"NativeLeakDetection",
-				"NativeLeakDetectionMode",
-				"WWWAudioExtensions",
+                "NativeLeakDetection",
+                "NativeLeakDetectionMode",
+                "WWWAudioExtensions",
                 "UnityEngine.Experimental",
             };
         }

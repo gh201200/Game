@@ -38,7 +38,7 @@ end
 function EventManager:Dispatch(et, ...)
 	if self.stopAll or self.StopList[et] then return end
 	if not self.EventList[et] then
-		print("EventType: " .. et .. " has no listener!")
+		-- print("EventType: " .. et .. " has no listener!")
 		return
 	end
 	for _, v in pairs(self.EventList[et]) do
