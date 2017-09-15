@@ -25,3 +25,5 @@ EventManager:Add(EventType.OpenHotfixPanel, function()
 end)
 
 UIManager:Open("LoginPanel")
+local go = AssetLoader.Instance:Load("Prefabs/UI/LoginPanel/LoginPanel.prefab", AssetType.Prefab)
+print(go)

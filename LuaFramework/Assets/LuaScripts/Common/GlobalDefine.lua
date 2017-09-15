@@ -29,6 +29,17 @@ AnimationType = {
 	B2T			=		"B2T",
 }
 
+-- 角色状态枚举
+EntityState = {
+	Idle = "Idle",						-- 站立
+	Move = "Move",						-- 移动
+	Patrol = "Patrol",					-- 游荡
+	Chase = "Chase",					-- 追逐
+	Dead = "Dead",						-- 死亡
+	Attack = "Attack",					-- 攻击
+	CastSkill = "CastSkill",			-- 释放技能
+}
+
 UIConfig = {
 	LoadingPanel = {
 		name = "LoadingPanel",
@@ -76,5 +87,8 @@ EventType = {
 	OnPanelOpen = 6,					-- 打开UI界面
 	OnPanelClose = 7,					-- 关闭UI界面
 	ShowVersion = 8,					-- 显示登录界面版本号
-	OpenHotfixPanel = 9,				-- 打开调试界面
+	OpenHotfixPanel = 9,				-- 打开调试界面	
+	OnStateEnter = 10,					-- 进入XX状态
+	OnStateExecute = 11,				-- XX状态正在执行
+	OnStateExit = 12,					-- 退出XX状态
 }

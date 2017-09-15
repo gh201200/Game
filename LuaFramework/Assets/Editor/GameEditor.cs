@@ -19,7 +19,7 @@ public class GameEditor
 {
     public static string buildSettingPath = "Assets/Editor/BuildSetting.asset";
 
-    [MenuItem("Tool/Test", false, 1000)]
+    [MenuItem("Tools/Test", false, 1000)]
     static void Test()
     {
         ////测试解压
@@ -95,11 +95,18 @@ public class GameEditor
         //    EditorUtility.ClearProgressBar();
         //    AssetDatabase.Refresh();
         //}
-        var res = HttpHelper.Instance.Load("http://localhost/Version/AssetsInfo.json");
-        Debug.Log(Api.GetString(res));
+        AssetLoader.Instance.LoadAsync("MapGridConfig.json", AssetType.TextAsset, o =>
+        {
+            AssetLoader.Instance.LoadAsync("MapObjConfig.json", AssetType.TextAsset, oo =>
+            {
+                var json_obj = (oo as TextAsset).ToString();
+                var json_grid = (o as TextAsset).ToString();
+                PathManager.Instance.InitMap(json_grid, json_obj);
+            });
+        });
     }
 
-    [MenuItem("Tool/BuildSetting", false, 1)]
+    [MenuItem("Tools/BuildSetting", false, 1)]
     static void BuildSetting()
     {
         Object obj = GetBuildSettingAsset();
@@ -107,7 +114,7 @@ public class GameEditor
         Selection.activeObject = obj;
     }
 
-    //[MenuItem("Tool/AssetBundle/Build Single", false, 10)]
+    //[MenuItem("Tools/AssetBundle/Build Single", false, 10)]
     static void BuildSingle()
     {
         BuildSetting bs = GetBuildSettingAsset();
@@ -137,7 +144,7 @@ public class GameEditor
         Build();
     }
 
-    [MenuItem("Tool/AssetBundle/Build All", false, 20)]
+    [MenuItem("Tools/AssetBundle/Build All", false, 20)]
     static void BuildAll()
     {
         BuildSetting bs = GetBuildSettingAsset();
@@ -165,14 +172,14 @@ public class GameEditor
         Build();
     }
 
-    [MenuItem("Tool/AssetBundle/Remove Unused AssetBundle Name", false, 30)]
+    [MenuItem("Tools/AssetBundle/Remove Unused AssetBundle Name", false, 30)]
     static void RemoveUnusedAssetBundleName()
     {
         AssetDatabase.RemoveUnusedAssetBundleNames();
         //Debug.Log("clear success!");
     }
 
-    [MenuItem("Tool/AssetBundle/Remove All AssetBundle Name", false, 40)]
+    [MenuItem("Tools/AssetBundle/Remove All AssetBundle Name", false, 40)]
     static void RemoveAllAssetBundleName()
     {
         foreach (string file in GetAllAssets())
@@ -184,7 +191,7 @@ public class GameEditor
         RemoveUnusedAssetBundleName();
     }
 
-    [MenuItem("Tool/AssetBundle/Clear ResVersion Record", false, 50)]
+    [MenuItem("Tools/AssetBundle/Clear ResVersion Record", false, 50)]
     static void ClearResVersionRecord()
     {
         EditorPrefs.DeleteKey("BuildVersion");
@@ -192,7 +199,7 @@ public class GameEditor
         Debug.Log("clear success!");
     }
 
-    [MenuItem("Tool/AssetBundle/Clear AssetBundles", false, 60)]
+    [MenuItem("Tools/AssetBundle/Clear AssetBundles", false, 60)]
     static void ClearAssetBundles()
     {
         BuildSetting bs = GetBuildSettingAsset();
@@ -217,14 +224,14 @@ public class GameEditor
 
     }
 
-    [MenuItem("Tool/Analyse Excel", false, 80)]
+    [MenuItem("Tools/Analyse Excel", false, 80)]
     static void AnalyseExcel()
     {
         var win = EditorWindow.GetWindow<AnalyseExcelWindow>();
         win.Show();
     }
 
-    [MenuItem("Tool/Encrypt Lua Code", false, 100)]
+    [MenuItem("Tools/Encrypt Lua Code", false, 100)]
     static void EncryptLuaCode()
     {
         try
@@ -255,7 +262,7 @@ public class GameEditor
         }
     }
 
-    //[MenuItem("Tool/Decrypt Lua Code", false, 101)]
+    //[MenuItem("Tools/Decrypt Lua Code", false, 101)]
     static void DecryptLuaCode()
     {
         try
@@ -288,7 +295,7 @@ public class GameEditor
         }
     }
 
-    [MenuItem("Tool/Clear Encrypt Lua Code", false, 110)]
+    [MenuItem("Tools/Clear Encrypt Lua Code", false, 110)]
     static void ClearLuaBytecode()
     {
         BuildSetting bs = GetBuildSettingAsset();
@@ -299,19 +306,19 @@ public class GameEditor
         AssetDatabase.Refresh();
     }
 
-    [MenuItem("Tool/Generate Assets Info/Json", false, 170)]
+    [MenuItem("Tools/Generate Assets Info/Json", false, 170)]
     static void GenerateAssetsInfo()
     {
         GenerateAssetInfoJson();
     }
 
-    [MenuItem("Tool/Generate Assets Info/XML", false, 180)]
+    [MenuItem("Tools/Generate Assets Info/XML", false, 180)]
     static void GenerateAssetsInfo2()
     {
         GenerateAssetInfoXml();
     }
 
-    [MenuItem("Tool/Export Textures", false, 200)]
+    [MenuItem("Tools/Export Textures", false, 200)]
     static void ExportSprites()
     {
         UnityEngine.Object obj = Selection.activeObject;
@@ -358,7 +365,7 @@ public class GameEditor
         }
     }
 
-    [MenuItem("Tool/Push Assets To Remote", false, 240)]
+    [MenuItem("Tools/Push Assets To Remote", false, 240)]
     static void PushAssetsToRemote()
     {
         EncryptLuaCode();
@@ -380,7 +387,7 @@ public class GameEditor
         }
     }
 
-    [MenuItem("Tool/Pack Assets", false, 280)]
+    [MenuItem("Tools/Pack Assets", false, 280)]
     static void PackAssets()
     {
         Debug.Log("begin pack");
@@ -414,6 +421,56 @@ public class GameEditor
         {
             EditorUtility.ClearProgressBar();
             AssetDatabase.Refresh();
+        }
+    }
+
+    [MenuItem("Tools/Generate AnimatorController", false, 320)]
+    static void GenerateAnimatorController()
+    {
+        var modelPath = "Assets/Res/Models/Entity";
+        var files = Directory.GetFiles(modelPath, "*.FBX", SearchOption.AllDirectories);
+        var animationList = new[] { "Idle", "Move", "Attack01", "Cast_Remote", "Cast_Blink", "Cast_Near", "Cast_Self", "Cast_Unique", "Die" };
+        foreach (var file in files)
+        {
+            var path = file.Replace('\\', '/');
+            var acPath = "Assets/Res/AnimatorController/" + Path.GetFileNameWithoutExtension(path) + ".controller";
+            GameUtil.CreateDirectory(acPath);
+            var ac = UnityEditor.Animations.AnimatorController.CreateAnimatorControllerAtPath(acPath);
+            var layer = ac.layers[0];
+            var stateMachine = layer.stateMachine;
+            var stateList = new List<UnityEditor.Animations.AnimatorState>();
+            var objs = AssetDatabase.LoadAllAssetsAtPath(path);
+            var index = 0;
+            foreach (var o in objs)
+            {
+                if (o is AnimationClip)
+                {
+                    var state = stateMachine.AddState(o.name);
+                    state.motion = o as Motion;
+                    stateList.Add(state);
+                    ac.AddParameter(o.name, AnimatorControllerParameterType.Bool);
+                    if (animationList.Contains(o.name)) index++;
+                }
+            }
+            if (index < animationList.Length)
+            {
+                Debug.LogError("动画不完整！");
+            }
+            for (int i = 0; i < stateList.Count; i++)
+            {
+                for (int j = 0; j < stateList.Count; j++)
+                {
+                    if (i != j)
+                    {
+                        var anstateTras = stateList[i].AddTransition(stateList[j], false);
+                        anstateTras.AddCondition(UnityEditor.Animations.AnimatorConditionMode.If, 0, stateList[j].name);
+                    }
+                }
+                if (stateList[i].name == "Idle")
+                {
+                    stateMachine.defaultState = stateList[i];
+                }
+            }
         }
     }
 
@@ -712,5 +769,130 @@ public class GameEditor
     public static bool ExistsSymbols(string str)
     {
         return PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup).Split(';').ToList().Contains(str);
+    }
+
+    public static void AddTag(string tag)
+    {
+        if (!isHasTag(tag))
+        {
+            SerializedObject tagManager = new SerializedObject(AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/TagManager.asset")[0]);
+            SerializedProperty it = tagManager.GetIterator();
+            while (it.NextVisible(true))
+            {
+                if (it.name == "tags")
+                {
+                    it.InsertArrayElementAtIndex(it.arraySize);
+                    SerializedProperty dataPoint = it.GetArrayElementAtIndex(it.arraySize - 1);
+                    dataPoint.stringValue = tag;
+                    tagManager.ApplyModifiedProperties();
+                    return;
+                }
+            }
+        }
+    }
+
+    public static void RemoveTag(string tag)
+    {
+        if (!isHasTag(tag))
+        {
+            SerializedObject tagManager = new SerializedObject(AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/TagManager.asset")[0]);
+            SerializedProperty it = tagManager.GetIterator();
+            while (it.NextVisible(true))
+            {
+                if (it.name == "tags")
+                {
+                    for (int i = 0; i < it.arraySize; i++)
+                    {
+                        SerializedProperty dataPoint = it.GetArrayElementAtIndex(i);
+                        if (dataPoint.stringValue == tag)
+                        {
+                            dataPoint.DeleteArrayElementAtIndex(i);
+                        }
+                    }
+                    tagManager.ApplyModifiedProperties();
+                }
+            }
+        }
+    }
+
+    public static void RemoveAllTag()
+    {
+        SerializedObject tagManager = new SerializedObject(AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/TagManager.asset")[0]);
+        SerializedProperty it = tagManager.GetIterator();
+        while (it.NextVisible(true))
+        {
+            if (it.name == "tags")
+            {
+                it.ClearArray();
+                tagManager.ApplyModifiedProperties();
+            }
+        }
+    }
+
+    public static void AddLayer(string layer)
+    {
+        if (!isHasLayer(layer))
+        {
+            SerializedObject tagManager = new SerializedObject(AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/TagManager.asset")[0]);
+            SerializedProperty it = tagManager.GetIterator();
+            while (it.NextVisible(true))
+            {
+                if (it.name.StartsWith("User Layer"))
+                {
+                    if (it.type == "string")
+                    {
+                        if (string.IsNullOrEmpty(it.stringValue))
+                        {
+                            it.stringValue = layer;
+                            tagManager.ApplyModifiedProperties();
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public static void RemoveLayer(string layer)
+    {
+        if (!isHasLayer(layer))
+        {
+            SerializedObject tagManager = new SerializedObject(AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/TagManager.asset")[0]);
+            SerializedProperty it = tagManager.GetIterator();
+            while (it.NextVisible(true))
+            {
+                if (it.name.StartsWith("User Layer"))
+                {
+                    if (it.type == "string")
+                    {
+                        if (it.stringValue == layer)
+                        {
+                            it.ClearArray();
+                            tagManager.ApplyModifiedProperties();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public static bool isHasTag(string tag)
+    {
+        for (int i = 0; i < UnityEditorInternal.InternalEditorUtility.tags.Length; i++)
+        {
+            if (UnityEditorInternal.InternalEditorUtility.tags[i].Contains(tag))
+                return true;
+        }
+        return false;
+    }
+
+    public static bool isHasLayer(string layer)
+    {
+        for (int i = 0; i < UnityEditorInternal.InternalEditorUtility.layers.Length; i++)
+        {
+            if (UnityEditorInternal.InternalEditorUtility.layers[i].Contains(layer))
+                return true;
+        }
+        return false;
     }
 }

@@ -19,8 +19,6 @@ local function OnCheckUpdateComplete(needUpdate)
 	this.progressLabel.text = "100%"
 	this.tipLabel.text = "正在进入游戏..."
 	if needUpdate then
-		this.progressGo:SetActive(true)
-		this.loginGo:SetActive(false)
 		GameManager:ReturnLoginPanel()
 	else
 		this.progressGo:SetActive(false)
