@@ -9,6 +9,10 @@ UIManager = require "ui.uimanager"
 CheckUpdate = require "common.checkupdate"
 GameManager = require "common.gamemanager"
 
+FSMSystem = require "FSM.FSMSystem"
+FSMState = require "FSM.FSMState"
+IdleState = require "FSM.States.IdleState"
+
 local PlayerData = require "common.playerdata"
 
 Data = PlayerData:Load()

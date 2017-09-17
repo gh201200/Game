@@ -67,6 +67,27 @@ UIConfig = {
 	},
 }
 
+StateTransition = {
+	SeePlayer = 0,
+	LosePlayer = 1,
+}
+
+StateID = {
+	Idle = 0,
+	Move = 1,
+	Patrol = 2,
+	Chase = 3,
+	CastSkill = 4,
+	Dead = 5,
+}
+
+EntityType = {
+	Player_Red = 0,
+	Player_Blue = 1,
+	Monster_Red = 2,
+	Monster_Blue = 3,
+}
+
 EventType = {
 	Test = 1,
 	OnStartCheckUpdate = 2,				-- 开始检查更新
