@@ -8,7 +8,6 @@ function IEntity:ctor(...)
 	this.preState = nil
 	this.curState = EntityState.Idle
 	LuaManager.OnUpdateEvent = {"+=", this.Update}
-	LuaManager.OnDestroyEvent = {"+=", this.OnDestroy}
 end
 
 function IEntity:CanChangeState(state)
@@ -40,7 +39,7 @@ function IEntity.Update()
 	EventManager:Dispatch(EventType.OnStateExecute, this.curState, this)
 end
 
-function IEntity.OnDestroy()
+function IEntity:OnDestroy()
 	LuaManager.OnUpdateEvent = {"-=", this.Update}
 end
 
