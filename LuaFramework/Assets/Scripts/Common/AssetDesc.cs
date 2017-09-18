@@ -126,7 +126,7 @@ public class AssetDesc
         FullPath = GetFullPath(path);
         AssetType = at;
 #if !DEBUG_MODE
-        Dependencies = AssetLoader.Instance.Manifest.GetDirectDependencies(AssetBundleTag);
+        Dependencies = AssetLoader.Instance.Manifest.GetAllDependencies(AssetBundleTag);
 #endif
         LoadedDependencies = new HashSet<string>();
         FinishNum = 0;

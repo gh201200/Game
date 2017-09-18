@@ -11,54 +11,57 @@ using Debug = UnityEngine.Debug;
 [CustomEditor(typeof(PathManager))]
 public class PathManagerExpand : Editor
 {
-    private static string ObstacleRoot
-    {
-        get { return EditorPrefs.GetString("ObstacleRoot", ""); }
-        set { EditorPrefs.SetString("ObstacleRoot", value); }
-    }
-
-    private static string MapObjConfigPath
-    {
-        get { return EditorPrefs.GetString("MapConfigPath", ""); }
-        set { EditorPrefs.SetString("MapConfigPath", value); }
-    }
-
-    private static string MapGridConfigPath
-    {
-        get { return EditorPrefs.GetString("MapGridConfigPath", ""); }
-        set { EditorPrefs.SetString("MapGridConfigPath", value); }
-    }
-
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
         EditorGUILayout.Separator();
         GUILayout.BeginHorizontal();
-        EditorGUILayout.SelectableLabel(ObstacleRoot);
-        if (GUILayout.Button("选择预制路径"))
+        EditorGUILayout.SelectableLabel(PathRecoder.ObstacleRoot);
+        if (GUILayout.Button("选择障碍物路径"))
         {
-            var path = EditorUtility.OpenFolderPanel("预制路径", ObstacleRoot, "");
+            var path = EditorUtility.OpenFolderPanel("障碍物路径", PathRecoder.ObstacleRoot, "");
             path = path.Replace('\\', '/');
             if (!path.StartsWith(Application.dataPath + "/Res"))
             {
-                EditorUtility.DisplayDialog("提示", "预制路径必须以Assets/Res开头", "确定");
+                EditorUtility.DisplayDialog("提示", "障碍物路径必须以Assets/Res开头", "确定");
                 return;
             }
-            if (path.Length > 0) ObstacleRoot = path;
+            if (path.Length > 0) PathRecoder.ObstacleRoot = path;
         }
         GUILayout.EndHorizontal();
-        if (GUILayout.Button("生成预制标签"))
+
+        //GUILayout.BeginHorizontal();
+        //EditorGUILayout.SelectableLabel(PathRecoder.EntityRoot);
+        //if (GUILayout.Button("选择Entity路径"))
+        //{
+        //    var path = EditorUtility.OpenFolderPanel("Entity路径", PathRecoder.EntityRoot, "");
+        //    path = path.Replace('\\', '/');
+        //    if (!path.StartsWith(Application.dataPath + "/Res"))
+        //    {
+        //        EditorUtility.DisplayDialog("提示", "Entity路径必须以Assets/Res开头", "确定");
+        //        return;
+        //    }
+        //    if (path.Length > 0) PathRecoder.EntityRoot = path;
+        //}
+        //GUILayout.EndHorizontal();
+
+        if (GUILayout.Button("生成标签"))
         {
             GenerateObstacleTag();
+        }
+        if (GUILayout.Button("导出障碍物信息"))
+        {
+            ExportMapObjConfig();
         }
         if (GUILayout.Button("导出网格信息"))
         {
             ExportMapGridConfig();
         }
-        if (GUILayout.Button("导出预制信息"))
-        {
-            ExportMapObjConfig();
-        }
+        //if (GUILayout.Button("导出Entity信息"))
+        //{
+        //    ExportMapEntityConfig();
+        //}
+
         if (GUILayout.Button("清除缓存"))
         {
             PathManager m = target as PathManager;
@@ -75,7 +78,11 @@ public class PathManagerExpand : Editor
     private void GenerateObstacleTag()
     {
         GameEditor.RemoveAllTag();
-        var files = Directory.GetFiles(ObstacleRoot, "*", SearchOption.AllDirectories);
+        //var entitys = Directory.GetFiles(PathRecoder.EntityRoot, "*", SearchOption.AllDirectories);
+        var obstacles = Directory.GetFiles(PathRecoder.ObstacleRoot, "*", SearchOption.AllDirectories);
+        var files = new List<string>();
+        //files.AddRange(entitys);
+        files.AddRange(obstacles);
         foreach (var file in files)
         {
             var fullPath = file.Replace('\\', '/');
@@ -100,7 +107,7 @@ public class PathManagerExpand : Editor
         var table = m.GetObjList();
         if (table == null) return;
 
-        var temp = EditorUtility.OpenFolderPanel("保存路径", MapObjConfigPath, "");
+        var temp = EditorUtility.OpenFolderPanel("保存路径", PathRecoder.MapObjConfigPath, "");
         if (string.IsNullOrEmpty(temp)) return;
         temp = temp.Replace('\\', '/');
         if (!temp.StartsWith(Application.dataPath + "/Res"))
@@ -108,7 +115,7 @@ public class PathManagerExpand : Editor
             EditorUtility.DisplayDialog("提示", "保存路径必须以Assets/Res开头", "确定");
             return;
         }
-        MapObjConfigPath = temp;
+        PathRecoder.MapObjConfigPath = temp;
 
         Dictionary<string, object> assetsDic = new Dictionary<string, object>();
         foreach (DictionaryEntry o in table)
@@ -139,15 +146,15 @@ public class PathManagerExpand : Editor
             assetsDic.Add(path, itemList);
         }
         var json = Json.Serialize(assetsDic);
-        File.WriteAllText(MapObjConfigPath + "/MapObjConfig.json", json);
-        Process.Start(MapObjConfigPath);
+        File.WriteAllText(PathRecoder.MapObjConfigPath + "/MapObjConfig.json", json);
+        Process.Start(PathRecoder.MapObjConfigPath);
     }
 
     private void ExportMapGridConfig()
     {
         PathManager m = target as PathManager;
         if (m == null) return;
-        var temp = EditorUtility.OpenFolderPanel("保存路径", MapGridConfigPath, "");
+        var temp = EditorUtility.OpenFolderPanel("保存路径", PathRecoder.MapGridConfigPath, "");
         if (string.IsNullOrEmpty(temp)) return;
         temp = temp.Replace('\\', '/');
         if (!temp.StartsWith(Application.dataPath + "/Res"))
@@ -155,7 +162,7 @@ public class PathManagerExpand : Editor
             EditorUtility.DisplayDialog("提示", "保存路径必须以Assets/Res开头", "确定");
             return;
         }
-        MapGridConfigPath = temp;
+        PathRecoder.MapGridConfigPath = temp;
         var grids = m.GetGridList();
         if (grids != null && grids.Length > 0)
         {
@@ -180,8 +187,8 @@ public class PathManagerExpand : Editor
             dic.Add("des", desDic);
             dic.Add("grids", gridDic);
             var json = Json.Serialize(dic);
-            File.WriteAllText(MapGridConfigPath + "/MapGridConfig.json", json);
-            Process.Start(MapGridConfigPath);
+            File.WriteAllText(PathRecoder.MapGridConfigPath + "/MapGridConfig.json", json);
+            Process.Start(PathRecoder.MapGridConfigPath);
         }
     }
 }

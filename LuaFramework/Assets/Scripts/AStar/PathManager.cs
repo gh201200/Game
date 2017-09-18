@@ -697,43 +697,52 @@ public class PathManager : MonoBehaviour
                     Debug.LogError("标签设置错误！name:" + go.name + " tag:" + go.tag);
                     return;
                 }
+                var obstaclePath = PathRecoder.ObstacleRoot.Replace(Application.dataPath + "/", "");
                 if (go.transform.parent == null) go.transform.SetParent(transform);
-                var path = go.tag.Replace("Res/", "");
-                Hashtable info = null;
-                if (objList.ContainsKey(path))
+                if (go.tag.Contains(obstaclePath))
                 {
-                    info = objList[path] as Hashtable;
+                    AddObstacle(go);
                 }
-                else
-                {
-                    info = new Hashtable();
-                    objList.Add(path, info);
-                }
-                if (info == null)
-                {
-                    Debug.LogError("unknow exception!");
-                    return;
-                }
-                Hashtable item = null;
-                if (info.ContainsKey(go))
-                {
-                    item = info[go] as Hashtable;
-                }
-                else
-                {
-                    item = new Hashtable();
-                    info[go] = item;
-                }
-                if (item == null)
-                {
-                    Debug.LogError("unknow exception!");
-                    return;
-                }
-                item["position"] = go.transform.localPosition;
-                item["eulerAngles"] = go.transform.localEulerAngles;
-                item["scale"] = go.transform.localScale;
             }
         }
 #endif
+    }
+
+    private void AddObstacle(GameObject go)
+    {
+        var path = go.tag.Replace("Res/", "");
+        Hashtable info = null;
+        if (objList.ContainsKey(path))
+        {
+            info = objList[path] as Hashtable;
+        }
+        else
+        {
+            info = new Hashtable();
+            objList.Add(path, info);
+        }
+        if (info == null)
+        {
+            Debug.LogError("unknow exception!");
+            return;
+        }
+        Hashtable item = null;
+        if (info.ContainsKey(go))
+        {
+            item = info[go] as Hashtable;
+        }
+        else
+        {
+            item = new Hashtable();
+            info[go] = item;
+        }
+        if (item == null)
+        {
+            Debug.LogError("unknow exception!");
+            return;
+        }
+        item["position"] = go.transform.localPosition;
+        item["eulerAngles"] = go.transform.localEulerAngles;
+        item["scale"] = go.transform.localScale;
     }
 }
